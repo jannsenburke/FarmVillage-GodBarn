@@ -4,6 +4,10 @@ For player-facing instructions, choose [local Mac play](PLAY_ON_MAC.md) or [serv
 
 This guide is for contributors working beyond the source-only checks. Start with the [README](../README.md#get-started-with-the-source) to create the external Python environment. Its examples set `FV_CHECK_ENV`; set that variable to the same environment path in each new terminal.
 
+## Source-only test prerequisites
+
+The selected synthetic tests need Python 3.10+, Bash and the packages in `FarmVillage/requirements.txt`. One staging test also runs the macOS script `FarmVillage/macOS/Scripts/bundle-runtime.sh`, which calls `/usr/bin/rsync`. macOS includes it; on Ubuntu install it with `sudo apt install rsync`. Without it, that single test is reported as skipped with an `UNRUN` reason, so the run finishes with `OK (skipped=1)`. A skipped test is not a pass: install `rsync` and rerun to include it.
+
 ## Public-resource build path
 
 Use the [resource installer](RESOURCE_SETUP.md) to prepare a new external pack. It downloads and verifies originals, generates metadata and records a source-built Ruffle identity. The source launcher then builds/installs the selected product. To build/stage separately after preparation:

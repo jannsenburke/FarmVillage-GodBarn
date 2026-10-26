@@ -11,6 +11,7 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
+RSYNC = '/usr/bin/rsync'  # Hard-coded by FarmVillage/macOS/Scripts/bundle-runtime.sh.
 spec = importlib.util.spec_from_file_location('fv_native_stage_test', ROOT / 'tools/native_resources.py')
 native = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(native)
@@ -115,6 +116,7 @@ class NativeStagingTests(unittest.TestCase):
         self.assertIn('Player resource verification failed', result.stderr)
         self.assertFalse(self.log.exists())
 
+    @unittest.skipUnless(os.access(RSYNC, os.X_OK), 'UNRUN: bundle-runtime.sh calls ' + RSYNC + ', which this host lacks (macOS ships it; on Ubuntu install the rsync package)')
     def test_prepared_bundle_uses_external_media_and_receipts(self):
         required = 'client_compatibility cove_client meadows_client client_graphics meadows_rules meadows_storage england_animals england_shipping cove_rules cove_port cove_shipping cellar_progression rainforest_features rainforest_rules placement_receipts inventory_sales commands server storage'.split()
         for name in required:
