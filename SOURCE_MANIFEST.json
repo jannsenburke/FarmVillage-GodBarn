@@ -1983,6 +1983,10 @@
       "bytes": 10804,
       "sha256": "c84ba02d95cad87ff3a75e5f488b47182d2174130a819d83a0b46483d998e136"
     },
+    "docs/MAC_ACCEPTANCE.md": {
+      "bytes": 13096,
+      "sha256": "b51172a0e7d86351aab18e1df4668b59922b7e85c04d1b58e351b96d25d1f58d"
+    },
     "docs/PLAY_ON_MAC.md": {
       "bytes": 8350,
       "sha256": "31b4cfecf38676192f16588bd95f2bcb4a0b5b3dfa1e23b93c76274e58a825d4"
@@ -2284,7 +2288,7 @@
     "supersedes": "Earlier readiness-only setup and unapplied recovery status"
   },
   "resealScope": "Reviewed source changes only; gameplay/platform acceptance requires a separate new record",
-  "reviewedFromCommit": "ef043d8789f0b91a3dafad51abef1d7814a79d1a",
+  "reviewedFromCommit": "71d1e13c2f8c3f47219d388863f25971e0fe4a30",
   "schema": 1,
   "source": {
     "FarmVillage": "62809de497404588f133e38740242864717af0c0",
