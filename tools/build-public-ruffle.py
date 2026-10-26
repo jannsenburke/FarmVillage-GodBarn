@@ -28,7 +28,9 @@ from urllib.parse import urlsplit
 ROOT = Path(__file__).resolve().parent.parent
 RUNTIME_ID = "0.7.1-farmvillage-gc1"
 COMMIT = "89a7049965f3090e706265670df309a5128233ac"
-PROVENANCE = ROOT / "FarmVillage/ruffle_runtime" / RUNTIME_ID / "provenance"
+# The source-build recipe. Deliberately NOT inside FarmVillage/ruffle_runtime/<id>/: that directory is the
+# hard-pinned historical player, whose manifest names its own provenance/ files by hash.
+PUBLIC_BUILD_INPUTS = ROOT / "tools/public-ruffle-build"
 PINS_PATH = ROOT / "tools/public-ruffle-toolchains.json"
 MARKER = ".farmvillage-public-ruffle-work.json"
 PRODUCT = "org.farmvillage.public-ruffle-build.v1"
@@ -241,7 +243,7 @@ def build_public_runtime(work, output, *, runner=run, fetch=download_artifact):
     if output.exists():
         raise BuildError("The player output exists without a valid completed build receipt. Choose an empty output folder.")
     pins = json.loads(PINS_PATH.read_text())
-    compatibility.verify_public_build_inputs(PROVENANCE, PINS_PATH)
+    compatibility.verify_public_build_inputs(PUBLIC_BUILD_INPUTS, PINS_PATH)
     host, node_host = host_identity()
     artifacts = toolchain_artifacts(pins, host, node_host)
     downloads = ordinary(work / "downloads")
@@ -317,7 +319,7 @@ def build_public_runtime(work, output, *, runner=run, fetch=download_artifact):
     stage = Path(tempfile.mkdtemp(prefix=".player-build-", dir=output.parent))
     candidate = stage / "player"
     try:
-        runner([sys.executable, "-I", "-B", PROVENANCE / "build-runtime.py", "--source", source,
+        runner([sys.executable, "-I", "-B", PUBLIC_BUILD_INPUTS / "build-runtime.py", "--source", source,
                 "--destination", candidate, "--node", locations["node"] / "bin/node",
                 "--npm-cli", locations["npm"] / "bin/npm-cli.js", "--wasm-bindgen",
                 locations["bindgen"] / "wasm-bindgen", "--source-build"], source, environment)

@@ -71,11 +71,11 @@ class PublicInstallFlowTests(unittest.TestCase):
         (self.game / "templates").mkdir()
         (self.game / "templates/index.html").write_text("synthetic source template")
         shutil.copyfile(ROOT / "FarmVillage/runtime_compatibility.py", self.game / "runtime_compatibility.py")
-        provenance = self.game / "ruffle_runtime" / fixtures.builder.RUNTIME_ID / "provenance"
+        provenance = self.source / "tools/public-ruffle-build"
         provenance.mkdir(parents=True)
         for name in fixtures.compat.PUBLIC_SOURCE_INPUTS:
             if name != "toolchain-pins.json":
-                shutil.copyfile(fixtures.builder.PROVENANCE / name, provenance / name)
+                shutil.copyfile(fixtures.builder.PUBLIC_BUILD_INPUTS / name, provenance / name)
         shutil.copyfile(fixtures.builder.PINS_PATH, self.source / "tools/public-ruffle-toolchains.json")
         self.patches = [mock.patch.object(pipeline, "ROOT", self.source),
                         mock.patch.object(pipeline, "download", side_effect=self.download),

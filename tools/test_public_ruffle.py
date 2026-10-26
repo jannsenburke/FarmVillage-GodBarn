@@ -82,7 +82,7 @@ class PublicRuntimeTests(unittest.TestCase):
         return compat.prepare_public_runtime(self.payload, self.receipt_path, receipt_sha256=self.receipt_pin)
 
     def test_real_source_contract_files_match_pins(self):
-        compat.verify_public_build_inputs(builder.PROVENANCE, builder.PINS_PATH)
+        compat.verify_public_build_inputs(builder.PUBLIC_BUILD_INPUTS, builder.PINS_PATH)
 
     def test_explicit_source_build_pin_required_and_installs_offline(self):
         pin = self.seal()
@@ -363,6 +363,67 @@ class BuildBootstrapTests(unittest.TestCase):
             self.assertFalse((task_root / "player").exists())
             self.assertFalse((task_root / "player.build-receipt.json").exists())
             self.assertFalse(list(task_root.glob(".player-build-*")))
+
+
+class PublishedSourceStagingTests(unittest.TestCase):
+    """The tracked source plus the approved private import must be exactly the default player pin.
+
+    The private player files cannot exist in a source checkout, so their digests are taken from the
+    importer's own expected hashes (tools/private-inputs.py verifies them on a real import). The
+    complete file set and every source-owned byte go through the real strict verifier.
+    """
+
+    RELEASE = compat.ACTIVE_RELEASE
+    PREFIX = "FarmVillage/ruffle_runtime/%s/" % RELEASE.runtime_id
+    SHARED_RECIPE_FILES = ("gc-pacing.patch", "Cargo.lock", "package-lock.json", "version-seal.json")
+
+    def setUp(self):
+        self.directory = ROOT / self.PREFIX.rstrip("/")
+        raw = (self.directory / compat.MANIFEST_NAME).read_bytes()
+        self.assertEqual(hashlib.sha256(raw).hexdigest(), self.RELEASE.manifest_sha256)
+        self.pin = json.loads(raw)["files"]
+        expected = json.loads((ROOT / "PrivateInputs.expected.json").read_text())["files"]
+        self.private = {name[len(self.PREFIX):]: seal["sha256"] for name, seal in expected.items() if name.startswith(self.PREFIX)}
+        tracked = json.loads((ROOT / "SOURCE_MANIFEST.json").read_text())["files"]
+        self.owned = {name[len(self.PREFIX):] for name in tracked if name.startswith(self.PREFIX)}
+
+    def test_source_and_private_import_together_are_exactly_the_pinned_file_set(self):
+        wanted = set(self.pin) | {compat.MANIFEST_NAME}
+        self.assertEqual(self.owned & set(self.private), set(), "tracked source must not shadow an imported player file")
+        self.assertEqual(sorted((self.owned | set(self.private)) - wanted), [], "extra files the strict verifier rejects")
+        self.assertEqual(sorted(wanted - (self.owned | set(self.private))), [], "pinned files neither tracked nor imported")
+        for name, digest in self.private.items():
+            self.assertEqual(digest, self.pin[name], "the importer expects different bytes than the pin: " + name)
+        for name in sorted(self.owned - {compat.MANIFEST_NAME}):
+            self.assertEqual(builder.digest(self.directory / name), self.pin[name], "tracked source differs from the pin: " + name)
+
+    def test_the_real_verifier_accepts_the_source_plus_import_overlay(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            staged = Path(temporary) / "player"
+            for name in self.owned:
+                (staged / name).parent.mkdir(parents=True, exist_ok=True)
+                (staged / name).write_bytes((self.directory / name).read_bytes())
+            for name in self.private:
+                (staged / name).parent.mkdir(parents=True, exist_ok=True)
+                (staged / name).write_bytes(b"placeholder for a file the importer verifies")
+            real_digest = compat._file_digest
+
+            def digest(path, check_cancelled):
+                name = Path(path).relative_to(staged).as_posix()
+                return self.private[name] if name in self.private else real_digest(path, check_cancelled)
+
+            with mock.patch.object(compat, "_file_digest", digest):
+                self.assertEqual(set(compat.verify_runtime(staged).files), set(self.pin))
+
+    def test_the_public_build_recipe_is_apart_from_the_pinned_player_and_shares_only_identical_files(self):
+        recipe = builder.PUBLIC_BUILD_INPUTS
+        self.assertFalse(recipe.is_relative_to(self.directory), "the recipe must not live in the hard-pinned player directory")
+        for name in self.SHARED_RECIPE_FILES:
+            with self.subTest(name):
+                shared = (self.directory / "provenance" / name).read_bytes()
+                self.assertEqual((recipe / name).read_bytes(), shared)
+                self.assertEqual(hashlib.sha256(shared).hexdigest(), compat.PUBLIC_SOURCE_INPUTS[name])
+        compat.verify_public_build_inputs(recipe, builder.PINS_PATH)
 
 
 if __name__ == "__main__":
