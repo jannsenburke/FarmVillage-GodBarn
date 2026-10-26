@@ -11,6 +11,9 @@ SPEC = importlib.util.spec_from_file_location("world_candidate_preparation", ROO
 HELPER = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(HELPER)
 BASELINE_ACTIVE_WORLDS = frozenset({"rainforest", "mediterranean", "storybook", "candy", "oasis", "oz"})
+# enable-world-candidate.py accepts only fixtures under /private/tmp (a macOS location), so a
+# fixture elsewhere would be refused for that reason and prove nothing about the other checks.
+needs_private_tmp = unittest.skipUnless(Path("/private/tmp").is_dir(), "UNRUN: the tool under test accepts only /private/tmp fixtures, which exist only on macOS")
 
 
 class CandidateFixtureTests(unittest.TestCase):
@@ -46,6 +49,7 @@ class CandidateFixtureTests(unittest.TestCase):
         node = cls.activation_node(source)
         return frozenset(ast.literal_eval(node.value.args[0]))
 
+    @needs_private_tmp
     def test_explicit_candidates_compose_idempotently_only_in_fixture_copy(self):
         original = (ROOT / "themed_worlds.py").read_bytes()
         accepted = BASELINE_ACTIVE_WORLDS
@@ -79,6 +83,11 @@ class CandidateFixtureTests(unittest.TestCase):
             self.assertEqual(save.read_bytes(), progress)
         self.assertEqual((ROOT / "themed_worlds.py").read_bytes(), original)
 
+    def test_source_checkout_is_refused_on_every_host(self):
+        with self.assertRaisesRegex(ValueError, "/private/tmp|marked disposable fixture"):
+            HELPER.enable_candidate(ROOT, "toyland")
+
+    @needs_private_tmp
     def test_source_checkout_unknown_world_unmarked_and_owner_fixture_are_refused(self):
         with self.assertRaisesRegex(ValueError, "/private/tmp|marked disposable fixture"):
             HELPER.enable_candidate(ROOT, "toyland")

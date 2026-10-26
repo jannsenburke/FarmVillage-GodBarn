@@ -1124,8 +1124,8 @@
       "sha256": "c62c8aa5cb5aecc7fc7d18045ed0cf673de624450b29275f21183654ea99a627"
     },
     "FarmVillage/macOS/Tests/test_runtime_serving.py": {
-      "bytes": 6668,
-      "sha256": "6e6d129e4e4ea4fad2f9eb893b9520d292b0a5011b03c9c39f0fb6c7f1ad5e32"
+      "bytes": 7434,
+      "sha256": "ea54dc839da7b430d2bbf21cd2a47e8c79dab0cc14beb036d7bec78920392969"
     },
     "FarmVillage/macOS/Tests/test_runtime_upgrade.py": {
       "bytes": 7145,
@@ -1292,8 +1292,8 @@
       "sha256": "ac184dfafb80f709b537d9bb247a22614b69af9cc7f3236cbc1264d37d94f389"
     },
     "FarmVillage/macOS/Tests/test_world_candidate_fixture.py": {
-      "bytes": 5758,
-      "sha256": "e100a69a1c09dbd3596fb148414aed65827aaf009be89a28732df19bf386909b"
+      "bytes": 6362,
+      "sha256": "1de3cbe46caa41f2709837e64cc0ca2bfb2861ce803c6ca4e42f7442a2964b2a"
     },
     "FarmVillage/macOS/Tests/test_world_currency_conversion.py": {
       "bytes": 7903,
@@ -2268,7 +2268,7 @@
     "supersedes": "Earlier readiness-only setup and unapplied recovery status"
   },
   "resealScope": "Reviewed source changes only; gameplay/platform acceptance requires a separate new record",
-  "reviewedFromCommit": "ac173c387cbf508281634603e27b365e01ce5d9c",
+  "reviewedFromCommit": "27dd4e1fcdd9e2c277ed9c596db24375370444c6",
   "schema": 1,
   "source": {
     "FarmVillage": "62809de497404588f133e38740242864717af0c0",
