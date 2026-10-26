@@ -69,7 +69,7 @@ class ClassifyTests(unittest.TestCase):
                 for name, code, price in (("strawberry", "SB", "10"), ("wheat", "WH", "13"))]
         first = prepare.first_indexes(data)
         self.assertEqual(prepare.classify(data, first, StubHeritage(set())), {})
-        with tempfile.TemporaryDirectory(prefix="god-barn-sold-crop-", dir="/private/tmp") as directory:
+        with tempfile.TemporaryDirectory(prefix="god-barn-sold-crop-", dir="/private/tmp" if Path("/private/tmp").is_dir() else None) as directory:
             catalog = Path(directory) / "catalog.json"
             catalog.write_text(json.dumps([{"name": item["name"], "type": "seed", "archive": {"raw": {
                 "buyable": item["buyable"], "cost": item["cost"]}}} for item in data]))
@@ -85,7 +85,7 @@ class ClassifyTests(unittest.TestCase):
     def test_copied_rows_must_agree_with_the_game_records(self):
         data = records()
         first = prepare.first_indexes(data)
-        with tempfile.TemporaryDirectory(prefix="god-barn-untabbed-script-", dir="/private/tmp") as directory:
+        with tempfile.TemporaryDirectory(prefix="god-barn-untabbed-script-", dir="/private/tmp" if Path("/private/tmp").is_dir() else None) as directory:
             catalog = Path(directory) / "catalog.json"
             # Mirror the game's tab data for every row except lockedcow, which gains a tab here.
             copied = [{"name": name, "archive": {"raw": {"marketEntries": {"marketEntry": {"type": "seed"}}}
@@ -101,7 +101,7 @@ class ClassifyTests(unittest.TestCase):
                 prepare.verify_against_catalog(data, first, catalog)
 
     def test_cli_uses_explicit_original_output_and_policy_without_reading_old_cache(self):
-        with tempfile.TemporaryDirectory(prefix="god-barn-untabbed-checkout-", dir="/private/tmp") as directory:
+        with tempfile.TemporaryDirectory(prefix="god-barn-untabbed-checkout-", dir="/private/tmp" if Path("/private/tmp").is_dir() else None) as directory:
             checkout = Path(directory)
             (checkout / "xml/gz/v855038").mkdir(parents=True)
             (checkout / "xml/gz/v855038/items_opt.amf").write_bytes(b"current source")

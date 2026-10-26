@@ -27,6 +27,8 @@ LEGACY_MARKER = '# Managed by FarmVillage LAN hosting (install-service.sh)'
 UNIT = 'farmvillage.service'
 STATE_NAMES = {'saves', 'god-barn', '.lan-server', 'workspace', 'snapshots', 'history', '.git', '.venv', '__pycache__'}
 
+SYSTEM_TOP_LEVEL = {'bin', 'boot', 'dev', 'etc', 'lib', 'lib64', 'opt', 'proc', 'root', 'run', 'sbin', 'srv', 'sys', 'usr', 'var'}
+
 class SetupError(ValueError):
     pass
 
@@ -65,7 +67,12 @@ def service_matches(path, target):
     return legacy or clean
 
 def classify_target(target, home, bundle, unit):
-    target, home, bundle = ordinary(target), ordinary(home), ordinary(bundle)
+    home = ordinary(home)
+    # A broken or root HOME (for example HOME=/ under sudo) would turn the
+    # "inside your home folder" rule into "anywhere on the disk".
+    if len(home.parts) < 3 or home.parts[1] in SYSTEM_TOP_LEVEL:
+        raise SetupError('Your home folder (%s) is not an ordinary user home. Run the installer as the normal user who will own the game, not as root or with sudo.' % home)
+    target, bundle = ordinary(target), ordinary(bundle)
     if target == home or home not in target.parents:
         raise SetupError('Choose a FarmVillage installation inside your own home folder, such as ~/farmvillage-server.')
     if not re.fullmatch(r'(?i)farm(?:ville|village)[a-z0-9._-]*', target.name):

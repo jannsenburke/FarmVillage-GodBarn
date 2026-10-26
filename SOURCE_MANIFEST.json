@@ -1892,8 +1892,8 @@
       "sha256": "4b68c4997493ddd74a6340b3566c54f541a930cc345a2d37deab65f733acafe3"
     },
     "GodBarn/tests/test_prepare_untabbed.py": {
-      "bytes": 6180,
-      "sha256": "9d930ff10420578c8ac6ab58b7da0ae566f0df2ed7300b8ce84307b30a1a119c"
+      "bytes": 6309,
+      "sha256": "7b02033cf03c6bd76f88b9ceed93eceb97d5b52d539f8b539c91fef38ab0cf85"
     },
     "GodBarn/tests/test_progression_tools.py": {
       "bytes": 7375,
@@ -1912,8 +1912,8 @@
       "sha256": "ba99a136007993d9db0bee932f409a615a4868c807f4d499f44e6bb32622ec81"
     },
     "GodBarn/tests/test_untabbed.py": {
-      "bytes": 13589,
-      "sha256": "294c48bc63c2d9436e61526444cad10d5befbdb16c00344cc28407524d82fed0"
+      "bytes": 13632,
+      "sha256": "012df4095851da934ac76904095116a7582256502e0929012f4264ece061f919"
     },
     "GodBarn/tests/test_untabbed_ui.py": {
       "bytes": 1002,
@@ -1975,6 +1975,10 @@
       "bytes": 42613,
       "sha256": "cda9445bb2c077d021c1ace68a4607419d3831b8518e577ae54075617665f42c"
     },
+    "conftest.py": {
+      "bytes": 2216,
+      "sha256": "e48ed0be46862b9c2358581bfd4b1e448ab9feb1a89ad520481aa94cbe015c74"
+    },
     "docs/DEVELOPMENT.md": {
       "bytes": 6544,
       "sha256": "13fbf970841640486570712e3dc9b2b266b1d90956deae2c8f04fd7e18b75e74"
@@ -1990,6 +1994,10 @@
     "docs/RESOURCE_SETUP.md": {
       "bytes": 5694,
       "sha256": "bf4645fc82151d6f03b9b2a59f0a0a2d7ab92e6666e4aa8ef921b38eb3f4e096"
+    },
+    "pytest.ini": {
+      "bytes": 108,
+      "sha256": "4a385576eb1ae329cd5315770d96d63c50a4311743907e0c07d678fbfa752776"
     },
     "tools/build-public-ruffle.py": {
       "bytes": 19593,
@@ -2052,8 +2060,8 @@
       "sha256": "a974f98b80c4e5ee111ec3b42489c37409974f6ce9435562a19e9d58fede7bf5"
     },
     "tools/setup-wizard.py": {
-      "bytes": 26630,
-      "sha256": "3a60924d07bc3e1e99b9f9b1ee57ad394e37d912685fed652ed8f3a368319a15"
+      "bytes": 27145,
+      "sha256": "9c872dff429cb1b7556397305d983a4a25d39b97ccfd1bb980b054fea52fdae2"
     },
     "tools/test_handoff_tools.py": {
       "bytes": 7404,
@@ -2096,8 +2104,8 @@
       "sha256": "4d784f81f49557eed0c046bb1ea6e831dbdaa2681a6d9aa5262f8a74445d06e8"
     },
     "tools/test_setup_wizard.py": {
-      "bytes": 14994,
-      "sha256": "d169b4730ceb09bb23009a4dd79404b6a69487642c32783aa56ffe970032b335"
+      "bytes": 15253,
+      "sha256": "4dbf0c0da0f8c2e92530208d9a9e5f2a93a5a041e94dd5f0fff7abaf7d125fa3"
     }
   },
   "githubDesktopHandoff": {
@@ -2252,7 +2260,7 @@
     "supersedes": "Earlier readiness-only setup and unapplied recovery status"
   },
   "resealScope": "Reviewed source changes only; gameplay/platform acceptance requires a separate new record",
-  "reviewedFromCommit": "adc1230029f2e9dadd8390a12d7474e7011977b1",
+  "reviewedFromCommit": "ac173c387cbf508281634603e27b365e01ce5d9c",
   "schema": 1,
   "source": {
     "FarmVillage": "62809de497404588f133e38740242864717af0c0",
