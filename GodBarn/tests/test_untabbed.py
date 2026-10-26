@@ -180,7 +180,7 @@ class GiftRefusalAgreementTests(unittest.TestCase):
 
 class CompanionRouteTests(unittest.TestCase):
     def setUp(self):
-        self.temporary = tempfile.TemporaryDirectory(prefix="god-barn-untabbed-", dir="/private/tmp")
+        self.temporary = tempfile.TemporaryDirectory(prefix="god-barn-untabbed-", dir="/private/tmp" if Path("/private/tmp").is_dir() else None)
         self.base = Path(self.temporary.name)
         self.root = self.base / "app"
         (self.root / "data").mkdir(parents=True)

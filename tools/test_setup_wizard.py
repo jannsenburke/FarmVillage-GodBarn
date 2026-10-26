@@ -44,6 +44,9 @@ class CleanInstallTests(unittest.TestCase):
   with self.assertRaises(w.SetupError):w.classify_target(self.target,self.home,self.bundle,self.unit)
   link=self.home/'farmville-linked';link.symlink_to(self.target,target_is_directory=True)
   with self.assertRaises(w.SetupError):w.classify_target(link,self.home,self.bundle,self.unit)
+ def test_refuse_root_or_system_home(self):
+  for home in [Path('/'),Path('/root'),Path('/var/lib/svc'),Path('/etc/x/y')]:
+   with self.subTest(home=home),self.assertRaises(w.SetupError):w.classify_target(home/'farmvillage-server',home,self.bundle,self.unit)
  def test_unknown_existing_directory_is_never_wiped(self):
   self.put(self.target/'keep.txt',b'unrelated');stage=self.stage()
   with self.assertRaises(w.SetupError):w.publish_clean_stage(stage,self.target,self.home,self.bundle,self.unit,self.config(),'WIPE '+str(self.target))
