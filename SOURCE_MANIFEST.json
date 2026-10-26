@@ -1995,6 +1995,10 @@
       "bytes": 5694,
       "sha256": "bf4645fc82151d6f03b9b2a59f0a0a2d7ab92e6666e4aa8ef921b38eb3f4e096"
     },
+    "docs/UBUNTU_ACCEPTANCE.md": {
+      "bytes": 13025,
+      "sha256": "b634d135c1cf620a77025a0f7bf508173d84b50f3b7b6d5ecb4b90d488fdf95d"
+    },
     "pytest.ini": {
       "bytes": 108,
       "sha256": "4a385576eb1ae329cd5315770d96d63c50a4311743907e0c07d678fbfa752776"
@@ -2050,6 +2054,10 @@
     "tools/refresh-source-manifest.py": {
       "bytes": 2496,
       "sha256": "a5591fb6e0dac30d789561833681136a8e707c892430ae402beedd15a06da081"
+    },
+    "tools/rehearse-linux-host.py": {
+      "bytes": 23108,
+      "sha256": "0c845e198c80fdf3bff1893cac0348c616e04dad40661587b5cbff1f28c6b55f"
     },
     "tools/resource_pipeline.py": {
       "bytes": 19484,
@@ -2110,6 +2118,10 @@
     "tools/test_public_ruffle.py": {
       "bytes": 19067,
       "sha256": "ac8dceede1a027ad0afa88ddcd882fb04c845f9c9f7db21597d80911b6f23865"
+    },
+    "tools/test_rehearse_linux_host.py": {
+      "bytes": 11668,
+      "sha256": "6f99ce82a4f6c9822ad24839fd25e513d8c305a70814e9bf9e04d40e24b2d2a1"
     },
     "tools/test_resource_pipeline.py": {
       "bytes": 14102,
@@ -2272,7 +2284,7 @@
     "supersedes": "Earlier readiness-only setup and unapplied recovery status"
   },
   "resealScope": "Reviewed source changes only; gameplay/platform acceptance requires a separate new record",
-  "reviewedFromCommit": "46ee71ffa19da91593024a594435688d48c969f6",
+  "reviewedFromCommit": "ef043d8789f0b91a3dafad51abef1d7814a79d1a",
   "schema": 1,
   "source": {
     "FarmVillage": "62809de497404588f133e38740242864717af0c0",
