@@ -2111,6 +2111,10 @@
       "bytes": 9600,
       "sha256": "5d0fd4063581d094c01e22dd676bde030246e1f1ad22c00ad25044c975f2e4d2"
     },
+    "tools/test_prerequisite_dispositions.py": {
+      "bytes": 18229,
+      "sha256": "4cea4978684f870a903994f5e6ab30791446b2809628c097371805e2e890ffd2"
+    },
     "tools/test_public_browser_stage.py": {
       "bytes": 10640,
       "sha256": "2f6fb2d0f21f18c16c7ea249e7c6eca42a8c188b17d6f0bc1c0bd3432512ef44"
@@ -2288,7 +2292,7 @@
     "supersedes": "Earlier readiness-only setup and unapplied recovery status"
   },
   "resealScope": "Reviewed source changes only; gameplay/platform acceptance requires a separate new record",
-  "reviewedFromCommit": "71d1e13c2f8c3f47219d388863f25971e0fe4a30",
+  "reviewedFromCommit": "b7c625a26753a1232ba55b3fd129513c70c521b9",
   "schema": 1,
   "source": {
     "FarmVillage": "62809de497404588f133e38740242864717af0c0",
