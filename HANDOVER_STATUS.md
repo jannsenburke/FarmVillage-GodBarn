@@ -13,6 +13,13 @@ The continuing targets are the native macOS desktop app and browser hosting on U
 
 The application source baseline is FarmVillage `62809de497404588f133e38740242864717af0c0` and God Barn `31245bb8bc2848908667ae0cf95af8244531bff5`. `SOURCE_MANIFEST.json` identifies the exact files in this source release. The public Git history is inherited from AcidCaos/FarmVillage through commit `2dc25ca24032041a8b68d299b861eb2d4d449653`; the current tree uses the reviewed source layout.
 
+## Two player paths
+
+- [Mac players](docs/PLAY_ON_MAC.md) keep a large local native installation. A complete app downloads the original artwork on first Create/Open Farm, but the fresh-source app/resource bootstrap is still incomplete.
+- [Server owners](docs/PLAY_ON_SERVER.md) prepare the full game on Ubuntu/Linux. Players use browsers; the existing installer requires pre-extracted artwork and a prepared release.
+
+`START_MAC.command` and the public-source `START_HERE.sh` open a read-only readiness guide. This is not a complete game installer or a new clean-clone gameplay pass. The prepared-bundle server installer remains a separate, explicitly scoped flow.
+
 ## First priority: independent resource setup
 
 1. Retrieve the original files from the documented public preservation sources, with resumable downloads and verified identities.

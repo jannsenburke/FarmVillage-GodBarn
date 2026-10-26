@@ -17,7 +17,7 @@ w=importlib.util.module_from_spec(spec);spec.loader.exec_module(w)
 class CleanInstallTests(unittest.TestCase):
  def setUp(self):
   self.temp=tempfile.TemporaryDirectory(prefix='fv-wizard-test-');self.addCleanup(self.temp.cleanup)
-  self.base=Path(self.temp.name).resolve();self.home=self.base/'home';self.home.mkdir();self.target=self.home/'farmville-test';self.bundle=self.base/'bundle';self.bundle.mkdir();self.unit=self.home/'.config/systemd/user/farmvillage.service'
+  self.base=Path(self.temp.name).resolve();self.home=self.base/'home';self.home.mkdir();self.target=self.home/'farmvillage-server';self.bundle=self.base/'bundle';self.bundle.mkdir();self.unit=self.home/'.config/systemd/user/farmvillage.service'
   self.manifest={'schema':1,'source':{'FarmVillage':'synthetic16','GodBarn':'synthetic'},'files':{}}
   for name in ['Runtime/server.py','Runtime/requirements.txt','BackendHost/native_paths.py','hosting/server_runner.py']:
    raw=b'# synthetic fixture\n';self.put(self.bundle/name,raw);self.manifest['files'][name]={'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
@@ -120,5 +120,40 @@ class CleanInstallTests(unittest.TestCase):
    self.assertEqual((bind,port,origin),('192.168.50.22',5501,'http://192.168.50.22:5501'));self.assertIn('Open from another computer',output.getvalue());self.assertIn('Only this Ubuntu computer',output.getvalue());self.assertIn('/new.html',output.getvalue())
    for address in ['0.0.0.0','8.8.8.8','not-an-address']:
     with mock.patch.object(w,'ask',side_effect=[address,'5501']),contextlib.redirect_stdout(io.StringIO()),self.assertRaises(w.SetupError):w.choose_network()
+
+ def source_clone(self):
+  root=self.base/'community-source'
+  self.put(root/'FarmVillage/server.py',b'# synthetic source\n')
+  self.put(root/'tools/setup-wizard.py',b'# synthetic wizard location\n')
+  self.put(root/'tools/private-inputs.py',b'# synthetic checker location\n')
+  self.put(root/'tools/prepare-browser-runtime.py',b'# synthetic staging location\n')
+  return root
+
+ def test_incomplete_source_stops_before_prompts_import_staging_or_temp_creation(self):
+  root=self.source_clone();result=type('Result',(),{'returncode':1})()
+  with mock.patch.object(w,'__file__',str(root/'tools/setup-wizard.py')),mock.patch.object(w.subprocess,'run',return_value=result) as check,mock.patch.object(w,'ask') as ask,mock.patch.object(w,'run') as stage,mock.patch.object(w.tempfile,'TemporaryDirectory') as temporary:
+   with self.assertRaisesRegex(w.SetupError,'Public resource setup is unfinished') as failure:w.choose_bundle()
+  self.assertIn('PLAY_ON_SERVER.md',str(failure.exception));self.assertIn('no files were downloaded',str(failure.exception));self.assertIn('clean clone cannot yet install and play',str(failure.exception))
+  check.assert_called_once_with([w.sys.executable,'-I','-S','-B',str(root/'tools/private-inputs.py'),'check'],stdout=w.subprocess.DEVNULL,stderr=w.subprocess.DEVNULL)
+  ask.assert_not_called();stage.assert_not_called();temporary.assert_not_called()
+
+ def test_matching_source_stages_existing_resources_without_import_or_prompts(self):
+  root=self.source_clone();result=type('Result',(),{'returncode':0})()
+  def stage_existing(command):
+   self.assertEqual(command[:3],[w.sys.executable,'-B',str(root/'tools/prepare-browser-runtime.py')]);self.assertEqual(command[3],'--output')
+   destination=Path(command[4]);self.put(destination/'PRIVATE_RELEASE_MANIFEST.json',b'{"schema":1}')
+  with mock.patch.object(w,'__file__',str(root/'tools/setup-wizard.py')),mock.patch.object(w.subprocess,'run',return_value=result) as check,mock.patch.object(w,'ask') as ask,mock.patch.object(w,'run',side_effect=stage_existing) as stage:
+   output,temporary=w.choose_bundle()
+  try:
+   self.assertEqual(output.name,'payload');self.assertTrue((output/'PRIVATE_RELEASE_MANIFEST.json').is_file());self.assertIsNotNone(temporary)
+   check.assert_called_once_with([w.sys.executable,'-I','-S','-B',str(root/'tools/private-inputs.py'),'check'],stdout=w.subprocess.DEVNULL,stderr=w.subprocess.DEVNULL)
+   ask.assert_not_called();stage.assert_called_once();self.assertNotIn('import',stage.call_args.args[0])
+  finally:temporary.cleanup()
+  self.assertFalse(output.parent.exists())
+
+ def test_complete_prepared_bundle_keeps_direct_path_without_checks_or_staging(self):
+  with mock.patch.object(w,'__file__',str(self.bundle/'setup-wizard.py')),mock.patch.object(w.subprocess,'run') as check,mock.patch.object(w,'ask') as ask,mock.patch.object(w,'run') as stage:
+   self.assertEqual(w.choose_bundle(),(self.bundle,None))
+  check.assert_not_called();ask.assert_not_called();stage.assert_not_called()
 
 if __name__=='__main__':unittest.main()

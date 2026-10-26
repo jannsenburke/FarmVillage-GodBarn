@@ -1,5 +1,7 @@
 # Development and builds
 
+For player-facing instructions, choose [local Mac play](PLAY_ON_MAC.md) or [server hosting](PLAY_ON_SERVER.md). This page covers contributor/build work, not a completed public installer.
+
 This guide is for contributors working beyond the source-only checks. Start with the [README](../README.md#get-started-with-the-source) to create the external Python environment. Its examples set `FV_CHECK_ENV`; set that variable to the same environment path in each new terminal.
 
 **A complete public-resource bootstrap is not implemented yet.** The commands below require an already prepared, compatible resource set. They do not download or reconstruct that set. See [game resources](RESOURCE_SETUP.md) before attempting an app build or server install.
@@ -20,7 +22,7 @@ The recorded prepared set is a compatibility baseline, not a promise that indepe
 
 ## Native macOS
 
-Requirements: macOS 14+, Xcode with its macOS SDK, and Python 3.10+ with venv/pip. The recorded build used Xcode 27.1; other toolchains need their own validation. Import and check resources first, then run from the repository root:
+Requirements: macOS 14+, Xcode with its macOS SDK, and Python 3.10+ with venv/pip. The recorded build used Xcode 27.1; other toolchains need their own validation. Import and check resources first. The build script now stops before Python/compiler work when representative inputs are absent, then verifies the complete prepared-input manifest before compilation. It does not download the missing set. Run from the repository root:
 
 ```sh
 bash FarmVillage/macOS/Scripts/build.sh Release

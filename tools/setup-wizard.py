@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Guided, explicitly scoped clean Bifrost install. Never deploy to another host."""
+"""Guided, explicitly scoped clean Ubuntu/Linux install on this host."""
 from __future__ import annotations
 import argparse
 from contextlib import contextmanager
@@ -67,7 +67,7 @@ def service_matches(path, target):
 def classify_target(target, home, bundle, unit):
     target, home, bundle = ordinary(target), ordinary(home), ordinary(bundle)
     if target == home or home not in target.parents:
-        raise SetupError('Choose a FarmVillage installation inside your own home folder, such as ~/farmville-test.')
+        raise SetupError('Choose a FarmVillage installation inside your own home folder, such as ~/farmvillage-server.')
     if not re.fullmatch(r'(?i)farm(?:ville|village)[a-z0-9._-]*', target.name):
         raise SetupError('The target folder must be clearly named farmville/farmvillage; unrelated folders are refused.')
     if target == bundle or bundle in target.parents or target in bundle.parents:
@@ -96,7 +96,7 @@ def classify_target(target, home, bundle, unit):
         ordinary(target / 'hosting/server_runner.py')
         ordinary(target / 'data')
         return 'legacy-managed'
-    raise SetupError('This is not a positively identified managed FarmVillage install. No files were erased. Choose a new empty ~/farmville-test folder or the actual managed installation.')
+    raise SetupError('This is not a positively identified managed FarmVillage install. No files were erased. Choose a new empty ~/farmvillage-server folder or the actual managed installation.')
 
 def verify_payload(bundle):
     manifest_path = bundle / 'PRIVATE_RELEASE_MANIFEST.json'
@@ -241,13 +241,15 @@ def choose_bundle():
         return here, None
     root = here.parent
     if not (root / 'FarmVillage/server.py').is_file():
-        raise SetupError('Run the wizard from the complete extracted private bundle or reviewed source folder.')
-    checker = [sys.executable, '-B', str(root / 'tools/private-inputs.py')]
+        raise SetupError('Run the wizard from a complete prepared release bundle or the source checkout. See docs/PLAY_ON_SERVER.md for server setup requirements.')
+    checker = [sys.executable, '-I', '-S', '-B', str(root / 'tools/private-inputs.py')]
     if subprocess.run([*checker, 'check'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode:
-        print('The code-only copy needs its matching local inputs. Nothing will be downloaded.')
-        game = ordinary(Path(ask('Folder containing the authorized private game source')).expanduser())
-        barn = ordinary(Path(ask('Matching GodBarn source folder', game.parent / 'GodBarn')).expanduser())
-        run([*checker, 'import', '--runtime-source', str(game), '--godbarn-source', str(barn)])
+        raise SetupError(
+            'Public resource setup is unfinished. This source checkout does not have a complete '
+            'verified resource set required to install the server. Read docs/PLAY_ON_SERVER.md '
+            'for the current setup status. Setup stopped before staging or installation; '
+            'no files were downloaded. A clean clone cannot yet install and play automatically.'
+        )
     temporary = tempfile.TemporaryDirectory(prefix='farmvillage-bundle-')
     output = Path(temporary.name).resolve() / 'payload'
     run([sys.executable, '-B', str(root / 'tools/prepare-browser-runtime.py'), '--output', str(output)])
@@ -255,7 +257,7 @@ def choose_bundle():
 
 def preflight():
     if platform.system() != 'Linux':
-        raise SetupError('Run this installer on the Ubuntu/Linux game host itself. This computer will not deploy to Bifrost remotely. macOS uses the native desktop build described in README.md.')
+        raise SetupError('Run this installer on the Ubuntu/Linux game host itself. It does not deploy remotely. macOS uses the native desktop app described in README.md.')
     if os.geteuid() == 0:
         raise SetupError('Please run as your normal Ubuntu user, without sudo. The wizard asks separately if a boot-setting step needs it.')
     if sys.version_info < (3, 10):
@@ -353,7 +355,7 @@ def wizard():
         home = Path.home().resolve()
         unit = service_path(home)
         say(2, 'Choose the home for the game', 'The recommended managed folder is shown below. Source, system, unrelated and linked folders are never erased. Extract this installer outside that target.')
-        target = ordinary(Path(ask('Installation folder', home / 'farmville-test')).expanduser())
+        target = ordinary(Path(ask('Installation folder', home / 'farmvillage-server')).expanduser())
         kind = classify_target(target, home, bundle, unit)
         if unit.exists() and not service_matches(unit, target):
             raise SetupError('An unrelated farmvillage.service already exists. It was not stopped or replaced. Choose the actual managed target or resolve that service before rerunning.')

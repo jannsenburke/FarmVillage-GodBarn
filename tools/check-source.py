@@ -30,8 +30,9 @@ def verify(root, publication=False):
                 raise ValueError("Unresolved merge conflict in %s:%d" % (name, line_number))
         if path.suffix == ".py":
             ast.parse(text, filename=name)
-        elif path.suffix == ".sh":
-            subprocess.run(["bash", "-n", str(path)], check=True)
+        elif path.suffix in {".sh", ".command"}:
+            subprocess.run(["bash", "-n", str(path)], check=True,
+                           env={key: value for key, value in os.environ.items() if key not in {"BASH_ENV", "ENV"}})
     unexpected = []
     for path in root.rglob("*"):
         name = path.relative_to(root).as_posix()
@@ -58,7 +59,7 @@ def run_tests(root):
         (root / "FarmVillage/macOS/Tests", ["-m", "unittest", "-v", "test_persistence.AtomicStorageTests", "test_persistence.CacheIdentityTests", "test_persistence.MultiFarmJournalTests"]),
         (root / "GodBarn", ["-m", "unittest", "discover", "-s", "tests", "-p", "test_engine.py", "-v"]),
         (root / "GodBarn", ["-m", "unittest", "discover", "-s", "tests", "-p", "test_seasonal.py", "-v"]),
-        (root / "tools", ["-m", "unittest", "-v", "test_handoff_tools", "test_setup_wizard"]),
+        (root / "tools", ["-m", "unittest", "-v", "test_handoff_tools", "test_setup_wizard", "test_player_setup", "test_mac_build_preflight"]),
     ]
     for directory, args in suites:
         subprocess.run([sys.executable, "-B", *args], cwd=directory, env=env, check=True)
@@ -71,7 +72,7 @@ def main():
     p.add_argument("--with-private-inputs", action="store_true", help="Validate private inputs and list the exact active release selection without executing it")
     a = p.parse_args()
     print(json.dumps(verify(a.root, a.for_publication), indent=2), flush=True)
-    subprocess.run([sys.executable, "-B", str(a.root / "tools/check-doc-links.py"), "--root", str(a.root)], check=True)
+    subprocess.run([sys.executable, "-I", "-S", "-B", str(a.root / "tools/check-doc-links.py"), "--root", str(a.root)], check=True)
     if a.tests:
         run_tests(a.root)
     if a.with_private_inputs:

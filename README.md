@@ -6,6 +6,17 @@ The aim is to make the original farming experience playable locally while preser
 
 **Development status:** this is a source release. A fresh clone can run source checks and selected tests, but the automatic setup needed to download and prepare all game resources is **not finished**. There is no verified clone-and-play installation yet.
 
+## Choose how you want to play
+
+| Audience | Where the full game lives | Start here |
+| --- | --- | --- |
+| **Mac players willing to install 20+ GB locally** | On your Mac, using the native app; a separate server is not required | [Mac player guide](docs/PLAY_ON_MAC.md) · `START_MAC.command` |
+| **People with an Ubuntu/Linux server** | On the host; players connect through their browsers without installing the full archives on each computer | [Server owner guide](docs/PLAY_ON_SERVER.md) · `bash START_HERE.sh` on the host |
+
+**Automatic downloads today:** a complete Mac app can fetch the four original artwork archives on first Create/Open Farm. The compressed archives alone are 19.13 GB, with extracted files and temporary space additional. Today’s source clone cannot yet build that complete app automatically. The server installer instead expects a prepared release and already-extracted artwork; it does not acquire that game-resource set automatically.
+
+The new source setup wizard is a **readiness guide**. It explains the appropriate path, checks missing resources and stops honestly when the complete installation is not available. It does not start large downloads, install packages or erase anything.
+
 ## What’s included
 
 - **Native macOS application:** a SwiftUI/AppKit desktop app using WebKit, Ruffle and a supervised local Python server.

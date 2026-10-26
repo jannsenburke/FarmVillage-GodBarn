@@ -44,8 +44,8 @@
       "sha256": "ef86036682263282933863ce43582497fd7737fb2bcbcea1b75eea47ccf6e819"
     },
     "BIFROST_SETUP.md": {
-      "bytes": 6842,
-      "sha256": "6742f21eb6ddc235be2231b9dc05634e80ea39acd6f96c919026fa47fb5c1ce8"
+      "bytes": 7271,
+      "sha256": "b76d982e22645bedc62d2b8d76da2ae577ffea8d543a4a77cc693cdf6794ddc8"
     },
     "CONTRIBUTING.md": {
       "bytes": 2658,
@@ -460,8 +460,8 @@
       "sha256": "0c09a858f60b7a0ef93ed33144f8e3badc889709298d84a570e906fc06a65a65"
     },
     "FarmVillage/macOS/Scripts/build.sh": {
-      "bytes": 774,
-      "sha256": "83e49c2ae285442b2ee59c7ad552bf6f58b6353ebb62cc69dfd80402b0260631"
+      "bytes": 5173,
+      "sha256": "ac62b365e5bc6c96f5d9ada062861d71d2313f1fc24e09829eb404abfde4576e"
     },
     "FarmVillage/macOS/Scripts/bundle-runtime.sh": {
       "bytes": 4369,
@@ -1908,8 +1908,8 @@
       "sha256": "3e81b797931fb151de07ec298f93f3d7143b506117f7e151d1ddafbbe5370107"
     },
     "HANDOVER_STATUS.md": {
-      "bytes": 4023,
-      "sha256": "328aed70a4564f8eba363313757301da719124a654b09835552a66d643e78ca9"
+      "bytes": 4689,
+      "sha256": "1a84f2daf6dd4c06826a8bc62d6608b8a91dd1957064fb70ed392152c16a3f38"
     },
     "LICENSE": {
       "bytes": 35149,
@@ -1920,8 +1920,8 @@
       "sha256": "39987da1e007eb22b3fcf2efc2ef08bd180a0ad1aaf6101eca8f6815ef58e167"
     },
     "README.md": {
-      "bytes": 5562,
-      "sha256": "f060dd0ce3a86b9e64b2ecf5fbc7d232d2876df82a02a4c9c57e3bbfda4cd670"
+      "bytes": 6784,
+      "sha256": "558ceabfd18a131af267bb0b94a929e2409d4f3e5717f4c14a0d8279fa2504ef"
     },
     "RESOURCE_SETUP_RECOVERY.patch": {
       "bytes": 225183,
@@ -1932,8 +1932,12 @@
       "sha256": "06f27b4d050b02515e21fdd33ca2a0768d05212e2dd6fb7f728e81b450c17586"
     },
     "START_HERE.sh": {
-      "bytes": 1386,
-      "sha256": "e864e9a1e0106b6c156d44514bd18f8f6ae6c2e7f1662949e9da610c3414d409"
+      "bytes": 2179,
+      "sha256": "18cf2a82267a7790f8676969a6823f393d409b0132888b50a4f9757df156c080"
+    },
+    "START_MAC.command": {
+      "bytes": 2109,
+      "sha256": "ef8fec0da5dd65aacc930b43d2399c0f1f805259f17fd5a47039d86954e9eb27"
     },
     "TAKEOVER.md": {
       "bytes": 5873,
@@ -1952,8 +1956,16 @@
       "sha256": "cda9445bb2c077d021c1ace68a4607419d3831b8518e577ae54075617665f42c"
     },
     "docs/DEVELOPMENT.md": {
-      "bytes": 5566,
-      "sha256": "2081a4fb884662517eacc2811589fa4bc823b7de49529a9c9030f7ba513e7946"
+      "bytes": 5952,
+      "sha256": "a990e839d56620a3db5b038579dad48ae4b5dda593c1c12758c3b5176caefb22"
+    },
+    "docs/PLAY_ON_MAC.md": {
+      "bytes": 5507,
+      "sha256": "a9fc8ce110579ead769c59bc6a9624185ed40f6f89c3a5d5813cea5f3c107ba7"
+    },
+    "docs/PLAY_ON_SERVER.md": {
+      "bytes": 5588,
+      "sha256": "c699ffb7b94ba21c2500318f6e4caaccf618bdb9cd3727dd6b7c63ada618bae7"
     },
     "docs/RESOURCE_SETUP.md": {
       "bytes": 7474,
@@ -1964,8 +1976,12 @@
       "sha256": "de0c683160fe7a4efeaa779a3e3b3994c7ed22c74246e4a2ee6700601f47c2a6"
     },
     "tools/check-source.py": {
-      "bytes": 4540,
-      "sha256": "bddb3b3738d24c8f7558e825b651b910fd7017a487eda99fbcefce7103ce1245"
+      "bytes": 4731,
+      "sha256": "cc0d385fcf91031185d381f55547a3c9cb5994fb7290ae52495f9b9a0e6eba0b"
+    },
+    "tools/player-setup.py": {
+      "bytes": 16783,
+      "sha256": "91cd7b319663f382861207044545fb8d439a63c3eec744fd1fe5528dffbfc35f"
     },
     "tools/prepare-browser-runtime.py": {
       "bytes": 3900,
@@ -1980,16 +1996,24 @@
       "sha256": "a5591fb6e0dac30d789561833681136a8e707c892430ae402beedd15a06da081"
     },
     "tools/setup-wizard.py": {
-      "bytes": 25445,
-      "sha256": "21e7ca0739bd0daac9b1c88e4b85b98b6680bd9c9f78b25a335e82d0982b3bb3"
+      "bytes": 25500,
+      "sha256": "af450d2b292025c22a7d7f2fe2862dd824a6c928803028cdac1c6e50aa72ebbe"
     },
     "tools/test_handoff_tools.py": {
       "bytes": 7404,
       "sha256": "d145933d879d174e642f6a85844f651ff51717babd5dacd0d661464b9928511f"
     },
+    "tools/test_mac_build_preflight.py": {
+      "bytes": 6172,
+      "sha256": "4faae9e3a61738fb5910e52d8a83032ab6e026048f0623d95241531dd21f12fa"
+    },
+    "tools/test_player_setup.py": {
+      "bytes": 9601,
+      "sha256": "4cf9b681898a70fe119e3174b0b3ae11075bb9bb598c0d00eecf691a2fa6dd52"
+    },
     "tools/test_setup_wizard.py": {
-      "bytes": 11992,
-      "sha256": "4a0e107a159b32bffd6af96317158e871e9bd93df4ebb102989a312795fe6927"
+      "bytes": 14994,
+      "sha256": "b06057ecca674906a9960a67a225c3a3e4292d331b2e8a8a95a329b5649e9903"
     }
   },
   "githubDesktopHandoff": {
@@ -2062,6 +2086,27 @@
     "scope": "Resolve README conflict, return incomplete applied draft to preserved patch, correct upload instructions, reject sealed conflict markers",
     "uploadStrategy": "Reviewed source copied into the existing owner-created GitHub Desktop repository; Desktop initial commit and text attributes preserved; previous checkout Git history not copied; owner publishes through browser-authenticated Desktop"
   },
+  "playerSetupRevision": {
+    "actualNativeBuildOrUbuntuInstallationRun": false,
+    "archiveBytes": 19126111395,
+    "audiences": [
+      "native Mac players with large local installation",
+      "Ubuntu/Linux server owners with browser players"
+    ],
+    "automaticPublicResourceBootstrapImplemented": false,
+    "date": "2026-10-26",
+    "entryPoints": {
+      "mac": "START_MAC.command",
+      "serverSource": "START_HERE.sh"
+    },
+    "expectedPreparedInputsMissingInSourceClone": 1843,
+    "gameplayRulesChanged": false,
+    "macArtworkDownload": "A complete native app can fetch the four original archives on first Create/Open Farm",
+    "qualifiedPeakSpaceBytes": null,
+    "serverArtworkDownload": "Prepared-release installer requires already-extracted artwork",
+    "sourceWizard": "read-only readiness guide; no game install/download/build",
+    "syntheticSetupTestsPassed": 62
+  },
   "publicDocumentationRevision": {
     "applicationCodeChanged": false,
     "date": "2026-10-26",
@@ -2080,7 +2125,7 @@
     "upstreamRepository": "https://github.com/AcidCaos/farmvillage"
   },
   "resealScope": "Reviewed source changes only; gameplay/platform acceptance requires a separate new record",
-  "reviewedFromCommit": "d827d66076118368fdf005e7c1fd56227e6078c6",
+  "reviewedFromCommit": "adc1230029f2e9dadd8390a12d7474e7011977b1",
   "schema": 1,
   "source": {
     "FarmVillage": "62809de497404588f133e38740242864717af0c0",
