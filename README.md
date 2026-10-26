@@ -10,12 +10,59 @@ The aim is to make the original farming experience playable locally while preser
 
 | Audience | Where the full game lives | Start here |
 | --- | --- | --- |
-| **Mac players willing to install 20+ GB locally** | On your Mac, using the native app; a separate server is not required | [Mac player guide](docs/PLAY_ON_MAC.md) · `START_MAC.command` |
+| **Mac players who can spare the disk space and a few hours** | On your Mac, using the native app; a separate server is not required | [New to this? Mac quick start](#new-to-this-start-here-on-a-mac) · [Mac player guide](docs/PLAY_ON_MAC.md) |
 | **People with an Ubuntu/Linux server** | On the host; players connect through their browsers without installing the full archives on each computer | [Server owner guide](docs/PLAY_ON_SERVER.md) · `bash START_HERE.sh` on the host |
 
 The source launchers show the complete download plan, ask for a dedicated folder and require exact confirmation before downloads/builds. They fetch the original client and four artwork WARCs from public sources, generate metadata and build Ruffle. No owner’s Mac files, private server or GitHub account is required.
 
 **Storage:** original compressed artwork is 19.13 GB. Source compilation and extracted artwork require more: the installer conservatively asks for 110 GiB free for Mac or 80 GiB for server resource preparation. The server’s final installation needs additional staging space. Exact fresh-install peak is not yet qualified. Read the appropriate player guide before starting.
+
+## New to this? Start here on a Mac
+
+You do not need to be a programmer to try this. You do need patience. The installer builds the game on your own computer, a bit like baking from scratch instead of buying the cake: the first time takes hours, but nearly all of it is waiting. The installer does the work and tells you what it is doing at each step.
+
+**Honest status:** this is an alpha, and the complete install, from a clean Mac to a farm that survives a restart, has not yet been tested end to end. If you try it, you are one of the first, and your report of what happened is valuable. Nothing here needs an account, a password, an Apple developer membership or a GitHub login.
+
+### What you need first
+
+| You need | Why | Good to know |
+| --- | --- | --- |
+| A Mac with **macOS 14 or newer** | The game runs as a native Mac app. | Apple Silicon Macs are the ones tested so far. Intel Macs are supported on paper but have not been played yet. |
+| About **110 GB free** on one drive | The original artwork alone is 19 GB compressed, and unpacking and building need much more. | This is a cautious allowance, not a measured size. You can check your space in System Settings, General, Storage. 20 GB free is not enough. |
+| **Python 3.10 or newer** from [python.org](https://www.python.org/downloads/macos/) | The installer is written in Python. | The `python3` that comes with the Mac does not count, and the installer will not use it. Install the python.org one, then start again. |
+| **Full Xcode** from the Mac App Store | It builds the app. | The smaller "Command Line Tools" are not enough. Open Xcode once after installing so it can finish its first-time setup. If the installer still cannot find it, open Xcode, go to Settings, Locations, and choose Xcode under Command Line Tools. |
+| A steady internet connection and a few hours | The installer downloads the original game files. | A first installation can take hours. You can leave it running. |
+
+If something is missing, the installer says so and stops before downloading anything.
+
+### The steps
+
+1. On the [repository page](https://github.com/jannsenburke/FarmVillage-GodBarn), choose **Code, then Download ZIP**, and unzip it.
+2. Open **Terminal** (press Command and Space, type `Terminal`, press Return). It is the plain text window; you only need to paste or type a few lines. Type `cd ` with a space after it, drag the unzipped folder onto the Terminal window, and press Return. Then run:
+
+   ```sh
+   bash START_MAC.command
+   ```
+
+   You can also double-click `START_MAC.command` in Finder. If macOS blocks it because it came from the internet, use the Terminal route above instead.
+3. Choose **1** to install. The installer shows the full plan first: what it will download, how much space it needs and where it will put things.
+4. Give it the path of a **brand new, empty folder** on a drive with plenty of space, for example `/Volumes/Games/FarmVillage`. Not your home folder, not the folder you just unzipped, and not a folder that already has things in it.
+5. When you are happy with the plan, type the word `INSTALL` followed by the exact folder path it shows you. Until you do that, nothing is downloaded and nothing is built.
+6. Leave Terminal open and let it work. Lots of text scrolling past is normal.
+7. When it finishes, the app opens. Choose **Create Farm**, pick a name and start playing. Next time, double-click **PLAY_MAC.command** inside your game folder.
+
+### Things that look scary but are normal
+
+- **A very long wait.** Four large archives download, the artwork is unpacked, and the Flash player is compiled from source. Hours are expected.
+- **A wall of text in Terminal.** It is a progress log, not an error. Real problems are named in plain words and the installer stops.
+- **An app you built yourself.** It is not signed by Apple's developer program, because it is made on your own Mac.
+- **Incomplete corners of the game.** There are sixteen worlds and some regional features are unfinished. [World readiness](WORLD_READINESS.md) says which.
+
+### If something stops
+
+You cannot break anything by stopping and trying again. Fix whatever the message names (a missing Python or Xcode is the usual one), run `bash START_MAC.command` again, and choose the **same** folder. Downloads that already passed their checks are reused. Do not run two installers on the same folder, and do not delete the game folder afterwards: it holds the artwork the app needs and your farms.
+
+For every detail, including what is downloaded from where, read the full [Mac player guide](docs/PLAY_ON_MAC.md). To tell us how it went, see [contributing](CONTRIBUTING.md).
 
 ## What’s included
 
@@ -27,7 +74,9 @@ The source launchers show the complete download plan, ask for a dedicated folder
 
 macOS desktop and browser/Ubuntu are the continuing targets. iPad/iOS development is discontinued. Enchanted Glen and Holiday Lights are excluded from the active world roster.
 
-## Get started with the source
+## For contributors: check the source
+
+Players can skip this section. It is for people who want to read, test or change the code.
 
 Use Python 3.10+ and Bash. Clone the repository and run the lightweight source check:
 
