@@ -272,6 +272,58 @@ class FormsAndPurityTests(unittest.TestCase):
                 self.assertEqual(PE.evaluate(bad, FACTS).reasons, ("malformed-node",))
         self.assertEqual(PE.evaluate({"type": "AND", "children": ["oops"]}, FACTS).reasons, ("malformed-node",))
 
+    def test_a_reference_never_answers_over_authored_children_it_would_ignore(self):
+        names = {"ok": leaf("location", "farm")}
+        for child in (known(NO), known(YES), known(UNKNOWN)):
+            with self.subTest(child.attrib):
+                element = leaf("prereq_check", "ok")
+                element.append(child)
+                mapping = {"type": "prereq_check", "value": "ok", "children": [{"type": "location", "value": "elsewhere"}]}
+                for node in (element, mapping):
+                    result = PE.evaluate(node, FACTS, nodes=names)
+                    self.assertEqual((result.verdict, result.reasons), (UNKNOWN, ("leaf-has-children:prereq_check",)))
+        self.assertEqual(verdict(leaf("prereq_check", "ok"), nodes=names), YES, "a childless reference still resolves")
+        self.assertEqual(verdict(group("AND", known(YES), leaf("prereq_check", "ok")), nodes=names), YES)
+
+    def test_malformed_mappings_are_unknown_never_an_exception(self):
+        cases = {
+            "type is a list": ({"type": ["location"], "value": "farm"}, "unsupported-type:list"),
+            "type is a mapping": ({"type": {"a": 1}}, "unsupported-type:dict"),
+            "type is a number": ({"type": 5}, "unsupported-type:int"),
+            "type is missing": ({"value": "x"}, "unsupported-type:None"),
+            "group children is a number": ({"type": "AND", "children": 5}, "malformed-children:AND"),
+            "group children is a mapping": ({"type": "OR", "children": {"type": "location"}}, "malformed-children:OR"),
+            "group children is a string": ({"type": "AND", "children": "location"}, "malformed-children:AND"),
+            "leaf children is a number": ({"type": "location", "value": "farm", "children": 5}, "malformed-children:location"),
+            "reference children is a number": ({"type": "prereq_check", "value": "n", "children": 5}, "malformed-children:prereq_check"),
+            "operator is a list": ({"type": "level_min", "value": "1", PE.OPERATOR_ATTRIBUTE: ["gte"]}, "unknown-operator:['gte']"),
+            "operator is a mapping": ({"type": "coins", "value": "1", PE.OPERATOR_ATTRIBUTE: {"gte": 1}}, "unknown-operator:{'gte': 1}"),
+            "group has a non-string attribute": ({"type": "AND", 1: "x", "children": [{"type": "location", "value": "farm"}]}, "unknown-attribute:1"),
+            "leaf has a non-string attribute": ({"type": "location", "value": "farm", 1: "x"}, "unknown-attribute:1"),
+            "reference has a non-string attribute": ({"type": "prereq_check", "value": "n", None: "x"}, "unknown-attribute:None"),
+        }
+        for label, (node, reason) in cases.items():
+            with self.subTest(label):
+                result = PE.evaluate(node, FACTS, nodes={"n": known(YES)})
+                self.assertEqual((result.verdict, result.reasons), (UNKNOWN, (reason,)))
+        mixed = {"type": "AND", "z": 1, 2: 2, "children": [known(YES)]}
+        self.assertEqual(PE.evaluate(mixed, FACTS).reasons, ("unknown-attribute:2,z",), "mixed key types are named in a stable order")
+        self.assertEqual(verdict({"type": "AND", "children": []}), UNKNOWN)
+        self.assertEqual(verdict({"type": "AND", "children": ()}), UNKNOWN, "an empty tuple is still an empty group")
+        self.assertEqual(verdict({"type": "OR", "children": (known(YES), known(UNKNOWN))}), YES, "a tuple of children is accepted")
+        self.assertEqual(verdict({"type": "location", "value": "farm", "children": []}), YES, "empty children is not content")
+
+    def test_integers_of_any_size_are_numbers_but_other_non_finite_values_are_not(self):
+        huge = 10 ** 400
+        facts = {**FACTS, "coins": huge, "cash": -huge, "player_level": 10 ** 5000}
+        self.assertEqual(verdict(leaf("coins", "100"), facts), YES)
+        self.assertEqual(verdict(leaf("coins", "100", **{PE.OPERATOR_ATTRIBUTE: "lte"}), facts), NO)
+        self.assertEqual(verdict(leaf("cash", "0"), facts), NO)
+        self.assertEqual(verdict(leaf("level_min", "5"), facts), YES)
+        for bad in (True, float("nan"), float("inf"), float("-inf"), "7", None, 1 + 2j):
+            with self.subTest(repr(bad)):
+                self.assertEqual(PE.evaluate(leaf("coins", "1"), {**FACTS, "coins": bad}).reasons, ("missing-fact:coins",))
+
     def test_facts_and_name_tables_must_be_mappings(self):
         for call in (lambda: PE.evaluate(known(YES), []), lambda: PE.evaluate_named("a", {}, []), lambda: PE.evaluate_all([known(YES)], None),
                      lambda: PE.evaluate(known(YES), FACTS, nodes=[]), lambda: PE.evaluate_named("a", [], FACTS)):

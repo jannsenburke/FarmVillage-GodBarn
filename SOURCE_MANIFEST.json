@@ -1488,8 +1488,8 @@
       "sha256": "6e3efbe2f035e32757c84d3dfd46bd3cd2731731fcb9d73bbda57d17b541d2ff"
     },
     "FarmVillage/prereq_eval.py": {
-      "bytes": 12015,
-      "sha256": "b50933d6a2472978e724d92d47baf8168fc76eb771f768cea861d0d2983e1fc5"
+      "bytes": 12907,
+      "sha256": "4f69a675c9812849f83dc39c9b224e1c4e6132934807872e4a460e3eea1fd93e"
     },
     "FarmVillage/progression.py": {
       "bytes": 8826,
@@ -1528,40 +1528,32 @@
       "sha256": "c63981977750d740c24a70fdd1582f9f4b40f9bb8bf18fd8ed2790e576628e0d"
     },
     "FarmVillage/ruffle_runtime/0.7.1-farmvillage-gc1/provenance/README.md": {
-      "bytes": 3285,
-      "sha256": "8fe7ecdfc72e483a616ac7da422dc2c0db34ad8a0adb1f0165ed71eedff3acbe"
+      "bytes": 3509,
+      "sha256": "b2e67db750f0f34f1007a6762286e5b66afbb24c8c347f435f3306467ed557df"
     },
     "FarmVillage/ruffle_runtime/0.7.1-farmvillage-gc1/provenance/build-runtime.py": {
-      "bytes": 9578,
-      "sha256": "a761b283d051f78fe18c85e9a5cb09733d17dc65b4c2a5cf86b064d453154e04"
+      "bytes": 5733,
+      "sha256": "83e333c908de4035da03cf5798414547a479e98f6e6089967f2f6fdd81100f94"
     },
     "FarmVillage/ruffle_runtime/0.7.1-farmvillage-gc1/provenance/gc-pacing.patch": {
       "bytes": 1069,
       "sha256": "502ad9492deb3b5904d1b09c535ec521345b86b17b8db16145de862046515d14"
     },
-    "FarmVillage/ruffle_runtime/0.7.1-farmvillage-gc1/provenance/historical-runtime-files.json": {
-      "bytes": 1157,
-      "sha256": "dbf47a0423d55d36e2201099f4922f9a4fe03417fc39c75809d14099f25f2e4c"
-    },
     "FarmVillage/ruffle_runtime/0.7.1-farmvillage-gc1/provenance/package-lock.json": {
       "bytes": 721670,
       "sha256": "fff432c1cd6a43c1b907dca1ebe438d38f28748368060cd1769bb9cb5bf05147"
     },
-    "FarmVillage/ruffle_runtime/0.7.1-farmvillage-gc1/provenance/public-build.json": {
-      "bytes": 1054,
-      "sha256": "2ea937ff40770f4654c273d3219144e67b5a69cf47b2a1c773de377d9cf0afd4"
-    },
     "FarmVillage/ruffle_runtime/0.7.1-farmvillage-gc1/provenance/runtime-files.json": {
       "bytes": 1157,
-      "sha256": "45ae72215a43427082a8a15b8f55d350d752143910f1430d8cf95e0def466836"
+      "sha256": "dbf47a0423d55d36e2201099f4922f9a4fe03417fc39c75809d14099f25f2e4c"
     },
     "FarmVillage/ruffle_runtime/0.7.1-farmvillage-gc1/provenance/version-seal.json": {
       "bytes": 295,
       "sha256": "e31f5d3d95f93dc508f2921263917950907ca616a16f63ba7fbb0a6656f4db5a"
     },
     "FarmVillage/runtime_compatibility.py": {
-      "bytes": 26979,
-      "sha256": "3750a0b94770ba50251868d6be37595cce3d77323dbfd11f59766b9b8286ea1c"
+      "bytes": 27067,
+      "sha256": "37195f670c6e5c10d024bb7c55cb686987ab8a5895e87b25012ca1aaaf709cde"
     },
     "FarmVillage/server.py": {
       "bytes": 55666,
@@ -1678,6 +1670,10 @@
     "GodBarn/__init__.py": {
       "bytes": 73,
       "sha256": "1b969df0d0ca6372aec884da79c9c172c1bbccca4ad907fa4a22d093017bbd11"
+    },
+    "GodBarn/branding/README.md": {
+      "bytes": 1611,
+      "sha256": "3e7418547c049e1186ca09e7e880de3745cc8df0a214d69d51e5f4087179c558"
     },
     "GodBarn/catalog_tools.py": {
       "bytes": 13818,
@@ -2000,8 +1996,8 @@
       "sha256": "5ea0035961be78c0b817302a523d1ba5d461a2c5e50ff118d1ff467f65810018"
     },
     "docs/RESOURCE_SETUP.md": {
-      "bytes": 5694,
-      "sha256": "bf4645fc82151d6f03b9b2a59f0a0a2d7ab92e6666e4aa8ef921b38eb3f4e096"
+      "bytes": 5660,
+      "sha256": "75a729e96cebe582a04881889d438638b28f8ee9910c6d04b0dca3eb277bbc00"
     },
     "docs/UBUNTU_ACCEPTANCE.md": {
       "bytes": 13025,
@@ -2012,8 +2008,8 @@
       "sha256": "4a385576eb1ae329cd5315770d96d63c50a4311743907e0c07d678fbfa752776"
     },
     "tools/build-public-ruffle.py": {
-      "bytes": 19593,
-      "sha256": "01046855ffcafa2c276f4ba18810f3bd7c1b7088d17f0a8242fc655143346a0f"
+      "bytes": 19787,
+      "sha256": "30d86146dbf33abb56e2959efbecceb223145bc052fa8a6dfa72c5c98a61c51e"
     },
     "tools/check-doc-links.py": {
       "bytes": 2039,
@@ -2050,6 +2046,42 @@
     "tools/public-resources.json": {
       "bytes": 8468,
       "sha256": "fead81f47373f9eba61f5ad79016f4a660e05af764a18b85c8301f8ffd47ee0d"
+    },
+    "tools/public-ruffle-build/Cargo.lock": {
+      "bytes": 190676,
+      "sha256": "c63981977750d740c24a70fdd1582f9f4b40f9bb8bf18fd8ed2790e576628e0d"
+    },
+    "tools/public-ruffle-build/README.md": {
+      "bytes": 4501,
+      "sha256": "5c9199ef321bbced33a8c9faad9ad49b62b06577f06e94cf20ddd10a770617a0"
+    },
+    "tools/public-ruffle-build/build-runtime.py": {
+      "bytes": 9578,
+      "sha256": "a761b283d051f78fe18c85e9a5cb09733d17dc65b4c2a5cf86b064d453154e04"
+    },
+    "tools/public-ruffle-build/gc-pacing.patch": {
+      "bytes": 1069,
+      "sha256": "502ad9492deb3b5904d1b09c535ec521345b86b17b8db16145de862046515d14"
+    },
+    "tools/public-ruffle-build/historical-runtime-files.json": {
+      "bytes": 1157,
+      "sha256": "dbf47a0423d55d36e2201099f4922f9a4fe03417fc39c75809d14099f25f2e4c"
+    },
+    "tools/public-ruffle-build/package-lock.json": {
+      "bytes": 721670,
+      "sha256": "fff432c1cd6a43c1b907dca1ebe438d38f28748368060cd1769bb9cb5bf05147"
+    },
+    "tools/public-ruffle-build/public-build.json": {
+      "bytes": 1054,
+      "sha256": "2ea937ff40770f4654c273d3219144e67b5a69cf47b2a1c773de377d9cf0afd4"
+    },
+    "tools/public-ruffle-build/runtime-files.json": {
+      "bytes": 1157,
+      "sha256": "45ae72215a43427082a8a15b8f55d350d752143910f1430d8cf95e0def466836"
+    },
+    "tools/public-ruffle-build/version-seal.json": {
+      "bytes": 295,
+      "sha256": "e31f5d3d95f93dc508f2921263917950907ca616a16f63ba7fbb0a6656f4db5a"
     },
     "tools/public-ruffle-toolchains.json": {
       "bytes": 3110,
@@ -2116,8 +2148,8 @@
       "sha256": "5d0fd4063581d094c01e22dd676bde030246e1f1ad22c00ad25044c975f2e4d2"
     },
     "tools/test_prereq_eval.py": {
-      "bytes": 28355,
-      "sha256": "9a7d40efec336b72e24b627f27e4e88bff4d767f1e84e1343cf7890b519f74ae"
+      "bytes": 32636,
+      "sha256": "0c3c164f41c06ad5fe52840911255ef7093ba6986ff17b01ab6f855b22a70281"
     },
     "tools/test_prerequisite_dispositions.py": {
       "bytes": 18229,
@@ -2128,12 +2160,12 @@
       "sha256": "2f6fb2d0f21f18c16c7ea249e7c6eca42a8c188b17d6f0bc1c0bd3432512ef44"
     },
     "tools/test_public_install_flow.py": {
-      "bytes": 11055,
-      "sha256": "ea92d50d7a1dc0cc29ef2b4f5045b471c88ff9b8006ad7b410e227d1542827af"
+      "bytes": 11032,
+      "sha256": "9b540129dfee0dec56c826857683cdd0ad940339e84461793d45b044d72aca75"
     },
     "tools/test_public_ruffle.py": {
-      "bytes": 19067,
-      "sha256": "ac8dceede1a027ad0afa88ddcd882fb04c845f9c9f7db21597d80911b6f23865"
+      "bytes": 22978,
+      "sha256": "2cfa8d3027ea22b6209b5ca716f49a88fd3cfe4c50db58404c93cc2b5de88136"
     },
     "tools/test_rehearse_linux_host.py": {
       "bytes": 11668,

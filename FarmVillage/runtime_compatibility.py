@@ -207,7 +207,8 @@ def prepare_public_runtime(payload: Path, receipt_path: Path, *, receipt_sha256:
     selected = _release(None)
     directory = bundled_runtime(payload, selected)
     receipt = validate_public_build(directory, Path(receipt_path), receipt_sha256=receipt_sha256)
-    provenance_source = Path(__file__).absolute().parent / "ruffle_runtime" / selected.runtime_id / "provenance"
+    # The recipe lives beside the installer tools, apart from the hard-pinned historical player directory.
+    provenance_source = Path(__file__).absolute().parent.parent / "tools/public-ruffle-build"
     toolchain_pins = Path(__file__).absolute().parent.parent / "tools/public-ruffle-toolchains.json"
     verify_public_build_inputs(provenance_source, toolchain_pins)
     provenance = directory / "provenance"

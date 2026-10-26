@@ -1,58 +1,60 @@
-# Public FarmVillage Ruffle build
+# FarmVillage Ruffle GC compatibility build
 
-The resource installer builds Ruffle from public commit
-`89a7049965f3090e706265670df309a5128233ac` and the included
-`gc-pacing.patch`. The patch starts incremental collection earlier on wasm32;
-it preserves upstream frame scheduling, reachability, renderer, music and the
-JPEG XR codec. Ruffle retains its MIT OR Apache-2.0 licenses.
+This is a separately identified build of Ruffle 0.7.1 at upstream commit
+`89a7049965f3090e706265670df309a5128233ac`. The only tracked Rust source change
+is the accompanying `gc-pacing.patch`: on wasm32, install smaller gc-arena
+sleep/work factors before creating player globals. This allows incremental
+collection to begin earlier and do more work before the 4 GiB linear heap fills.
+It preserves normal frame scheduling, reachability, drop behavior, codecs,
+original game music, and the upstream renderer. It adds no allocator logging,
+Arena tracing, forced collection, PixelBender instrumentation, or runtime debug API.
 
-The normal player wizard invokes `tools/build-public-ruffle.py`. Its standalone
-equivalent, from the repository root, is:
+Keeping this directory in the repository does not select or install it. Selection
+uses the separately reviewed `runtime_compatibility.ACTIVE_RELEASE` manifest pin.
+Native acceptance evidence is recorded separately. The previous official Ruffle
+0.7.1 runtime is preserved in existing profiles.
+
+The twelve runtime files are the complete self-hosted distribution: matching
+loader, core chunks, modern and MVP WebAssembly, source maps, package metadata,
+upstream README, and MIT/Apache licenses. `runtime-files.json` pins those outputs.
+The outer `.farmvillage-ruffle.json` additionally pins every provenance file.
+
+## Maintainer rebuild
+
+End users need no Rust, Cargo, Node, npm, LLVM, or wasm-bindgen. These tools are
+only used to produce the already vendored package.
+
+Use a fresh checkout of the exact upstream commit with its normal submodules,
+Rust 1.99.1 (`58cf8f9c35b355199727627d07ae34a4e2846d67`, LLVM 23.1.1), the
+`wasm32-unknown-unknown` target, `rust-src` and `llvm-tools` components,
+wasm-bindgen CLI 0.2.127, Node v24.19.0 and npm 11.0.0. The included Cargo.lock
+and npm package-lock.json are byte-identical to the pinned upstream checkout.
+Run npm with `ci --ignore-scripts`; invoke the explicit upstream build steps.
+The complete adaptable command driver is `build-runtime.py`:
 
 ```sh
-python3 tools/build-public-ruffle.py \
-  --work /path/to/resource-pack/work/ruffle \
-  --output /path/to/resource-pack/Runtime/ruffle_runtime/0.7.1-farmvillage-gc1
+python3 build-runtime.py --source /absolute/path/to/clean/ruffle \
+  --destination /absolute/path/to/new/output \
+  --node /absolute/path/to/node \
+  --npm-cli /absolute/path/to/npm/bin/npm-cli.js \
+  --wasm-bindgen /absolute/path/to/wasm-bindgen
 ```
 
-Both locations must be outside the source checkout. Build tools, compiler
-caches, source checkout and temporary files stay in the chosen work folder.
-Builds can take hours and require several GB beyond the original game resources.
-Nothing is installed globally. Git and a Clang C/C++ toolchain with wasm32
-support must already be installed; the player wizard checks prerequisites.
+Both Cargo builds use `-p ruffle_web --features jpegxr --locked` and the wasm32
+target, preserving the full JPEG XR codec. The modern profile enables bulk
+memory, SIMD, nontrapping float-to-int, sign extension and reference types;
+wasm-bindgen receives `--reference-types`. The fallback uses `target-cpu=mvp`,
+`RUSTC_BOOTSTRAP=1`, and `-Z build-std=std,panic_abort`; its C codec flags disable
+reference types and multivalue. Both builds set `AR_wasm32_unknown_unknown` to
+the Rust sysroot's host `llvm-ar`. Native macOS `ar` creates an empty wasm codec
+archive and must not be substituted. Both use `CARGO_BUILD_JOBS=3`.
 
-The bootstrap downloads official checksum-pinned Rust 1.99.1 (with wasm32,
-rust-src and LLVM tools), Node 24.19.0, npm 11.0.0, wasm-bindgen 0.2.127 and
-Temurin Java 17.0.16+8. Pins for Apple Silicon/Intel macOS and ARM64/x86_64
-Linux are in `tools/public-ruffle-toolchains.json`. Downloads are anonymous
-HTTPS. Git runs with its own empty home and disabled personal configuration,
-credential helpers, hooks and prompts.
+Packaging uses the fixed `version-seal.json`, matching bindgen output for both
+modules, TypeScript build, version/text/CSS generation, and self-hosted webpack.
+No wasm-opt pass was applied. The driver compares all twelve final SHA256s and
+refuses to call a different output the reviewed build. The executed build used
+an Apple Silicon macOS host; rebuilding on another host must pass those pins or
+receive a new review. No claim of cross-host byte reproducibility is implied.
 
-The recipe checks the exact upstream commit and both lockfiles before applying
-the reviewed patch. It builds `jpegxr` in modern `web-wasm-extensions` and
-fallback `web-wasm-mvp` profiles. Modern WASM enables bulk memory, SIMD,
-nontrapping conversions, sign extension and reference types; fallback uses
-`target-cpu=mvp`, `build-std`, and C flags disabling reference types/multivalue.
-The matching wasm-bindgen outputs, version seal, TypeScript generators and
-self-hosted webpack produce twelve files: loader, two core chunks, two WASM
-modules, source maps, metadata, README and licenses. No wasm-opt is applied.
-Rust and C source paths map to `/farmvillage-public-build`.
-
-Each host uses its installed Clang, so Linux output is allowed to differ from
-Apple Clang output. The completed build receipt records source/patch/recipe,
-lockfile/toolchain identities, host/compiler and every output SHA256. The
-installer verifies it, adds source provenance, seals the full distribution in
-`.farmvillage-ruffle.json`, and binds that manifest hash to its prepared resource
-state. Launch requires that explicit prepared pin; it never substitutes an
-arbitrary downloaded player. A failed command or partial build is not sealed.
-
-`runtime-files.json` records earlier public Apple Silicon output hashes for
-comparison; `historical-runtime-files.json` records older private build hashes.
-Neither is a universal output pin for Linux. The strict historical default
-runtime pin remains separate from newly prepared source builds.
-
-A verified source build establishes input/output integrity. It does not claim
-gameplay, native-window or Ubuntu qualification; those checks need a real game
-installation on the relevant target.
-
-[Pinned upstream source](https://github.com/ruffle-rs/ruffle/tree/89a7049965f3090e706265670df309a5128233ac)
+The fork remains under upstream's MIT OR Apache-2.0 licenses, retained at the
+package root. Upstream source: https://github.com/ruffle-rs/ruffle/tree/89a7049965f3090e706265670df309a5128233ac
