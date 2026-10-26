@@ -1940,8 +1940,8 @@
       "sha256": "39987da1e007eb22b3fcf2efc2ef08bd180a0ad1aaf6101eca8f6815ef58e167"
     },
     "README.md": {
-      "bytes": 6817,
-      "sha256": "11afaaa083497fcebed088c6a2def2679e63a37ba64b785a82806f7d5e3757ab"
+      "bytes": 11613,
+      "sha256": "c94a24479f6636835ac331eeafc8786d907a75e40b6d221eabeadeb18312c4f6"
     },
     "RESOURCE_SETUP_RECOVERY.patch": {
       "bytes": 225183,
