@@ -28,8 +28,8 @@
       "sha256": "519a0ae4cca2474c04c5ce2f5b1583b2e8c9d363410552edad5c4a3fac971047"
     },
     ".github/source-checks.yml.example": {
-      "bytes": 865,
-      "sha256": "b01a79de085c72db53206d01fe105236593d4b569c31c6bb237854b0bf17994e"
+      "bytes": 1561,
+      "sha256": "0b2f0bafcf97c0a3e93510c48099d70afcadca7697a88ab0e3d9a81f6766876e"
     },
     ".gitignore": {
       "bytes": 149115,
@@ -1976,12 +1976,12 @@
       "sha256": "cda9445bb2c077d021c1ace68a4607419d3831b8518e577ae54075617665f42c"
     },
     "conftest.py": {
-      "bytes": 2216,
-      "sha256": "e48ed0be46862b9c2358581bfd4b1e448ab9feb1a89ad520481aa94cbe015c74"
+      "bytes": 6724,
+      "sha256": "d4124fe6d6e93c87ec51e5bb662dffd0c5f961635422454a12ef266da44306c8"
     },
     "docs/DEVELOPMENT.md": {
-      "bytes": 7067,
-      "sha256": "3d3347acb28f7580c2b3b94af11a6dafacffd2167f13acf7f0e9d7a878710068"
+      "bytes": 10804,
+      "sha256": "c84ba02d95cad87ff3a75e5f488b47182d2174130a819d83a0b46483d998e136"
     },
     "docs/PLAY_ON_MAC.md": {
       "bytes": 8350,
@@ -2062,6 +2062,10 @@
     "tools/setup-wizard.py": {
       "bytes": 27145,
       "sha256": "9c872dff429cb1b7556397305d983a4a25d39b97ccfd1bb980b054fea52fdae2"
+    },
+    "tools/test_conftest_unrun.py": {
+      "bytes": 10338,
+      "sha256": "c5d6f48edc0ee512578b29b29616bfbe5995808d50c78851bc54a561a044a209"
     },
     "tools/test_doc_consistency.py": {
       "bytes": 6795,
@@ -2268,7 +2272,7 @@
     "supersedes": "Earlier readiness-only setup and unapplied recovery status"
   },
   "resealScope": "Reviewed source changes only; gameplay/platform acceptance requires a separate new record",
-  "reviewedFromCommit": "27dd4e1fcdd9e2c277ed9c596db24375370444c6",
+  "reviewedFromCommit": "46ee71ffa19da91593024a594435688d48c969f6",
   "schema": 1,
   "source": {
     "FarmVillage": "62809de497404588f133e38740242864717af0c0",
