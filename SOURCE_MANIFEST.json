@@ -1976,8 +1976,8 @@
       "sha256": "cda9445bb2c077d021c1ace68a4607419d3831b8518e577ae54075617665f42c"
     },
     "docs/DEVELOPMENT.md": {
-      "bytes": 6544,
-      "sha256": "13fbf970841640486570712e3dc9b2b266b1d90956deae2c8f04fd7e18b75e74"
+      "bytes": 7067,
+      "sha256": "3d3347acb28f7580c2b3b94af11a6dafacffd2167f13acf7f0e9d7a878710068"
     },
     "docs/PLAY_ON_MAC.md": {
       "bytes": 8350,
@@ -2055,9 +2055,17 @@
       "bytes": 26630,
       "sha256": "3a60924d07bc3e1e99b9f9b1ee57ad394e37d912685fed652ed8f3a368319a15"
     },
+    "tools/test_doc_consistency.py": {
+      "bytes": 6795,
+      "sha256": "d9a6a2f84e57a99e21309cc6323e62b179cf95617776af3b56e324400a6ab0ff"
+    },
     "tools/test_handoff_tools.py": {
       "bytes": 7404,
       "sha256": "d145933d879d174e642f6a85844f651ff51717babd5dacd0d661464b9928511f"
+    },
+    "tools/test_installer_sequence.py": {
+      "bytes": 6680,
+      "sha256": "a71d798f3322eef3381dd8d6f3a8857cab709bca5686662c206f559cffa83613"
     },
     "tools/test_mac_build_preflight.py": {
       "bytes": 6175,
@@ -2068,8 +2076,8 @@
       "sha256": "279527d59e6dd8564eaac0a27ade992a1681ce0b2e7f8a1d2d912cecd6e4d1a7"
     },
     "tools/test_native_staging.py": {
-      "bytes": 12539,
-      "sha256": "018b408917783f66232d53d895839284beedf9271113160928f06c9d920b8027"
+      "bytes": 12803,
+      "sha256": "5b80afe419af9d87bfe6781a907a09ac7422ed13988653f6d56b368318ef072d"
     },
     "tools/test_player_install.py": {
       "bytes": 4340,
@@ -2252,7 +2260,7 @@
     "supersedes": "Earlier readiness-only setup and unapplied recovery status"
   },
   "resealScope": "Reviewed source changes only; gameplay/platform acceptance requires a separate new record",
-  "reviewedFromCommit": "adc1230029f2e9dadd8390a12d7474e7011977b1",
+  "reviewedFromCommit": "ac173c387cbf508281634603e27b365e01ce5d9c",
   "schema": 1,
   "source": {
     "FarmVillage": "62809de497404588f133e38740242864717af0c0",
