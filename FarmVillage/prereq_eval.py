@@ -96,9 +96,16 @@ def _attributes(node):
 
 
 def _children(node):
+    """The authored children, or None when a mapping's "children" is not a list or tuple."""
     if isinstance(node, Mapping):
-        return list(node.get("children") or ())
+        children = node.get("children") or ()
+        return list(children) if isinstance(children, (list, tuple)) else None
     return list(node)
+
+
+def _names(keys) -> str:
+    # Mapping nodes may carry non-string keys; report them without letting sorting or joining raise.
+    return ",".join(sorted(str(key) for key in keys))
 
 
 def _is_node(node) -> bool:
@@ -107,7 +114,11 @@ def _is_node(node) -> bool:
 
 
 def _is_number(value) -> bool:
-    return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+    if isinstance(value, bool):
+        return False
+    if isinstance(value, int):
+        return True  # math.isfinite would try to convert a very large integer to a float and overflow
+    return isinstance(value, float) and math.isfinite(value)
 
 
 def _integer(text):
@@ -151,9 +162,9 @@ def _leaf(kind, attributes, facts, ignore_end_time) -> Result:
         allowed.add(OPERATOR_ATTRIBUTE)
     if kind in VARIANT_TABLES:
         allowed.add("variant")
-    extra = sorted(set(attributes) - allowed)
+    extra = set(attributes) - allowed
     if extra:
-        return _unknown("unknown-attribute:" + ",".join(extra))
+        return _unknown("unknown-attribute:" + _names(extra))
     if kind == "end_time" and ignore_end_time:
         return _YES
     value = attributes.get("value")
@@ -163,7 +174,7 @@ def _leaf(kind, attributes, facts, ignore_end_time) -> Result:
     if kind in NUMERIC:
         fact_name, default = NUMERIC[kind]
         name = attributes.get(OPERATOR_ATTRIBUTE, default)
-        if name not in OPERATORS:
+        if not isinstance(name, str) or name not in OPERATORS:
             return _unknown("unknown-operator:" + str(name))
         threshold, fact = _integer(value), facts.get(fact_name)
         if threshold is None:
@@ -229,26 +240,32 @@ def _run(node, facts, nodes, ignore_end_time, max_depth, max_nodes, entry_path=(
             return _unknown("malformed-node")
         attributes = _attributes(current)
         kind = attributes.get("type")
+        if not isinstance(kind, str):
+            return _unknown("unsupported-type:" + (str(kind) if kind is None else type(kind).__name__))
+        kids = _children(current)
+        if kids is None:
+            return _unknown("malformed-children:" + kind)
         if kind in ("AND", "OR"):
-            extra = sorted(set(attributes) - {"name", "type"})
+            extra = set(attributes) - {"name", "type"}
             if extra:
-                return _unknown("unknown-attribute:" + ",".join(extra))
-            kids = _children(current)
+                return _unknown("unknown-attribute:" + _names(extra))
             if not kids:
                 return _unknown("empty-group")
             return _combine([walk(kid, depth + 1, path) for kid in kids], kind == "AND")
+        if kids:
+            # A reference answers only for what it names. Authored children it would ignore are
+            # unrecognised content, so the node is UNKNOWN rather than the referenced verdict.
+            return _unknown("leaf-has-children:" + kind)
         if kind == "prereq_check":
-            extra = sorted(set(attributes) - BASE_ATTRIBUTES)
+            extra = set(attributes) - BASE_ATTRIBUTES
             reference = attributes.get("value")
             if extra:
-                return _unknown("unknown-attribute:" + ",".join(extra))
+                return _unknown("unknown-attribute:" + _names(extra))
             if not isinstance(reference, str) or nodes is None or reference not in nodes:
                 return _unknown("unresolved:" + str(reference))
             if reference in path:
                 return _unknown("cycle:" + reference)
             return walk(nodes[reference], depth + 1, path + (reference,))
-        if _children(current):
-            return _unknown("leaf-has-children:" + str(kind))
         return _leaf(kind, attributes, facts, ignore_end_time)
 
     return walk(node, 0, tuple(entry_path))
