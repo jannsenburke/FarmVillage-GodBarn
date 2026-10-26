@@ -3,6 +3,7 @@
 import ast
 import hashlib
 import json
+import os
 from pathlib import Path
 import sys
 import tempfile
@@ -93,8 +94,18 @@ class RuntimeServingTests(unittest.TestCase):
         server_tree = ast.parse(SERVER_FILE.read_text())
         imported = next(node for node in server_tree.body if isinstance(node, ast.ImportFrom) and node.module == "bundle")
         self.assertIn("TMP_BUNDLED_DIR", [alias.name for alias in imported.names])
-        selection = next(node for node in server_tree.body if isinstance(node, ast.Assign)
-                         and any(isinstance(target, ast.Name) and target.id == "_runtime_directory" for target in node.targets))
+        # server.py derives the directory from the selected release, so run both real
+        # statements, in source order, rather than a stand-in for the release.
+        wanted = ("_runtime_release", "_runtime_directory")
+        selection = [node for node in server_tree.body if isinstance(node, ast.Assign)
+                     and any(isinstance(target, ast.Name) and target.id in wanted for target in node.targets)]
+        self.assertEqual([node.targets[0].id for node in selection], list(wanted),
+                         "server.py no longer selects the runtime release and then its directory in this order")
+        # No installer pin: the strict default release is selected without touching disk.
+        environment = mock.patch.dict(os.environ)
+        environment.start()
+        self.addCleanup(environment.stop)
+        os.environ.pop("FARMVILLAGE_PREPARED_RUNTIME_PIN_SHA256", None)
         bundle_source = (ROOT / "bundle.py").read_text()
         extracted = str(self.payload)
         bundle_namespace = {"__name__": "isolated_frozen_bundle", "__file__": str(self.root / "executable/bundle/bundle.py")}
@@ -103,9 +114,10 @@ class RuntimeServingTests(unittest.TestCase):
             exec(compile(bundle_source, str(ROOT / "bundle.py"), "exec"), bundle_namespace)
         self.assertEqual(bundle_namespace["TMP_BUNDLED_DIR"], extracted)
         self.assertNotEqual(bundle_namespace["BASE_DIR"], extracted)
-        namespace = dict(bundle_namespace, RUFFLE_DIR=None, Path=Path, runtime_compatibility=runtime)
-        selection_code = compile(ast.Module(body=[selection], type_ignores=[]), str(SERVER_FILE), "exec")
+        namespace = dict(bundle_namespace, RUFFLE_DIR=None, Path=Path, runtime_compatibility=runtime, os=os)
+        selection_code = compile(ast.Module(body=selection, type_ignores=[]), str(SERVER_FILE), "exec")
         exec(selection_code, namespace)
+        self.assertEqual(namespace["_runtime_release"], self.release)
         self.assertEqual(namespace["_runtime_directory"], self.source)
         runtime.verify_runtime(namespace["_runtime_directory"])
         profile = self.root / "native-profile"
