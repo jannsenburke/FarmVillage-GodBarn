@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read-only player readiness guide; not a complete download-and-play installer."""
+"""Guided resource installation for Mac players and Ubuntu server owners."""
 from __future__ import annotations
 import argparse
 from contextlib import contextmanager
@@ -139,142 +139,48 @@ def resource_report(root):
         result["errors"].append(str(error) if isinstance(error, ValueError) else "The resource manifest cannot be read as an ordinary file.")
     return result
 
-def build_report(source_root, audience="mac"):
-    if audience not in GUIDES:
-        raise ValueError("Choose the mac or server audience.")
+def build_report(source_root=ROOT, audience="mac"):
     root = ordinary_root(source_root)
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from resource_pipeline import plan
     resources = resource_report(root)
-    system = platform.system()
-    version = platform.mac_ver()[0] if system == "Darwin" else ""
-    try:
-        mac_supported = system == "Darwin" and tuple(int(x) for x in version.split(".")[:2]) >= (14,)
-    except ValueError:
-        mac_supported = False
-    return {"schema": 1, "audience": audience, "status": "not-ready", "guide_only": True,
-        "source_root": str(root), "play_ready": False,
-        "public_bootstrap": {"implemented": False, "status": "unfinished"},
-        "prepared_resource_inputs_match": resources["status"] == "complete", "resource_inputs": resources,
-        "platform": {"system": system, "python_version": platform.python_version(), "project_python_minimum": "3.10",
-                     "python_supported": sys.version_info >= (3, 10), "macos_version": version or None,
-                     "macos_14_or_newer": mac_supported,
-                     "audience_platform_matches": mac_supported if audience == "mac" else system == "Linux",
-                     "xcode_sdk_or_ubuntu_service_check": "not run"},
-        "storage": {"archive_bytes": ARCHIVE_BYTES, "archive_gib": round(ARCHIVE_BYTES / 1024 ** 3, 2),
-                    "exact_peak_known": False, "disk_space_checked": False,
-                    "additional_space": "Extracted artwork, temporary extraction, Python environments and build products need additional space."},
-        "download_plan": {"archive_source": "https://archive.org/download/original-farmville/", "archive_count": 4,
-            "mac_prepare": "A complete app installs pinned packages from PyPI and copies its bundled LOCAL reviewed Ruffle player. Prepare does not download game-art archives.",
-            "mac_first_create_or_open": "A complete prepared app can download and extract four original Internet Archive WARCs when artwork is missing. Original client and companion inputs must already be bundled.",
-            "server_owner": "The Ubuntu installer needs a prepared release bundle and already-extracted artwork. It may fetch Python packages from PyPI; it does not fetch the original game-art archives.",
-            "browser_players": "Browser players visiting a prepared server do not install the full archive collection; game resources are served by that server as needed."},
-        "data_paths": {"mac_app_default": "~/Library/Application Support/FarmVillage",
-                       "server": "The owner chooses a clearly named managed installation on the Ubuntu host.",
-                       "checked_by_this_guide": "Only the explicit source folder and manifest-named resources; no personal folders are searched."},
-        "actions_this_guide": {"downloads": False, "installs": False, "builds": False,
-                              "creates_environment_or_cache": False, "reads_accounts_or_credentials": False,
-                              "scans_personal_folders": False},
+    return {"schema": 2, "audience": audience, "source_root": str(root), "status": "installation-plan", "play_ready": False,
+        "public_bootstrap": {"implemented": True}, "resource_inputs": resources,
+        "prepared_resource_inputs_match": resources["status"] == "complete",
+        "storage": {"archive_bytes": ARCHIVE_BYTES, "exact_peak_known": False}, "download_plan": plan(audience),
         "guide": GUIDES[audience], "active_worlds": 16, "excluded_worlds": ["glen", "hlights"],
-        "ios_development": "discontinued"}
-
-def print_report(report):
-    print("\nFarmVillage — " + ("Mac players" if report["audience"] == "mac" else "Ubuntu server owners and browser players") + "\n")
-    print("This is a READINESS GUIDE, not a completed game installer.")
-    print("The public download-and-play setup is unfinished. This guide does not download, install or build anything.")
-    print("\nStep 1 of 4 — What you downloaded\nA source checkout is not a ready-built FarmVillage.app or a complete server release.")
-    print("\nStep 2 of 4 — Check this selected source folder")
-    resources = report["resource_inputs"]
-    print("This is the shared source-resource manifest; some entries serve native builds or tests, not a minimal player download list.")
-    print("Prepared resource identities matching: %d/%d." % (resources["matching_files"], resources["expected_files"]))
-    for name, group in sorted(resources["groups"].items()):
-        print("  %s: %d/%d match; %d missing, %d different, %d refused, %d unreadable." % (name, group["matching"], group["expected"], group["missing"], group["mismatched"], group["refused"], group["unreadable"]))
-        for example in group["problem_examples"]:
-            print("    %s: %s" % (example["problem"], example["path"]))
-    for error in resources["errors"]:
-        print("  " + error)
-    if report["prepared_resource_inputs_match"]:
-        print("Matching prepared inputs are present. This does not prove an app build, complete installation or gameplay.")
-    else:
-        print("Missing prepared resources cannot yet be generated by a complete public bootstrap in this source release.")
-    host = report["platform"]
-    print("Python %s; project runtime needs Python 3.10+." % host["python_version"])
-    print("macOS 14+ and full Xcode/SDK are needed for native developer builds; no developer tool was launched." if report["audience"] == "mac" else "Hosting needs Ubuntu/Linux. A systemd session and actual Ubuntu installation have not been checked.")
-    if not host["audience_platform_matches"]:
-        print("This host does not establish the selected audience's platform prerequisite.")
-    print("\nStep 3 of 4 — Downloads, storage and locations")
-    plan = report["download_plan"]
-    if report["audience"] == "mac":
-        print("Prepare Runtime: " + plan["mac_prepare"])
-        print("First Create/Open after preparation: " + plan["mac_first_create_or_open"])
-        print("The complete app's default data folder is " + report["data_paths"]["mac_app_default"] + ". This guide has not opened it.")
-    else:
-        print("Server owner: " + plan["server_owner"])
-        print(plan["browser_players"])
-        print(report["data_paths"]["server"])
-    print("Original archives: %s bytes (%s GiB), before extracted artwork and temporary files." % (format(ARCHIVE_BYTES, ","), report["storage"]["archive_gib"]))
-    print("Extracted artwork and temporary space are additional; the exact total peak is not qualified. No free-space check or download was performed.")
-    print("\nStep 4 of 4 — Supported next steps")
-    print("Read " + report["guide"] + " and docs/RESOURCE_SETUP.md for the original public sources and missing work.")
-    print("Setup stops before any download, build or installation. It will not ask for files from the project owner's computer or server.")
-
-def read_guide(root, audience):
-    with ordinary_file(root, GUIDES[audience]) as stream:
-        print(stream.read().decode("utf-8"))
-
-def run_source_check(root):
-    with ordinary_file(root, "tools/check-source.py"):
-        pass
-    environment = {key: value for key, value in os.environ.items() if key not in {"BASH_ENV", "ENV"} and not key.startswith(("PYTHON", "PIP_"))}
-    environment["PYTHONDONTWRITEBYTECODE"] = "1"
-    return subprocess.run([sys.executable, "-I", "-S", "-B", str(root / "tools/check-source.py"), "--root", str(root)], cwd=root, env=environment, check=False).returncode
-
-def interactive(root, audience, input_fn):
-    while True:
-        print("\n1. Read the local player guide\n2. Check source files (no game download or install)\n3. Close this guide")
-        try:
-            choice = input_fn("Choose 1, 2 or 3: ").strip()
-        except (EOFError, KeyboardInterrupt):
-            print("\nGuide closed. No installation was started.")
-            return
-        if choice == "3":
-            print("Guide closed. The game is not installed by this guide.")
-            return
-        if choice == "1":
-            try:
-                read_guide(root, audience)
-            except (OSError, ValueError, UnicodeError):
-                print("The local guide is missing, linked or unreadable. Open its copy in your source download.")
-        elif choice == "2":
-            print("You selected the source check. This checks code and documentation; it does not install the game.")
-            try:
-                code = run_source_check(root)
-                print("Source check passed. Game installation remains unfinished." if code == 0 else "Source check failed. Read its named source/documentation issue; game installation remains unfinished.")
-            except (OSError, ValueError):
-                print("The local source checker is missing, linked or could not run.")
-        else:
-            print("Please choose a displayed number. No action was taken.")
+        "actions_this_guide": {"downloads": False, "installs": False, "builds": False,
+          "creates_environment_or_cache": False, "reads_accounts_or_credentials": False, "scans_personal_folders": False}}
 
 def main(argv=None, input_fn=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--audience", choices=sorted(GUIDES), default="mac")
-    parser.add_argument("--source-root", type=Path, default=ROOT, help="Explicit source folder; no other folders are searched")
-    parser.add_argument("--check", action="store_true", help="Print read-only readiness without interactive choices")
-    parser.add_argument("--json", action="store_true", help="Print read-only JSON and exit without prompts")
+    parser.add_argument('--audience', choices=sorted(GUIDES), default='mac')
+    parser.add_argument('--source-root', type=Path, default=ROOT)
+    parser.add_argument('--check', action='store_true', help='Show plan without downloads, writes or prompts')
+    parser.add_argument('--json', action='store_true', help='Print the read-only plan as JSON')
+    parser.add_argument('--resources', type=Path)
+    parser.add_argument('--accept-downloads', action='store_true')
     args = parser.parse_args(argv)
     try:
         report = build_report(args.source_root, args.audience)
-    except (OSError, ValueError) as error:
         if args.json:
-            print(json.dumps({"schema": 1, "status": "not-ready", "play_ready": False, "public_bootstrap": {"implemented": False}, "error": str(error)}, indent=2))
-        else:
-            print("Player guide paused: " + str(error), file=sys.stderr)
-        return 2
-    if args.json:
-        print(json.dumps(report, indent=2, sort_keys=True))
-    else:
-        print_report(report)
-        if not args.check:
-            interactive(Path(report["source_root"]), args.audience, input_fn or input)
-    return 2  # Never imply that this readiness guide installed a game.
+            print(json.dumps(report, indent=2, sort_keys=True))
+            return 0
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from player_install import show_plan, wizard, install
+        show_plan(args.audience)
+        print('Guide: ' + GUIDES[args.audience])
+        if args.check:
+            return 0
+        root = Path(report['source_root'])
+        if args.accept_downloads:
+            if args.resources is None:
+                raise ValueError('--accept-downloads requires an explicit --resources folder')
+            return install(root, args.audience, args.resources, consent=True)
+        return wizard(root, args.audience, input_fn or input)
+    except (OSError, ValueError, RuntimeError, subprocess.CalledProcessError, EOFError, KeyboardInterrupt) as error:
+        print('Setup paused: ' + str(error) + '\nRerun with the same folder to resume. No unrelated folder was erased.', file=sys.stderr)
+        return 1
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     raise SystemExit(main())

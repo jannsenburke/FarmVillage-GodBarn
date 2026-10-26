@@ -61,7 +61,7 @@ class PlayerSetupTests(unittest.TestCase):
         report = p.build_report(self.root)
         self.assertTrue(report['prepared_resource_inputs_match'])
         self.assertFalse(report['play_ready'])
-        self.assertFalse(report['public_bootstrap']['implemented'])
+        self.assertTrue(report['public_bootstrap']['implemented'])
 
     def test_same_size_corrupt_input(self):
         self.populate()
@@ -135,41 +135,41 @@ class PlayerSetupTests(unittest.TestCase):
     def test_check_json_never_prompts(self):
         code, output = self.main_output(['--check', '--json'], mock.Mock(side_effect=AssertionError('prompt')))
         report = json.loads(output)
-        self.assertEqual(code, 2)
+        self.assertEqual(code, 0)
         self.assertEqual(report['storage']['archive_bytes'], 19126111395)
         self.assertFalse(report['storage']['exact_peak_known'])
 
     def test_json_alone_never_prompts(self):
         code, output = self.main_output(['--json'], mock.Mock(side_effect=AssertionError('prompt')))
-        self.assertEqual(code, 2)
+        self.assertEqual(code, 0)
         self.assertFalse(json.loads(output)['play_ready'])
 
     def test_server_explanation(self):
         _, output = self.main_output(['--audience', 'server', '--check'])
-        self.assertIn('already-extracted artwork', output)
+        self.assertIn('four original artwork archives', output)
         self.assertIn('do not install the full archive collection', output)
         self.assertIn('PLAY_ON_SERVER.md', output)
 
     def test_guide_read_only_after_explicit_choice(self):
-        answers = iter(['1', '3'])
+        answers = iter(['2', '3'])
         with mock.patch.object(p.subprocess, 'run') as run:
             code, output = self.main_output(answers=lambda _: next(answers))
         run.assert_not_called()
-        self.assertEqual(code, 2)
+        self.assertEqual(code, 0)
         self.assertIn('# Local Mac guide', output)
 
     def test_source_check_only_after_explicit_choice(self):
         checker = self.root / 'tools/check-source.py'
         checker.parent.mkdir()
         checker.write_text('# synthetic checker\n')
-        answers = iter(['2', '3'])
+        answers = iter(['4', '3'])
         with mock.patch.object(p.subprocess, 'run', return_value=subprocess.CompletedProcess([], 0)) as run:
             _, output = self.main_output(answers=lambda _: next(answers))
         command = run.call_args.args[0]
         self.assertIn(str(checker), command)
         self.assertNotIn('--tests', command)
         self.assertIn('--root', command)
-        self.assertIn('Game installation remains unfinished', output)
+        self.assertIn('No installation was started', output)
 
     def test_guide_symlink_not_read(self):
         guide = self.root / 'docs/PLAY_ON_MAC.md'
@@ -177,7 +177,7 @@ class PlayerSetupTests(unittest.TestCase):
         outside = self.base / 'outside.md'
         outside.write_text('DO NOT DISPLAY')
         guide.symlink_to(outside)
-        answers = iter(['1', '3'])
+        answers = iter(['2', '3'])
         _, output = self.main_output(answers=lambda _: next(answers))
         self.assertNotIn('DO NOT DISPLAY', output)
         self.assertIn('missing, linked or unreadable', output)
@@ -193,8 +193,8 @@ class PlayerSetupTests(unittest.TestCase):
 
     def test_eof_is_clean_close(self):
         code, output = self.main_output(answers=mock.Mock(side_effect=EOFError))
-        self.assertEqual(code, 2)
-        self.assertIn('Guide closed', output)
+        self.assertEqual(code, 0)
+        self.assertIn('Installer closed', output)
 
     def test_launcher_guards_apple_shim_before_version_probe(self):
         text = (Path(__file__).resolve().parents[1] / 'START_MAC.command').read_text()

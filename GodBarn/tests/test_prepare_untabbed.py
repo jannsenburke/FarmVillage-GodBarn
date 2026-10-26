@@ -1,4 +1,4 @@
-"""The origin index is built from pre-overlay records and refuses stale inputs."""
+"""The origin index is built from pristine originals without a cache dependency."""
 
 import hashlib
 import importlib.util
@@ -6,6 +6,7 @@ import json
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 
@@ -99,7 +100,7 @@ class ClassifyTests(unittest.TestCase):
             with self.assertRaises(SystemExit):
                 prepare.verify_against_catalog(data, first, catalog)
 
-    def test_refuses_a_checkout_whose_item_cache_is_stale(self):
+    def test_cli_uses_explicit_original_output_and_policy_without_reading_old_cache(self):
         with tempfile.TemporaryDirectory(prefix="god-barn-untabbed-checkout-", dir="/private/tmp") as directory:
             checkout = Path(directory)
             (checkout / "xml/gz/v855038").mkdir(parents=True)
@@ -108,9 +109,13 @@ class ClassifyTests(unittest.TestCase):
             (checkout / "cache/gz_v855038_items_opt.json").write_text(json.dumps(
                 {"identity": {"source_sha256": hashlib.sha256(b"older source").hexdigest()},
                  "data": {"settings": {"items": {"item": []}}}}))
-            with self.assertRaises(SystemExit) as caught:
-                prepare.main([str(checkout)])
-            self.assertIn("does not match", str(caught.exception))
+            output=checkout.parent/'fixture-output'
+            policy=checkout.parent/'fixture-policy'
+            document={'counts':{'untabbed':0,'heritage':0,'exclusive':0,'other':0}}
+            with mock.patch.object(prepare,'generate',return_value=document) as generate:
+                with mock.patch.object(Path,'read_text',side_effect=AssertionError('legacy cache read')):
+                    prepare.main([str(checkout),'--root',str(output),'--policy-root',str(policy)])
+            generate.assert_called_once_with(checkout,output,policy_root=policy)
 
 
 if __name__ == "__main__":

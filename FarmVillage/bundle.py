@@ -34,7 +34,7 @@ ASSETHASH_DIR = os.path.join(TMP_BUNDLED_DIR, "assethash")
 DATA_DIR = os.path.abspath(os.path.expanduser(os.environ.get("FARMVILLAGE_DATA_DIR", BASE_DIR)))
 
 SAVES_DIR = os.path.join(DATA_DIR, "saves")
-ASSETS_DIR = os.path.join(DATA_DIR, "assets")
+ASSETS_DIR = os.path.abspath(os.environ.get("FARMVILLAGE_ASSETS_DIR", os.path.join(DATA_DIR, "assets")))
 CACHE_DIR = os.path.join(DATA_DIR, "cache")
 TMP_DIR = os.path.join(DATA_DIR, "tmp")
 UNHANDLED_LOG = os.path.join(DATA_DIR, "unhandled.log")

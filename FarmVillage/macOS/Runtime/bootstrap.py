@@ -138,7 +138,9 @@ def run_owned(command: list[str], *, cwd: Path | None = None, env: dict | None =
 
 def payload_files(source: Path) -> list[Path]:
     files = list(source.glob("*.py"))
-    files.extend(source / name for name in ("requirements.txt", "LICENSE") if (source / name).is_file())
+    files.extend(source / name for name in ("requirements.txt", "LICENSE", "PREPARED_RUNTIME.json",
+                                           "PUBLIC_RUNTIME_BUILD.json", "PUBLIC_INSTALL.json")
+                 if (source / name).is_file())
     for directory in PAYLOAD_DIRECTORIES:
         files.extend(path for path in (source / directory).rglob("*") if path.is_file() and "__pycache__" not in path.parts)
     return sorted(files)
@@ -305,12 +307,10 @@ def install_ruffle(data: Path) -> Path:
 
 
 def private_python_environment() -> dict[str, str]:
-    # Avoid Python path overrides and pip options inherited from a developer's
-    # shell. Proxies and OS certificate settings continue to work normally.
-    environment = {name: value for name, value in os.environ.items()
-                   if not name.startswith(("PYTHON", "PIP_"))}
-    # pip documents os.devnull as disabling global, user, and venv config files.
-    environment["PIP_CONFIG_FILE"] = os.devnull
+    # Forward runtime necessities without account/proxy configuration.
+    environment = {name: os.environ[name] for name in ('PATH', 'LANG', 'LC_ALL', 'LC_CTYPE', 'HOME', 'FARMVILLAGE_ASSETS_DIR') if name in os.environ}
+    environment['NETRC'] = os.devnull
+    environment['PIP_CONFIG_FILE'] = os.devnull
     return environment
 
 
@@ -353,8 +353,25 @@ def compatibility_runtime(runtime: Path, data: Path):
     module = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
-    installed = module.install_runtime(runtime, data, check_cancelled=check_cancelled)
+    release = compatibility_release(module, runtime)
+    installed = module.install_runtime(runtime, data, release, check_cancelled=check_cancelled)
     return module, installed
+
+
+def compatibility_release(module, runtime: Path):
+    """Read the explicit source-build pin copied by the prepared-pack bundler."""
+    prepared_path = owned_path(runtime, runtime / "PREPARED_RUNTIME.json")
+    if not prepared_path.exists():
+        return module.ACTIVE_RELEASE
+    if prepared_path.stat().st_size > 1024 * 1024:
+        raise RuntimeError("The prepared runtime marker exceeds its expected size.")
+    try:
+        prepared = json.loads(prepared_path.read_text(encoding="utf-8"))
+    except (ValueError, UnicodeError) as error:
+        raise RuntimeError("The prepared runtime marker is damaged; rebuild the app from the prepared resource pack.") from error
+    if not isinstance(prepared, dict) or prepared.get("schema") != 1 or not prepared.get("runtime_manifest_sha256"):
+        raise RuntimeError("The prepared runtime marker is missing its player integrity pin.")
+    return module.select_runtime_release(runtime, prepared_pin_sha256=prepared["runtime_manifest_sha256"])
 
 
 def prepare(runtime: Path, data: Path, version: str) -> None:
@@ -366,6 +383,10 @@ def prepare(runtime: Path, data: Path, version: str) -> None:
     pip_cache = owned_path(data, data / "cache" / "pip")
     base_python = getattr(sys, "_base_executable", sys.executable)
     environment = private_python_environment()
+    package_home = owned_path(data, data / 'cache/package-home')
+    package_home.mkdir(parents=True, exist_ok=True)
+    environment['HOME'] = str(package_home)
+    environment['XDG_CACHE_HOME'] = str(package_home / '.cache')
     log("Creating the isolated Python environment…")
     run_owned([base_python, "-I", "-B", "-m", "venv", "--clear", str(venv)], env=environment)
     log("Installing the upstream project's pinned Python requirements…")
@@ -375,7 +396,7 @@ def prepare(runtime: Path, data: Path, version: str) -> None:
                "-r", str(runtime / "requirements.txt")], env=environment)
     log("Installing the reviewed local Ruffle runtime…")
     compatibility, _ruffle = compatibility_runtime(runtime, data)
-    release = compatibility.ACTIVE_RELEASE
+    release = compatibility_release(compatibility, runtime)
     check_cancelled()
     atomic_json(marker, {
         "schema": PREPARED_SCHEMA, "payload_version": version,
@@ -384,7 +405,7 @@ def prepare(runtime: Path, data: Path, version: str) -> None:
         "ruffle_runtime_id": release.runtime_id,
         "ruffle_manifest_sha256": release.manifest_sha256,
     }, data_root=data)
-    log("Preparation complete. Start will download and extract the game archives if assets are missing.")
+    log("Preparation complete. Start will reuse the prepared public artwork." if (runtime / "PUBLIC_INSTALL.json").is_file() else "Preparation complete. Start will download and extract the game archives if assets are missing.")
 
 
 def start(runtime: Path, data: Path, arguments: argparse.Namespace) -> None:
@@ -401,7 +422,7 @@ def start(runtime: Path, data: Path, arguments: argparse.Namespace) -> None:
     # Existing schema-2 Python environments receive only this verified offline
     # runtime migration. No venv, dependency, asset, save or God Barn reset.
     compatibility, ruffle = compatibility_runtime(runtime, data)
-    release = compatibility.ACTIVE_RELEASE
+    release = compatibility_release(compatibility, runtime)
     runtime_marker = {"ruffle_version": RUFFLE_VERSION,
                       "ruffle_runtime_id": release.runtime_id,
                       "ruffle_manifest_sha256": release.manifest_sha256}
@@ -415,6 +436,8 @@ def start(runtime: Path, data: Path, arguments: argparse.Namespace) -> None:
         "FARMVILLAGE_RUFFLE_DIR": str(ruffle), "FARMVILLAGE_INSTANCE_TOKEN": arguments.token,
         "PYTHONUNBUFFERED": "1", "PYTHONDONTWRITEBYTECODE": "1",
     })
+    if (runtime / "PREPARED_RUNTIME.json").is_file():
+        environment["FARMVILLAGE_PREPARED_RUNTIME_PIN_SHA256"] = release.manifest_sha256
     log(f"Starting the owned local server at http://127.0.0.1:{arguments.port}/…")
     run_owned([str(python), "-E", "-s", "-B", "-u", str(Path(__file__).with_name("server_runner.py")),
                "--runtime", str(runtime), "--port", str(arguments.port)], cwd=runtime, env=environment)

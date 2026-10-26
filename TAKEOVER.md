@@ -6,7 +6,7 @@ This guide introduces the architecture, restoration boundaries and validation pr
 
 macOS native desktop and browser/Ubuntu are the active targets. iPad/iOS is abandoned as of 25 October 2026. Only a new explicit human instruction can reverse that decision. The desktop app is SwiftUI/AppKit with WebKit/Ruffle and a supervised Python backend; it does not use the iOS Rust player.
 
-Read README.md and ACCEPTANCE.md, record the current commit and inspect SOURCE_MANIFEST.json. Start with asset-free synthetic tests. Read [resource setup](docs/RESOURCE_SETUP.md) before attempting a complete app/game check; automatic clean-clone resource preparation is unfinished. Use a newly created synthetic profile and an unused port. The clean-start installer may wipe only its identified managed installation, and must refuse unrelated/system/source paths.
+Read README.md and ACCEPTANCE.md, record the current commit and inspect SOURCE_MANIFEST.json. Start with asset-free synthetic tests. Read [resource setup](docs/RESOURCE_SETUP.md) before attempting a complete app/game check; the public resource installer is implemented; real clean-clone installation qualification remains open. Use a newly created synthetic profile and an unused port. The clean-start installer may wipe only its identified managed installation, and must refuse unrelated/system/source paths.
 
 ## Architectural entry points
 

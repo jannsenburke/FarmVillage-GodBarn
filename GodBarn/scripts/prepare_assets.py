@@ -9,11 +9,10 @@ from __future__ import annotations
 
 import argparse
 import collections
-import datetime as dt
 import hashlib
 import json
 import re
-import shutil
+import sys
 import struct
 import zlib
 from pathlib import Path
@@ -53,55 +52,53 @@ def display_name(name: str) -> str:
     return text.title()
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("source", type=Path, help="Existing FarmVillage directory (read-only)")
-    parser.add_argument("--max-thumbnails", type=int, default=10000)
-    parser.add_argument("--thumbnail-budget-mb", type=int, default=180)
-    args = parser.parse_args()
-    source = args.source.expanduser().resolve()
-    if source == ROOT or ROOT in source.parents:
-        raise SystemExit("The source must be outside GodBarn.")
+def prepare(source, root=ROOT, *, assets_root=None, max_thumbnails=10000, thumbnail_budget_mb=180):
+    """Build metadata from original resource files without opening player data."""
+    source, root = Path(source).resolve(), Path(root).resolve()
+    assets_root = Path(assets_root).resolve() if assets_root else None
+    if source == root or root in source.parents or source in root.parents:
+        raise ValueError("Game resources and companion output must be separate.")
     for rel in ("data", "static/assets/ui", "static/assets/items", "static/assets/fonts"):
-        (ROOT / rel).mkdir(parents=True, exist_ok=True)
+        (root / rel).mkdir(parents=True, exist_ok=True)
 
     # Import only the third-party decoder; never import source game modules.
     import pyamf
     manifest_path = source / "assethash/v9/assethash.master.amf.gz"
     manifest_bytes = manifest_path.read_bytes()
     manifest = pyamf.get_decoder(pyamf.AMF3, zlib.decompress(manifest_bytes)).readElement()
-    asset_root = source / "LocalData/assets"
-    catalog_path = source / "LocalData/cache/gz_v855038_items_opt.json"
+    manifests = []
+    delta = source / "xml/gz/v855098/assethash.min.amf.gz"
+    if delta.is_file():
+        manifests.append((delta.relative_to(source).as_posix(),
+                          pyamf.get_decoder(pyamf.AMF3, zlib.decompress(delta.read_bytes())).readElement()))
+    manifests.append((manifest_path.relative_to(source).as_posix(), manifest))
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from recover_catalog import resolve_from_manifests
+    asset_root = assets_root or (source / "LocalData/assets")
+    catalog_path = source / "xml/gz/v855038/items_opt.amf"
     catalog_bytes = catalog_path.read_bytes()
-    wrapped = json.loads(catalog_bytes)
-    raw_items = wrapped.get("data", wrapped)["settings"]["items"]["item"]
-    by_name = {item["name"]: item for item in raw_items}
+    wrapped = pyamf.get_decoder(pyamf.AMF3, zlib.decompress(catalog_bytes)).readElement()
+    raw_items = wrapped["settings"]["items"]["item"]
+    by_name = {}
+    for item in raw_items:
+        by_name.setdefault(item["name"], item)
     copied = []
     ui_manifest = {}
 
     def resolve_asset(logical: str):
-        parts = logical.removeprefix("assets/").split("/", 1)
-        if len(parts) != 2:
-            return None
-        group, file = parts
-        hashed = manifest.get(group, {}).get(file)
-        if not isinstance(hashed, str):
-            return None
-        path = asset_root / group / Path(file).parent / (hashed + Path(file).suffix)
-        if path.is_file():
-            return path
-        return None
+        path, reason, _, _ = resolve_from_manifests(source, manifests, logical, assets_root=asset_root)
+        return path if reason is None else None
 
     def copy_asset(logical: str, destination: str):
         src = resolve_asset(logical)
         if not src:
             return None
-        dst = ROOT / destination
-        if not dst.is_relative_to(ROOT):
+        dst = root / destination
+        if not dst.is_relative_to(root):
             raise ValueError("Destination escaped the companion")
         data = src.read_bytes()
         dst.write_bytes(data)
-        entry = {"logical": logical, "originalPath": str(src), "path": destination,
+        entry = {"logical": logical, "assetRelativePath": src.relative_to(asset_root).as_posix(), "path": destination,
                  "bytes": len(data), "sha256": digest(data)}
         if src.suffix.lower() == ".png" and data[:8] == b"\x89PNG\r\n\x1a\n":
             entry["width"], entry["height"] = struct.unpack(">II", data[16:24])
@@ -163,9 +160,10 @@ def main():
                 url = copy_asset(logical, "static/assets/ui/" + name)
                 ui_manifest[name] = {"url": url, "logical": logical}
     if "tree.png" not in ui_manifest:
-        item = next(i for i in raw_items if i.get("type") == "tree" and item_icon(i)[1])
-        logical, _ = item_icon(item)
-        ui_manifest["tree.png"] = {"url": copy_asset(logical, "static/assets/ui/tree.png"), "logical": logical}
+        item = next((i for i in raw_items if i.get("type") == "tree" and item_icon(i)[1]), None)
+        if item:
+            logical, _ = item_icon(item)
+            ui_manifest["tree.png"] = {"url": copy_asset(logical, "static/assets/ui/tree.png"), "logical": logical}
 
     fonts = {"badaboom.ttf": "badaboomprobb_reg.ttf", "caslon-bold.otf": "ACaslonPro-Bold.otf",
              "myriad-bold.otf": "MyriadPro-Bold.otf"}
@@ -182,14 +180,14 @@ def main():
     for values in buckets.values():
         values.sort(key=lambda i: hashlib.sha256(i["name"].encode()).hexdigest())
     candidates = [by_name[name] for name in sorted(CLASSICS) if name in by_name]
-    maximum = max(map(len, buckets.values()))
+    maximum = max(map(len, buckets.values()), default=0)
     for index in range(maximum):
         for kind in sorted(buckets):
             if index < len(buckets[kind]):
                 candidates.append(buckets[kind][index])
     image_by_name, seen, copied_thumbnails = {}, set(), set()
     thumbnail_bytes = 0
-    budget = args.thumbnail_budget_mb * 1024 * 1024
+    budget = thumbnail_budget_mb * 1024 * 1024
     for item in candidates:
         if item["name"] in seen:
             continue
@@ -197,7 +195,7 @@ def main():
         logical, path = item_icon(item)
         if not path:
             continue
-        if len(image_by_name) >= args.max_thumbnails:
+        if len(image_by_name) >= max_thumbnails:
             break
         size = path.stat().st_size
         if thumbnail_bytes + size > budget:
@@ -230,7 +228,7 @@ def main():
         if item.get("masteryLevel"):
             entry["masteryLevel"] = item["masteryLevel"]
         normalized.append(entry)
-    (ROOT / "data/catalog.json").write_text(json.dumps(normalized, ensure_ascii=False, separators=(",", ":")) + "\n")
+    (root / "data/catalog.json").write_text(json.dumps(normalized, ensure_ascii=False, separators=(",", ":")) + "\n")
 
     game_path = source / "xml/gz/v855098/gameSettings.xml.gz"
     cms_path = source / "xml/gz/v855098/gameSettingsCMS.xml.gz"
@@ -246,27 +244,34 @@ def main():
              "higherLevelXp": number(farming.get("higherLevelXp"), 1500000),
              "higherLevelStep": number(farming.get("higherLevelStep"), 100000),
              "highestLevelForFCReward": number(farming.get("highestLevelForFCReward"), 250)}
-    (ROOT / "data/rules.json").write_text(json.dumps(rules, indent=2) + "\n")
-    save_path = source / "LocalData/saves/1fe568a4-6816-4c6c-80bf-39fdd4889d8d.save.json"
-    save_bytes = save_path.read_bytes()
-    json.loads(save_bytes)  # Reject a partial read rather than manufacturing a save.
-    (ROOT / "data/bootstrap-save.json").write_bytes(save_bytes)
-    provenance = {"preparedAt": dt.datetime.now(dt.timezone.utc).isoformat(),
-                  "sourceDirectory": str(source), "sourceReadOnly": True,
+    (root / "data/rules.json").write_text(json.dumps(rules, indent=2) + "\n")
+    provenance = {"schema": 2, "sourceReadOnly": True,
                   "sourceModulesImported": False, "networkUsed": False,
-                  "save": {"originalPath": str(save_path), "sha256": digest(save_bytes),
-                           "bytes": len(save_bytes), "copy": "data/bootstrap-save.json", "exactCopy": True},
-                  "sources": [{"path": str(p), "sha256": digest(p.read_bytes())}
+                  "containsPlayerState": False,
+                  "sources": [{"path": p.relative_to(source).as_posix(), "sha256": digest(p.read_bytes())}
                               for p in (manifest_path, catalog_path, game_path, cms_path)],
                   "catalogItems": len(normalized), "illustratedItems": len(image_by_name),
                   "thumbnailBytes": thumbnail_bytes,
                   "categoryFallbacks": fallback, "assets": copied}
-    (ROOT / "data/provenance.json").write_text(json.dumps(provenance, indent=2) + "\n")
-    (ROOT / "data/ui-assets.json").write_text(json.dumps(ui_manifest, indent=2) + "\n")
+    (root / "data/provenance.json").write_text(json.dumps(provenance, indent=2) + "\n")
+    (root / "data/ui-assets.json").write_text(json.dumps(ui_manifest, indent=2) + "\n")
     print(json.dumps({"catalogItems": len(normalized), "illustratedItems": len(image_by_name),
                       "thumbnailMiB": round(thumbnail_bytes / 1048576, 2),
                       "uiAssets": len(ui_manifest), "levels": len(rules["levels"]),
-                      "bootstrapSha256": digest(save_bytes)}, indent=2))
+                      "containsPlayerState": False}, indent=2))
+    return provenance
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("source", type=Path, help="Original game resource root (read-only)")
+    parser.add_argument("--root", type=Path, default=ROOT)
+    parser.add_argument("--assets-root", type=Path)
+    parser.add_argument("--max-thumbnails", type=int, default=10000)
+    parser.add_argument("--thumbnail-budget-mb", type=int, default=180)
+    args = parser.parse_args()
+    prepare(args.source, args.root, assets_root=args.assets_root,
+            max_thumbnails=args.max_thumbnails, thumbnail_budget_mb=args.thumbnail_budget_mb)
 
 
 if __name__ == "__main__":

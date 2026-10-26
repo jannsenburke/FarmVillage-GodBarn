@@ -1,59 +1,78 @@
 # Play on your Mac
 
-The game is a sixteen-world alpha with incomplete regional features; see [world readiness](../WORLD_READINESS.md).
+This route builds the native Mac app and keeps the game on your computer. You do not need a server or the project owner's Mac. The game is a sixteen-world alpha with incomplete regional features; see [world readiness](../WORLD_READINESS.md).
 
-This path is for people who want the native Mac app and are comfortable keeping a large game installation on their own computer. A separate server is not required.
+The installer downloads the preserved originals, extracts the artwork, generates God Barn's catalogue and the native launcher artwork, builds the pinned Ruffle player from public source, and builds an unsigned Mac app. **It is a large installation, not a small app download.**
 
-**Current status: a fresh-download Mac installation is not ready yet.** The repository provides source code, not a complete public Mac installer. The app needs additional prepared client files, God Barn data, native artwork and a pinned compiled player before it can be built. The new setup wizard is a **readiness guide**; it will not pretend those files are available or start a large download to work around them.
+## Before you start
 
-## Start with the readiness guide
+You need:
 
-1. On the repository page, choose **Code → Download ZIP**, or use your existing clone.
-2. Extract the ZIP and open the resulting folder.
-3. Double-click **START_MAC.command**. You can also run `bash START_MAC.command` from a Terminal opened in that folder.
-4. Read the status and download explanation. The guide checks only the selected source folder; it does not search your Mac for someone else’s installation or ask for an owner’s checkpoint.
-5. If required resources are missing, it stops and names the missing groups. Follow the linked resource/status documents if you want to help finish setup. This is not an “installed successfully” result.
+- **macOS 14 or newer**, on an Apple Silicon or Intel Mac.
+- An **already installed Python 3.10 or newer**, such as the installer from [python.org](https://www.python.org/downloads/macos/).
+- **Full Xcode with its macOS SDK already installed**. Command Line Tools alone cannot build this app. Open Xcode once and finish its normal first-launch setup before running this installer.
+- A reliable internet connection and **at least 110 GiB free** on the volume you choose for the game.
 
-The guide does not install Python, developer tools, packages or game files. It does not create game data or modify saves. If a compatible Python is unavailable, the launcher explains that and points back to this document instead of automatically invoking Apple’s developer-tool installer. Python is already a prerequisite of the current game runtime; the guide does not supply it.
+Python and Xcode are prerequisites; this installer does not install them. The game is built locally without signing, a developer membership, a GitHub token or access to your accounts. The installer does not read your Keychain or search your computer for another person's resources.
 
-For a read-only machine-readable check with an existing Python interpreter:
+## Install, step by step
 
-```sh
-python3 -I -B tools/player-setup.py --audience mac --check --json
-```
+1. On the [repository page](https://github.com/jannsenburke/FarmVillage-GodBarn), choose **Code → Download ZIP** and extract it. An existing clone works too. Keep this source folder separate from the large game installation.
+2. Double-click **START_MAC.command** in the extracted folder. If you prefer Terminal, change to that folder and run:
 
-A not-ready result is expected for today’s source-only clone. A source resource check is also separate from testing a built app on a Mac.
+   ```sh
+   bash START_MAC.command
+   ```
 
-## What a complete Mac app does
+3. Choose **1 — install** in the Mac setup menu. Read the download, disk-space and destination plan before continuing.
+4. Enter the full path of a **new, dedicated game folder**, for example `/Volumes/Games/FarmVillage`. Choose a location you can keep: the app will use the extracted artwork there. Do not choose your home folder, the source checkout, an existing collection of files or a system folder.
+5. Check the exact destination displayed. Type **INSTALL followed by the displayed absolute folder path** only when you want the downloads and builds to begin. Before that confirmation, the installer shows the plan without downloading the game or starting a build.
+6. Leave the Terminal window open. It reports each download, integrity check, extraction and build. The four game archives alone are 19.13 GB; extraction and the player build can take a long time. A first installation may take hours, depending on your connection and Mac.
+7. The installer prepares the app’s Python engine and opens the app using your installation’s `player-data` folder. It also creates **PLAY_MAC.command** in the chosen game folder for later launches.
+8. In the app, choose **Create Farm**, enter your farmer name and follow its prompts. Watch **Activity** for startup details. If the app later needs repair, use **Settings → Setup → Prepare Runtime**; this reinstalls the app environment’s pinned Python packages from PyPI.
 
-These steps describe the existing native app **after a complete, compatible app bundle has been built**. They are not a way to turn today’s source ZIP into that bundle.
-
-| Step | What happens | Network and storage |
-| --- | --- | --- |
-| Install prerequisites | The current runtime requires macOS 14+ and an already installed Python 3.10+ | Python is not installed automatically |
-| Open **Settings → Setup** and choose **Prepare Runtime** | Creates or replaces its dedicated Python environment, installs five pinned Python packages, and copies the reviewed player included in the app | Python packages come from PyPI; the player must already be bundled locally |
-| Choose **Create Farm** or **Open Farm** | Starts the local game server; if artwork is missing, downloads and extracts the four original game archives | Archives come from Internet Archive’s `original-farmville` collection |
-| Watch **Activity** | Shows download, verification, extraction and startup progress | The first start can take an hour or more |
-| Create your farm and play | Follow the app’s farm-creation prompts after startup completes | The game and saves remain on this Mac |
-
-The normal Prepare Runtime path does **not** fetch the missing original client, God Barn catalogue, native artwork or the pinned player needed to build the app. It installs the player already included in a complete bundle. An older official-player download helper in the source is not the normal preparation path.
-
-## The 20+ GB commitment
-
-The four recorded archive files total **19,126,111,395 bytes — 19.13 GB / 17.81 GiB**. That is the compressed download alone. Extracted artwork, temporary extraction, the runtime and saves require more space. **20 GB free is not an adequate installation promise.**
-
-A complete fresh-install peak-space requirement has not yet been qualified. The existing native downloader has no full-install disk-space preflight or guaranteed maximum. The readiness guide reports that limitation; it does not invent a precise storage guarantee or start those downloads.
-
-A complete app normally stores its data at:
+With `PACK` meaning the game folder you selected, the app is built at:
 
 ```text
-~/Library/Application Support/FarmVillage/
+PACK/macos-build/DerivedData/Build/Products/Release/FarmVillage.app
 ```
 
-That folder holds the runtime, Python environment, artwork, caches, temporary archives, saves, logs and God Barn history. Original archives are temporary inputs: successful extraction/publication cleans the owned archive/extraction cache. If a download is interrupted, **Stop Farm** preserves partial downloads and verified archives for retry. A partial file can resume when the archive server supports byte ranges; otherwise that file starts again. Interrupted extraction starts again from the retained archives; it is not an extraction resume. An existing incomplete artwork folder may be preserved separately, using additional disk space.
+Double-click **PLAY_MAC.command** in your chosen game folder for later sessions so it keeps using `PACK/player-data`. If opening the app manually, pass the same data folder:
 
-## What is still needed before this is a normal player install
+```sh
+open "/your/game/folder/macos-build/DerivedData/Build/Products/Release/FarmVillage.app" --args --farmvillage-data-dir "/your/game/folder/player-data"
+```
 
-The public resource pipeline must produce the complete app inputs from their original sources, verify them, build/package the app, and pass a fresh-Mac installation plus real farming/save/restart checks. See [resource setup](RESOURCE_SETUP.md) and [development priorities](../HANDOVER_STATUS.md).
+Replace both `/your/game/folder` examples with your installation's full path. The app's normal direct-open default is `~/Library/Application Support/FarmVillage`; the generated shortcut avoids accidentally creating a second set of farm data there.
 
-If you are contributing that work, use the [development and build guide](DEVELOPMENT.md). If you would rather host the game once and let people connect through browsers, use [the server path](PLAY_ON_SERVER.md).
+**Prepare Runtime does not download the game archives again.** This public build reads its `PUBLIC_INSTALL.json` receipt and uses `PACK/assets` as a shared input. It does not copy that large artwork collection into the app or into `player-data`. If that archive is missing or incomplete, Start reports the problem and directs you back to the installer.
+
+## What downloads, and where it goes
+
+| Input | Original source | Purpose |
+| --- | --- | --- |
+| Original client, configuration, browser images and starter templates | Pinned public revision of [AcidCaos/farmvillage](https://github.com/AcidCaos/farmvillage/tree/2dc25ca24032041a8b68d299b861eb2d4d449653) | Original game inputs; identities are listed in `tools/public-resources.json` |
+| Four preserved WARC archives | [Internet Archive's original-farmville collection](https://archive.org/details/original-farmville) | Original artwork, audio and fonts; downloads are checked against pinned sizes and digests |
+| Ruffle and its build dependencies | Pinned [Ruffle source](https://github.com/ruffle-rs/ruffle), Rust distribution, Node.js/npm and Eclipse Temurin Java sources | Builds the reviewed player with the project's compatibility patch; the installer records the resulting identity |
+| FFDec 26.4.0 and Temurin Java 17 | [JPEXS releases](https://github.com/jindrapetrik/jpexs-decompiler/releases/tag/version26.4.0) and [Adoptium](https://github.com/adoptium/temurin17-binaries/releases) | Recovers original launcher artwork from archived SWFs; no private display font is needed |
+| Python dependencies | [PyPI](https://pypi.org/) | Isolated installer/game environments; no global package installation |
+
+Downloads, extracted assets, generated catalogues, tool state and build products stay in your selected game folder. The source checkout stays separate. God Barn's public metadata is generated from the original catalogue and the project's policy code; no old farm, owner's backup or private server configuration is required. Original artwork, marks, audio and fonts retain their creators' rights; see [resource setup](RESOURCE_SETUP.md) and the notices supplied with the resources.
+
+The four compressed archives total **19,126,111,395 bytes — 19.13 GB / 17.81 GiB**. This is only one part of the installation. Extracted files, download caches, Rust/Node/Java tools, the Ruffle source build, Xcode output and game data need additional space.
+
+The installer uses a conservative **110 GiB free-space preflight**, a **100 GiB installation budget** and a **5 GiB free-space reserve**. These are protective checks, not a measured fresh-install peak or a filesystem quota. A complete real installation's peak usage has not yet been qualified. **Having only 20 GB free is insufficient.**
+
+## If something stops
+
+Keep the source folder and the chosen game folder. Run **START_MAC.command** again and choose the same installation folder to retry. Verified downloads are reused. Partial downloads resume when the server supports byte ranges; otherwise that file restarts. An interrupted extraction or build may need to repeat its current step. Do not start a second installer against the same folder.
+
+Read the named failure before changing anything. A missing Python or full Xcode installation must be fixed separately. A digest failure is not a successful download. A disk-space refusal means the installer will not safely continue with the available space. Do not solve these errors by copying files from an unrelated installation.
+
+Keep the whole installation folder after success: `assets` is required for play, and `player-data` holds your new farms and app runtime. Do not delete it as temporary build trash. Avoid manually deleting individual caches while setup is running. Retry the installer after correcting the reported problem.
+
+## What has actually been checked
+
+The installation and native staging paths have synthetic fixture coverage for resource identities, external output paths, player-pin propagation, artwork staging and reuse of the external archive without another WARC download. **The complete public download, native build and fresh-Mac farming/save/restart journey have not been executed together for this installer.** Fixture tests and a build path do not constitute gameplay acceptance.
+
+If you want to host the game once for browser players, use [the server instructions](PLAY_ON_SERVER.md). Developers can use the [build guide](DEVELOPMENT.md).

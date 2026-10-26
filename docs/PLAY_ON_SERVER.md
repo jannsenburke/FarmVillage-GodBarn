@@ -1,62 +1,70 @@
-# Host the game on a server
+# Host FarmVillage on Ubuntu/Linux
 
-The game is a sixteen-world alpha with incomplete regional features; see [world readiness](../WORLD_READINESS.md).
+The full game lives on your server. Players visit its browser address; they do not install the full archive collection. Choose your own server name and folders. No files or accounts belonging to the project owner are required.
 
-This path is for people who have an Ubuntu/Linux server and want to run the game there. The server stores the game resources and farms. Players connect through a browser; they do not install the full archive collection on every computer. Their browsers still download the player and individual game files as needed.
+This is a sixteen-world alpha with incomplete features; see [world readiness](../WORLD_READINESS.md). The installer is implemented. Full clean-clone installation and gameplay on an actual Ubuntu host remain unqualified; current tests use tiny synthetic files and mocked build tools.
 
-**Current status: automatic setup from a fresh public clone is unfinished.** The existing server installer requires a complete prepared release and already-extracted artwork. It does not retrieve and assemble all game resources from the public sources. A server or folder with a particular personal name is not a prerequisite.
+## Prepare your server
 
-## Start with the readiness guide
-
-1. Put the source checkout on the Ubuntu/Linux machine you intend to use as the host.
-2. Open a terminal in that source folder and run `bash START_HERE.sh`.
-3. The public-source entry opens the **server readiness guide**. It explains what is missing and which later steps use the network or modify an installation.
-4. If resources are missing, stop at that result. The guide will not ask you to obtain the project owner’s Mac, private checkpoint or authentication files.
-
-With an existing Python interpreter, you can also run:
+Use a normal Ubuntu login with a working systemd user session, Python 3.10+ and these tools:
 
 ```sh
-python3 -I -B tools/player-setup.py --audience server --check --json
+sudo apt update
+sudo apt install python3 python3-venv python3-pip git clang build-essential pkg-config libssl-dev
 ```
 
-This is a read-only source-readiness check, not a successful server installation. Running it on a Mac does not qualify Ubuntu hosting or deploy anything to another computer.
+These install packages on **your server**. The wizard does not log in remotely or run them automatically. Clang must support `wasm32`. Keep **80 GiB free** for preparation, plus space for the final installation. The compressed artwork is 19.13 GB; extracted art and source-build tools need more. The exact fresh-install peak is unmeasured.
 
-## Who downloads and stores what?
+Clone/download the source onto the host, outside the resource and final installation folders:
 
-| Component | Server owner | Browser players |
-| --- | --- | --- |
-| Original archive collection and extracted artwork | Prepare/store the resources on the host; the compressed archives alone are 19.13 GB and extraction needs additional space | No full archive installation |
-| Client/configuration, God Barn data and pinned player | Must be in the prepared release before installation | Served by the host as needed |
-| Python dependencies | The prepared-release installer creates a fresh environment and downloads five pinned packages from PyPI | No local Python installation |
-| Farms and God Barn history | Stored in the host’s managed data directory | Accessed through the game |
+```sh
+git clone https://github.com/jannsenburke/FarmVillage-GodBarn.git
+cd FarmVillage-GodBarn
+bash START_HERE.sh
+```
 
-The supported prepared-release installer **does not automatically download WARCs or extract artwork**. That missing public setup work is distinct from the native Mac app’s later first-start artwork downloader. The older raw server downloader is not a substitute for the complete reviewed server release.
+## Download and prepare the originals
 
-During a clean replacement, the installer stages another copy of the selected artwork before deleting the old managed target. Both copies can exist temporarily. It checks the staging space it needs; archive acquisition/extraction is a separate storage cost.
+Choose **1. Install or resume installation**. Choose a dedicated new folder, such as `~/FarmVillage-Resources`. The wizard prints its absolute path; type `INSTALL ` followed by that exact path to consent.
 
-## When you already have a complete prepared release
+Before confirmation, you only see a plan. After confirmation it:
 
-The managed installer runs on the host itself, using a normal user login with Python 3.10+ and systemd user services. Extract the prepared bundle outside the installation target and run its `bash START_HERE.sh`. This bundle entry is separate from the source clone’s readiness guide.
+1. Downloads pinned client/configuration from AcidCaos’s public repository and verifies each file.
+2. Downloads the four original Internet Archive WARCs one at a time, verifies sizes/checksums and extracts artwork. Successful compressed WARCs are removed to save space.
+3. Creates an isolated Python environment and installs dependencies from PyPI.
+4. Generates God Barn metadata, labels, interface resources and progression from originals. It needs no old farm/private catalogue. Historical prize shelves remain empty where originals cannot reconstruct their curation.
+5. Downloads pinned build tools and builds reviewed Ruffle from pinned public source and its compatibility patch.
+6. Seals and verifies the complete prepared resources.
 
-The installer’s eight steps are:
+Compilation and hundreds of thousands of files take time. Progress stays in the terminal. Partial downloads and completed stages survive retry. Setup keeps a 5 GiB free-space reserve and pauses at its 70 GiB resource-folder budget. Every host has not been qualified to fit within this budget. Rerun with the **same folder** after correcting the named problem.
 
-1. **Check the tools:** verify the Ubuntu login, Python and user services.
-2. **Choose the home for the game:** review the managed installation folder and select a private/loopback address and unused port.
-3. **Bring the artwork:** select an already-extracted assets folder containing `Environment/` and `xpromoSupport/`.
-4. **Name the clean slate:** review the exact installation target and enter the explicit wipe confirmation.
-5. **Make room for a new season:** stage verified resources and artwork, then replace only the positively identified managed installation.
-6. **Prepare the fresh engine:** create a new Python environment and install the pinned packages.
-7. **Choose a new key to the gate:** create a fresh browser password privately on the server.
-8. **Open the gate:** start the managed service, verify its sign-in page and show the browser address.
+See [resource setup](RESOURCE_SETUP.md) for exact sources/storage. No GitHub token, SSH account, Keychain access or connection to the owner’s host is needed.
 
-The current release is a clean start. If an existing managed installation is replaced, its old farms, snapshots, history, environment and authentication are erased after the named confirmation. The installer refuses unrelated, system, source and linked paths. No previous farms or passwords are bundled.
+## Install the prepared game
 
-The default managed target is `~/farmvillage-server`. Its `release/` holds the game environment; `data/` holds artwork, farms and other game data. Use the [prepared-release installer reference](../BIFROST_SETUP.md) for the matching detailed sequence. The historical filename does not require that server name or access to the owner’s host.
+The same flow then opens the guarded clean server installer:
 
-## Connecting players
+1. Check Python and the systemd user session.
+2. Choose the final managed folder (default `~/farmvillage-server`) and private IPv4 address/port.
+3. Accept the artwork folder offered from the prepared resources.
+4. Review the final target and type `WIPE ` followed by its absolute path. A new target gets a fresh installation. Replacing an identified managed target erases farms and authentication **inside that target**.
+5. Stage runtime/artwork and publish the named installation.
+6. Create a fresh server Python environment and install packages from PyPI.
+7. Choose a new browser password privately in the terminal.
+8. Start the user service, check sign-in and print the browser address. The optional boot setting may ask for sudo on your host.
 
-The current hosting layer accepts private/loopback IPv4 addresses. Use the exact browser URL printed by the running installer/service, sign in with the new server password, then create a farm. Loopback (`127.0.0.1`) works only on the server itself; other computers need the host’s reachable private-network address.
+This phase copies artwork into the final `data/assets` folder. Budget space for that additional copy; it checks staging space before erasing an existing managed target. Resource preparation and final installation are separate owned folders. No old farms, snapshots or sign-ins are imported.
 
-General public-internet hosting, reverse-proxy/TLS deployment and actual Ubuntu installation/gameplay still need their own qualification. A local fixture test or a browser scene on a Mac does not establish those results.
+The [clean server installer reference](../BIFROST_SETUP.md) covers the same eight-step phase. Its historical filename is not a required server name.
 
-For the unfinished original-source acquisition and resource assembly, start with [resource setup](RESOURCE_SETUP.md) and [development priorities](../HANDOVER_STATUS.md). For the all-local native app, use [the Mac path](PLAY_ON_MAC.md).
+## Play and restart
+
+Visit the printed address, sign in and choose **Create a new farm**. Other computers need your server’s reachable private-network address. `127.0.0.1` works only on the server itself. Hosting currently supports private/loopback IPv4. Public internet/TLS/reverse-proxy deployment requires separate work and qualification.
+
+```sh
+systemctl --user status farmvillage.service
+systemctl --user restart farmvillage.service
+journalctl --user -u farmvillage.service -n 50 --no-pager
+```
+
+Keep the final installation: `release/` contains the runtime; `data/` contains farms, artwork and authentication. Never upload generated folders to GitHub. For local Mac play, use [the Mac guide](PLAY_ON_MAC.md).

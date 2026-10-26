@@ -1,5 +1,5 @@
 #!/bin/bash
-# Read-only player guide: no downloads, installs or builds.
+# Guided installer: plan and target confirmation before downloads.
 set -euo pipefail
 TASK_SETUP_DIR="$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 if [[ "$(/usr/bin/uname -s)" != Darwin ]]; then
@@ -23,10 +23,10 @@ else
     done
 fi
 if [[ -z "$TASK_PYTHON" ]]; then
-    printf '\nFarmVillage — Mac player guide\n\n'
-    printf 'This source release has no complete download-and-play installer yet.\nNothing has been downloaded, installed or built.\n\n'
-    printf 'The interactive guide needs an installed Python 3.10+. Read docs/PLAY_ON_MAC.md now without installing anything.\n'
-    printf 'If you choose to install Python, use python.org, then reopen this guide.\n'
+    printf '\nFarmVillage — Mac player setup\n\n'
+    printf 'An existing Python interpreter is needed before the installer can start.\nNothing has been downloaded, installed or built.\n\n'
+    printf 'The installer needs an installed Python 3.10+. Read docs/PLAY_ON_MAC.md now without installing anything.\n'
+    printf 'If you choose to install Python, use python.org, then reopen this installer.\n'
     printf 'For a custom interpreter, set FARMVILLAGE_SETUP_PYTHON to its full path. The Apple /usr/bin/python3 shim is not launched.\n'
     printf '\nGuide: %s/docs/PLAY_ON_MAC.md\n' "$TASK_SETUP_DIR"
     if [[ -t 0 ]]; then read -r -p 'Press Return to close. ' TASK_CLOSE; fi

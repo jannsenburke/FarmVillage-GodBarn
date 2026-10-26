@@ -109,7 +109,7 @@ class CleanInstallTests(unittest.TestCase):
  def test_python_pip_environment_ignores_external_targets_and_config(self):
   with mock.patch.dict(os.environ,{'PIP_TARGET':'/outside','PIP_PREFIX':'/outside','PIP_CONFIG_FILE':'/outside/pip.conf','PYTHONPATH':'/outside','HTTPS_PROXY':'http://proxy.invalid'}):
    env=w.private_python_environment()
-  self.assertNotIn('PIP_TARGET',env);self.assertNotIn('PIP_PREFIX',env);self.assertNotIn('PYTHONPATH',env);self.assertEqual(env['PIP_CONFIG_FILE'],os.devnull);self.assertEqual(env['HTTPS_PROXY'],'http://proxy.invalid')
+  self.assertNotIn('PIP_TARGET',env);self.assertNotIn('PIP_PREFIX',env);self.assertNotIn('PYTHONPATH',env);self.assertEqual(env['PIP_CONFIG_FILE'],os.devnull);self.assertNotIn('HTTPS_PROXY',env);self.assertEqual(env['NETRC'],os.devnull)
 
  def test_detected_network_choices_offer_private_access_and_reject_public(self):
   result=type('Result',(),{'stdout':'192.168.50.22 0.0.0.0 8.8.8.8 100.88.0.5 ::1','returncode':0})()
@@ -132,8 +132,8 @@ class CleanInstallTests(unittest.TestCase):
  def test_incomplete_source_stops_before_prompts_import_staging_or_temp_creation(self):
   root=self.source_clone();result=type('Result',(),{'returncode':1})()
   with mock.patch.object(w,'__file__',str(root/'tools/setup-wizard.py')),mock.patch.object(w.subprocess,'run',return_value=result) as check,mock.patch.object(w,'ask') as ask,mock.patch.object(w,'run') as stage,mock.patch.object(w.tempfile,'TemporaryDirectory') as temporary:
-   with self.assertRaisesRegex(w.SetupError,'Public resource setup is unfinished') as failure:w.choose_bundle()
-  self.assertIn('PLAY_ON_SERVER.md',str(failure.exception));self.assertIn('no files were downloaded',str(failure.exception));self.assertIn('clean clone cannot yet install and play',str(failure.exception))
+   with self.assertRaisesRegex(w.SetupError,'No prepared resource pack was selected') as failure:w.choose_bundle()
+  self.assertIn('PLAY_ON_SERVER.md',str(failure.exception));self.assertIn('no files were downloaded',str(failure.exception));self.assertIn('bash START_HERE.sh',str(failure.exception))
   check.assert_called_once_with([w.sys.executable,'-I','-S','-B',str(root/'tools/private-inputs.py'),'check'],stdout=w.subprocess.DEVNULL,stderr=w.subprocess.DEVNULL)
   ask.assert_not_called();stage.assert_not_called();temporary.assert_not_called()
 

@@ -30,7 +30,7 @@ AUTH_KEY = "_farmvillage_lan_authenticated"
 CSRF_KEY = "_farmvillage_lan_csrf"
 LOGIN_PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FarmVillage · Bifrost</title><style>
+<title>FarmVillage · Your server</title><style>
 body{font:18px system-ui;background:#f6f0df;color:#2f3828;max-width:26rem;margin:12vh auto;padding:1.5rem}
 main{background:white;border-radius:1rem;padding:1.5rem}label,input,button{display:block;width:100%;box-sizing:border-box}
 input,button{font:inherit;padding:.75rem;margin-top:.5rem}button{background:#436d34;color:white;border:0;border-radius:.4rem}
@@ -344,11 +344,20 @@ def main():
             try:
                 listener.bind((arguments.bind, arguments.port))
             except OSError as error:
-                raise RuntimeError(f"Cannot listen at {origin}. Stop the old server and check Bifrost's IP address.") from error
+                raise RuntimeError(f"Cannot listen at {origin}. Stop the old server and check your server’s IP address.") from error
             os.environ["FARMVILLAGE_DATA_DIR"] = str(data)
             os.environ["FARMVILLAGE_NATIVE"] = "0"
             os.chdir(runtime)
             sys.path.insert(0, str(runtime))
+            prepared_path = runtime / "PREPARED_RUNTIME.json"
+            if prepared_path.is_file():
+                import json
+                import runtime_compatibility
+                if prepared_path.is_symlink():
+                    raise RuntimeError("Linked runtime identity refused")
+                prepared = json.loads(prepared_path.read_text())
+                release = runtime_compatibility.select_runtime_release(runtime, prepared_pin_sha256=prepared["runtime_manifest_sha256"])
+                os.environ["FARMVILLAGE_PREPARED_RUNTIME_PIN_SHA256"] = release.manifest_sha256
             assets = importlib.import_module("assets")
             assets.check_assets = lambda: verify_existing_assets(assets)
             from neighborhood_host import activate_neighborhood, configure_neighborhood

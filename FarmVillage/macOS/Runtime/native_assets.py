@@ -150,6 +150,21 @@ def cleanup_completed_assets(assets) -> None:
 
 
 def check_assets(assets) -> None:
+    external = os.environ.get("FARMVILLAGE_ASSETS_DIR")
+    if external:
+        # An installer-prepared archive is a shared read-only input, separate
+        # from this app's writable saves/cache. Never clean or redownload it.
+        destination = Path(external)
+        if (not destination.is_absolute() or ".." in destination.parts
+                or any(path.is_symlink() for path in (destination, *destination.parents))
+                or Path(assets.ASSETS_DIR) != destination):
+            raise RuntimeError("The public asset folder differs from the installer configuration.")
+        for name in ("Environment", "xpromoSupport"):
+            path = destination / name
+            if path.is_symlink() or not path.is_dir():
+                raise RuntimeError("The prepared public assets are missing or incomplete. Run START_MAC.command again; Start will not download another archive.")
+        log("Using the installer-prepared public archive without copying or downloading it.")
+        return
     data, destination, temporary, warcs, extracted, staged = asset_paths(assets)
     environment = owned_path(data, destination / "Environment")
     xpromo = owned_path(data, destination / "xpromoSupport")

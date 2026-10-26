@@ -45,7 +45,7 @@ OWNED = {"haveneighbors", "boughtbuildings", "boughtdecorations", "placeflowerde
          "fencedin", "baledout", "catlady", "gearhead"}
 
 
-def recover(source, *, root=ROOT):
+def recover(source, *, root=ROOT, assets_root=None):
     import pyamf
     manifest_names = ("xml/gz/v855098/assethash.min.amf.gz", "assethash/v9/assethash.master.amf.gz")
     manifests = [(name, pyamf.get_decoder(pyamf.AMF3, zlib.decompress((source / name).read_bytes())).readElement())
@@ -53,7 +53,7 @@ def recover(source, *, root=ROOT):
     artwork = []
 
     def copy_art(logical, destination=None):
-        original, reason, manifest, _ = resolve_from_manifests(source, manifests, logical)
+        original, reason, manifest, _ = resolve_from_manifests(source, manifests, logical, assets_root=assets_root)
         if reason:
             return None
         payload = original.read_bytes()
@@ -62,7 +62,8 @@ def recover(source, *, root=ROOT):
         relative = destination or "static/assets/progression/" + digest + original.suffix.lower()
         _write_verified(root, relative, payload, digest)
         artwork.append({"path": "/" + relative, "logical": logical, "manifest": manifest,
-                        "sha256": digest, "sourcePath": original.relative_to(source).as_posix()})
+                        "sha256": digest, "sourcePath": (original.relative_to(Path(assets_root).resolve()).as_posix()
+                                       if assets_root else original.relative_to(source).as_posix())})
         return "/" + relative
 
     settings_path = source / "xml/gz/v855098/gameSettings.xml.gz"
@@ -93,10 +94,10 @@ def recover(source, *, root=ROOT):
                         "image": icon,
                         "counterSource": "ownership" if name in OWNED else "cumulative",
                         "levels": tiers})
-    catalog_path = source / "LocalData/cache/gz_v855038_items_opt.json"
+    catalog_path = source / "xml/gz/v855038/items_opt.amf"
     raw_bytes = catalog_path.read_bytes()
-    wrapped = json.loads(raw_bytes)
-    items = wrapped.get("data", wrapped)["settings"]["items"]["item"]
+    wrapped = pyamf.get_decoder(pyamf.AMF3, zlib.decompress(raw_bytes)).readElement()
+    items = wrapped["settings"]["items"]["item"]
     # The game's code lookup keeps the first record even when a later record
     # with the same code has different metadata.
     seen, masteries = set(), []
@@ -111,7 +112,7 @@ def recover(source, *, root=ROOT):
             "source": {"ribbons": "xml/gz/v855098/gameSettings.xml.gz",
                        "ribbonsSha256": hashlib.sha256(settings_bytes).hexdigest(),
                        "mastery": "xml/gz/v855038/items_opt.amf",
-                       "catalogCacheSha256": hashlib.sha256(raw_bytes).hexdigest()},
+                       "itemSourceSha256": hashlib.sha256(raw_bytes).hexdigest()},
             "artwork": artwork,
             "ribbons": ribbons, "masteryItems": masteries}
 

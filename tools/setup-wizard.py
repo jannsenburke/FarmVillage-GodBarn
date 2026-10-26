@@ -194,7 +194,8 @@ def publish_clean_stage(stage, target, home, bundle, unit, configuration, confir
     return kind
 
 def private_python_environment():
-    environment = {key: value for key, value in os.environ.items() if not key.startswith(('PYTHON', 'PIP_'))}
+    environment = {key: os.environ[key] for key in ('PATH', 'LANG', 'LC_ALL', 'LC_CTYPE', 'HOME') if key in os.environ}
+    environment['NETRC'] = os.devnull
     environment['PIP_CONFIG_FILE'] = os.devnull
     return environment
 
@@ -235,7 +236,17 @@ def ask(prompt, default=None):
     value = input(prompt + ((' [' + str(default) + ']') if default is not None else '') + ': ').strip()
     return value or (str(default) if default is not None else '')
 
+PUBLIC_RESOURCES = None
+
 def choose_bundle():
+    if PUBLIC_RESOURCES is not None:
+        root = Path(__file__).resolve().parents[1]
+        output = PUBLIC_RESOURCES / 'browser-release'
+        if output.exists():
+            verify_payload(output)
+            return output, None
+        run([sys.executable, '-I', '-B', str(root / 'tools/prepare-browser-runtime.py'), '--output', str(output), '--resources', str(PUBLIC_RESOURCES)])
+        return output, None
     here = Path(__file__).resolve().parent
     if (here / 'PRIVATE_RELEASE_MANIFEST.json').is_file():
         return here, None
@@ -245,10 +256,10 @@ def choose_bundle():
     checker = [sys.executable, '-I', '-S', '-B', str(root / 'tools/private-inputs.py')]
     if subprocess.run([*checker, 'check'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode:
         raise SetupError(
-            'Public resource setup is unfinished. This source checkout does not have a complete '
-            'verified resource set required to install the server. Read docs/PLAY_ON_SERVER.md '
-            'for the current setup status. Setup stopped before staging or installation; '
-            'no files were downloaded. A clean clone cannot yet install and play automatically.'
+            'No prepared resource pack was selected. Run bash START_HERE.sh to download '
+            'and prepare public originals, then continue this installer automatically. '
+            'See docs/PLAY_ON_SERVER.md. This direct advanced entry stopped before '
+            'staging or installation; no files were downloaded.'
         )
     temporary = tempfile.TemporaryDirectory(prefix='farmvillage-bundle-')
     output = Path(temporary.name).resolve() / 'payload'
@@ -363,7 +374,7 @@ def wizard():
         print('Installation target: %s\nIdentified as: %s' % (target, kind))
         bind, port, origin = choose_network()
         say(3, 'Bring the artwork', 'Choose only the extracted assets folder. If it is inside the old installation, we will stage the art outside the wipe first. Old saves and passwords are never copied.')
-        default_assets = target / 'data/assets'
+        default_assets = PUBLIC_RESOURCES / 'assets' if PUBLIC_RESOURCES is not None else target / 'data/assets'
         if not default_assets.is_dir():
             default_assets = None
         assets = ordinary(Path(ask('Extracted assets folder (contains Environment and xpromoSupport)', default_assets)).expanduser())
@@ -396,6 +407,10 @@ def wizard():
         say(6, 'Prepare the fresh engine', 'The old state is now gone. We are creating a new Python environment and installing the five pinned dependencies. This step may use the network; it downloads no game artwork.')
         environment = target / 'release/.venv'
         python_env = private_python_environment()
+        package_home = ordinary(target / 'data/cache/package-home')
+        package_home.mkdir(parents=True, exist_ok=True)
+        python_env['HOME'] = str(package_home)
+        python_env['XDG_CACHE_HOME'] = str(package_home / '.cache')
         run([sys.executable, '-I', '-B', '-m', 'venv', str(environment)], env=python_env)
         run([str(environment / 'bin/python'), '-I', '-B', '-m', 'pip', '--isolated', 'install', '--disable-pip-version-check', '--no-input', '--require-virtualenv', '--prefer-binary', '--index-url', 'https://pypi.org/simple', '--cache-dir', str(target / 'data/cache/pip'), '-r', str(target / 'release/Runtime/requirements.txt')], env=python_env)
         say(7, 'Choose a new key to the gate', 'Create a new browser password below. It is entered privately and is never put in command arguments, logs or this package. No old password or session is restored.')
@@ -422,8 +437,15 @@ def wizard():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--start', action='store_true', help='Start only this already installed managed game (used by its service)')
+    parser.add_argument('--resources', type=Path, help='Verified public pack from the resource wizard')
     arguments = parser.parse_args()
     try:
+        if arguments.resources is not None:
+            sys.path.insert(0, str(Path(__file__).resolve().parent))
+            from resource_pipeline import check_pack, target_path
+            PUBLIC_RESOURCES = target_path(arguments.resources)
+            check_pack(PUBLIC_RESOURCES)
+
         if arguments.start:
             start_installed(Path(__file__).resolve().parent)
         else:

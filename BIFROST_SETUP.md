@@ -4,7 +4,7 @@ Welcome back to the farm. This installer builds a fresh starting point for sixte
 
 This is a **full clean install**, not migration. At the exact named managed target, all old farms, snapshots, history, runtime environments and sign-in state are erased. Only selected extracted game artwork may be retained as an input. No unrelated directory is a wipe target, and this package does not deploy to a remote computer.
 
-This reference requires a complete verified prepared release and already-extracted artwork. Public resource assembly is still unfinished; new source-clone users should start with the [server owner guide](docs/PLAY_ON_SERVER.md).
+This reference requires a complete verified prepared release and already-extracted artwork. The source wizard prepares these from public originals first; start with the [server owner guide](docs/PLAY_ON_SERVER.md).
 
 Extract the prepared bundle **outside** the installation being replaced, such as `~/Downloads/FarmVillage-Server-Release/`. On the Ubuntu/Linux host, open a terminal in that extracted folder and run:
 
@@ -12,7 +12,7 @@ Extract the prepared bundle **outside** the installation being replaced, such as
 bash START_HERE.sh
 ```
 
-In a public source checkout, `bash START_HERE.sh` opens the read-only readiness guide. It does not fetch the missing resource pack. Contributors who already have a complete matching resource set can use `python3 -I -B tools/setup-wizard.py` for the advanced installer; incomplete inputs stop with a clear explanation rather than a request for an owner’s private folders.
+In a public source checkout, `bash START_HERE.sh` opens the resource/download installer first. After verified preparation it enters this eight-step clean installation with the generated pack and artwork selected. You do not need a private checkpoint. Advanced users can run `python3 -I -B tools/setup-wizard.py --resources /absolute/resource-pack` after preparation.
 
 ## The same eight steps as the wizard
 

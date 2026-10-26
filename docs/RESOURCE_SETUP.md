@@ -1,88 +1,65 @@
-# Game resources
+# Public resource installer
 
-**Public-resource installation is unfinished.** This repository contains source and resource-processing tools, but a fresh clone cannot yet download, prepare and run the complete game automatically. You can contribute code and run the [source-only checks](../README.md#get-started-with-the-source) without game resources.
+The active installer acquires originals, extracts artwork, generates God Barn, builds reviewed Ruffle and prepares native Mac or Ubuntu/Linux installation. Follow the [Mac guide](PLAY_ON_MAC.md) or [server guide](PLAY_ON_SERVER.md).
 
-## Original preservation sources
+**Qualification:** the complete public installation was not run on the owner’s Mac for this update. No large downloads, real compiler/toolchain builds or Ubuntu session were used. Small synthetic archives and mocked build/staging tests cover the implementation. Full clean-clone installation, native gameplay and actual Ubuntu gameplay/persistence still require qualification.
 
-| Source | What it provides |
+## Download sources
+
+| Public source | Purpose and verification |
 | --- | --- |
-| [Pinned AcidCaos/FarmVillage revision](https://github.com/AcidCaos/farmvillage/tree/2dc25ca24032041a8b68d299b861eb2d4d449653) | Original base files under `embeds/`, `assethash/`, `xml/` and `patched/` |
-| [Internet Archive: original-farmville](https://archive.org/details/original-farmville) | Archived artwork and other original web resources |
-| [Upstream asset downloader and manifest](https://github.com/AcidCaos/farmvillage/blob/2dc25ca24032041a8b68d299b861eb2d4d449653/assets.py) | The exact four `.warc.gz` captures and expected identities used by the preservation project |
-| [Archive file listing](https://archive.org/download/original-farmville/) | The collection’s download listing |
+| [Pinned AcidCaos/FarmVillage](https://github.com/AcidCaos/farmvillage/tree/2dc25ca24032041a8b68d299b861eb2d4d449653) | Original client, configuration, starter templates and browser media. Byte sizes/Git blob identities are pinned in [the manifest](../tools/public-resources.json). |
+| [Internet Archive original-farmville](https://archive.org/download/original-farmville/) | Four WARCs ending `00000`–`00003`, totalling **19,126,111,395 bytes**. Pinned sizes, SHA-1 and MD5 checksums. |
+| PyPI / files.pythonhosted.org | Runtime packages and Pillow for generation; [preparation requirements](../tools/preparation-requirements.txt). |
+| GitHub, Rust distribution servers, Node.js, npm and Cargo registries | Pinned Ruffle source/submodules, reviewed patch, Rust/Node/npm/wasm-bindgen/Adoptium Java tools for both hosts and locked dependencies. See [toolchain pins](../tools/public-ruffle-toolchains.json) and [provenance](../FarmVillage/ruffle_runtime/0.7.1-farmvillage-gc1/provenance/README.md). |
+| GitHub FFDec / Eclipse Adoptium | Mac image/font extraction tools pinned by checksum in [native preparation](../tools/native_resources.py). |
 
-A WARC stores archived web responses. The four captures named by upstream end in `00000` through `00003`. Extracting them recovers original resource files, but still requires version selection and arrangement into this fork’s expected layout. These sources are preservation references, not a complete installation procedure or a new asset mirror.
+Downloads use anonymous public access. The installer does not request tokens, clone private repositories or read browser sessions. Build commands use an isolated HOME/cache in the chosen folder. Original media keeps its separate rights; see [resource notices](../SOURCE_NOTICE.md).
 
-Original resources retain their own rights. The source-code licence does not license the original game media. See [source and resource notices](../SOURCE_NOTICE.md).
+## Consent, storage and retry
 
-## What a playable resource set needs
+Source launchers show a plan first. Installation requires a dedicated ordinary folder outside source and exact path confirmation. Unrelated, linked, system and source targets are refused. Preparation does not erase an existing game installation or import player state.
 
-- Original client/configuration payloads and the versions expected by the compatibility patches.
-- An extracted artwork tree, including the required environment and promotional resources.
-- Generated God Barn item metadata, labels, skins, helpers and progression data.
-- A reviewed, version-pinned Ruffle player for the browser/native wrapper.
-- Resource identities and a complete layout accepted by the runtime and staging tools.
+Conservative preparation requirements: **110 GiB free for Mac**, **80 GiB for server resources**. Resource-folder budgets are 100/70 GiB respectively, with a 5 GiB disk reserve. Exact fresh-install peak is unmeasured; these guards may pause a build. The server’s final installation additionally copies runtime/artwork and checks staging space before its explicit wipe confirmation.
 
-Downloading the upstream base files and four archives does not by itself supply all of these outputs. No previous player farm, authentication state or personal profile should be needed by the completed bootstrap.
+One WARC is downloaded, verified and extracted at a time, then its compressed file is removed. Interrupted downloads keep `.part` files. Valid HTTP Range responses resume; sources ignoring Range restart the file. Interrupted extraction replays the same archive. Completed extraction receipts avoid unnecessary downloads. Keep the prepared originals/receipts intact between retries.
 
-## Existing tools and their limits
+Ruffle compilation takes time and disk. Tools/caches remain inside the chosen folder. Closing setup stops its owned build process group. Rerun with the same folder to retry. Repeated checksum failure may require removing only the named failed `.part` inside the owned `downloads/` directory before retry.
 
-### Extract local archives
+## Generated layout
 
-After obtaining the original archives and creating the external Python environment from the README, the existing extractor can read local WARCs:
+| Location within the resource root | Contents |
+| --- | --- |
+| `original/` | Pinned upstream originals |
+| `assets/` | Extracted artwork shared by the Mac app |
+| `godbarn/` | Generated catalogue, labels, skins, progression |
+| `Runtime/` | Patched runtime, prepared companion, source-built Ruffle |
+| `Runtime/PREPARED_RUNTIME.json` | Explicit local player manifest identity |
+| `Runtime/PUBLIC_RUNTIME_BUILD.json` | Source/toolchain/output receipt |
+| `native/` | Mac images, font and icon |
+| `python/` | Preparation environment |
+| `work/`, `tools/`, `downloads/` | Isolated build workspace, tools, downloads |
+| `assets-manifest.jsonl`, `resource-state.json` | Artwork identities and complete runtime seal |
+| `macos-build/` | Mac build output and app |
+| `browser-release/` | Prepared server bundle |
 
-```sh
-FARMVILLAGE_NATIVE=1 "$FV_CHECK_ENV/bin/python" -B   FarmVillage/warc_extractor/warc_extractor.py   -path /absolute/path/to/local-warc-directory   -output_path /absolute/path/to/new-extraction-directory   -dump content
-```
+Generated folders never belong in the GitHub source upload. `PrivateInputs.expected.json` remains a historical resource baseline. New public packs use their own source-build receipts and seals. Compiler differences are recorded without pretending the output matches the old Mac binary hash.
 
-Run from the repository root with a new output directory outside source and install targets. The native flag enables output containment checks. This command does not select a complete accepted runtime layout or generate the companion data.
+## Command-line plan and verification
 
-### Build the pinned player
-
-The Ruffle source revision, patch, toolchain, lockfiles and output pins are retained in the [runtime build recipe](../FarmVillage/ruffle_runtime/0.7.1-farmvillage-gc1/provenance/README.md). The driver uses a clean checkout at commit `89a7049965f3090e706265670df309a5128233ac` and explicitly selected tools:
-
-```sh
-"$FV_CHECK_ENV/bin/python" -B   FarmVillage/ruffle_runtime/0.7.1-farmvillage-gc1/provenance/build-runtime.py   --source /absolute/path/to/clean/pinned-ruffle-source   --destination /absolute/path/to/new-player-output   --node /absolute/path/to/node   --npm-cli /absolute/path/to/npm/bin/npm-cli.js   --wasm-bindgen /absolute/path/to/wasm-bindgen
-```
-
-The driver checks output identities. Cross-host reproducibility remains an open task; the recorded build host was Apple Silicon macOS. Review differing outputs as a new resource baseline rather than weakening the pin to accept arbitrary files.
-
-### Recover companion resources
-
-Read [the catalogue pipeline](../GodBarn/Documentation/CATALOG_PIPELINE.md) before running generators. These are maintenance interfaces requiring their named inputs, not a from-scratch bootstrap sequence:
+Run from the repository root, choosing an absolute new folder on your own machine:
 
 ```sh
-# Audit an existing prepared catalogue against original resources.
-"$FV_CHECK_ENV/bin/python" -B GodBarn/scripts/recover_catalog.py   /absolute/path/to/prepared-game-archive --audit-only
+# Plan only: no folder, download, environment or build.
+python3 -I -B tools/setup-resources.py --audience mac --resources /absolute/new/FarmVillage
 
-# Recover labels from the original locale SWF.
-"$FV_CHECK_ENV/bin/python" -B GodBarn/scripts/recover_labels.py   /absolute/path/to/en_US.swf /absolute/path/to/new-localized-labels.json
+# Explicitly consent to downloads and builds.
+python3 -I -B tools/setup-resources.py --audience mac --resources /absolute/new/FarmVillage --accept-downloads
 
-# Refresh archive-derived data using existing catalogue/provenance inputs.
-"$FV_CHECK_ENV/bin/python" -B GodBarn/scripts/prepare_archive.py   /absolute/path/to/prepared-game-archive
-
-# Requires a prepared catalogue and a source-identified pristine item cache.
-"$FV_CHECK_ENV/bin/python" -B GodBarn/scripts/prepare_untabbed.py   /absolute/path/to/prepared-game-archive
+# Verify all sealed runtime/artwork files without downloading.
+python3 -I -B tools/setup-resources.py --audience mac --resources /absolute/new/FarmVillage --check
 ```
 
-Some generators write to the working checkout’s `GodBarn/` resource directories. Run them in a development checkout and inspect the resulting identities. Generated data stays outside the source export.
+Use `--audience server` for server preparation. Resource-only setup does not launch the app or install a service. The guided source launchers handle subsequent steps.
 
-## Missing bootstrap work
-
-1. Map extracted WARC content and versions into the accepted runtime layout.
-2. Generate catalogues and companion artwork without a private cache or player-save seed. The older `prepare_assets.py` reads a hardcoded legacy save and writes a practice-save copy; do not use it unchanged for this release’s bootstrap.
-3. Resolve the generators’ historical cache-layout and provenance assumptions. `prepare_untabbed.py` expects a pristine decode under the game’s `cache/`, while the older bootstrap expects `LocalData/cache/`.
-4. Handle separately curated historical data explicitly. `prepare_encyclopedia.py` expects `historical-prizes.json`; item AMF alone does not reconstruct that curation.
-5. Finish source-verified player builds and resource identities across macOS and Linux, connect external resource roots to the application and browser, and verify clean-clone gameplay and persistence.
-
-An [unapplied draft patch](../RESOURCE_SETUP_RECOVERY.patch) preserves some resource automation work. It needs review and missing central helpers before integration. See [maintainer priorities](../HANDOVER_STATUS.md); commands mentioned only in the draft are not active setup tools.
-
-## Existing matching-resource importer
-
-For maintainers who already possess a compatible prepared set, `PrivateInputs.expected.json` records **1,843 files / 392,964,044 bytes** accepted by the current importer. The large extracted artwork tree is additional and is not included in that count. The manifest lists identities; it does not retrieve files.
-
-The prepared game root contains the original payloads, selected templates and exact player distribution. The prepared companion root contains generated metadata and selected interface resources. Neither root should include farms, snapshots, credentials or another player’s profile.
-
-Use the [development and build guide](DEVELOPMENT.md) for the checked import interface, native build and prepared browser staging. Independently regenerated files may require a reviewed new resource baseline; they are not interchangeable merely because their filenames match.
-
-Actual native gameplay, browser gameplay and Ubuntu installation must each be checked after resource preparation. Keep the sixteen-world scope, original prices/timers and explicit unsupported-feature boundaries.
+Sixteen worlds remain active; Enchanted Glen and Holiday Lights are retired. Original costs/timers/earned rewards are preserved. Historical prize curation unrecoverable from originals is explicitly empty. Setup does not establish that every original feature is restored.

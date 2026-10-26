@@ -1,10 +1,19 @@
 # Development and builds
 
-For player-facing instructions, choose [local Mac play](PLAY_ON_MAC.md) or [server hosting](PLAY_ON_SERVER.md). This page covers contributor/build work, not a completed public installer.
+For player-facing instructions, choose [local Mac play](PLAY_ON_MAC.md) or [server hosting](PLAY_ON_SERVER.md). This page covers contributor/build work, with historical matching-resource interfaces retained below.
 
 This guide is for contributors working beyond the source-only checks. Start with the [README](../README.md#get-started-with-the-source) to create the external Python environment. Its examples set `FV_CHECK_ENV`; set that variable to the same environment path in each new terminal.
 
-**A complete public-resource bootstrap is not implemented yet.** The commands below require an already prepared, compatible resource set. They do not download or reconstruct that set. See [game resources](RESOURCE_SETUP.md) before attempting an app build or server install.
+## Public-resource build path
+
+Use the [resource installer](RESOURCE_SETUP.md) to prepare a new external pack. It downloads and verifies originals, generates metadata and records a source-built Ruffle identity. The source launcher then builds/installs the selected product. To build/stage separately after preparation:
+
+```sh
+bash FarmVillage/macOS/Scripts/build.sh Release --resources /absolute/resource-pack --output /absolute/resource-pack/macos-build --python /absolute/resource-pack/python/bin/python
+python3 -I -B tools/prepare-browser-runtime.py --resources /absolute/resource-pack --output /absolute/new-browser-release
+```
+
+The following matching-resource import commands are retained for the older prepared baseline. They are optional maintainer interfaces; players do not need private files or an old checkpoint.
 
 ## Compatible prepared resources
 
@@ -42,7 +51,7 @@ Once the complete matching resource set is present, the existing staging tool ca
 
 The output must be new and outside the source checkout. Staging verifies inputs; it does not deploy or qualify a server.
 
-The existing prepared-release installer is documented in [BIFROST_SETUP.md](../BIFROST_SETUP.md). That historical filename refers to a managed release workflow, not a host every contributor must have. It requires a complete prepared bundle and extracted artwork; running `START_HERE.sh` in an unprepared source clone is not a public setup solution.
+The existing prepared-release installer is documented in [BIFROST_SETUP.md](../BIFROST_SETUP.md). That historical filename refers to a managed release workflow, not a host every contributor must have. It requires a complete prepared bundle and extracted artwork; running `START_HERE.sh` in a source clone first prepares its resources through the public installer.
 
 The current release policy uses fresh farms. The installer must identify its managed installation, request explicit confirmation before wiping it, and refuse unrelated, system, source and linked paths. Do not run destructive installation steps to test documentation. Actual Ubuntu installation, managed-service operation and gameplay remain separate open qualification tasks.
 

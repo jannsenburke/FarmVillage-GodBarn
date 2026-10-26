@@ -24,8 +24,8 @@
   ],
   "files": {
     ".gitattributes": {
-      "bytes": 202,
-      "sha256": "4a8be2a60caf909c6431759910e13977a31f0e4b09d08443572c206158564048"
+      "bytes": 209,
+      "sha256": "519a0ae4cca2474c04c5ce2f5b1583b2e8c9d363410552edad5c4a3fac971047"
     },
     ".github/source-checks.yml.example": {
       "bytes": 865,
@@ -44,8 +44,8 @@
       "sha256": "ef86036682263282933863ce43582497fd7737fb2bcbcea1b75eea47ccf6e819"
     },
     "BIFROST_SETUP.md": {
-      "bytes": 7271,
-      "sha256": "b76d982e22645bedc62d2b8d76da2ae577ffea8d543a4a77cc693cdf6794ddc8"
+      "bytes": 7251,
+      "sha256": "8d23abbf32aad8849e27de65e0dea72ae36f5507d5734ca0e18444be44bcdbd4"
     },
     "CONTRIBUTING.md": {
       "bytes": 2658,
@@ -88,8 +88,8 @@
       "sha256": "6b173ce37ab9c35bed40b4fd9fceab4d4f501ccb4d638cfb4c67f7f525e82eb0"
     },
     "FarmVillage/bundle.py": {
-      "bytes": 1817,
-      "sha256": "c2c054100dded658dbf6fa23fc296a279d719edd2e9fcfafaee95a2c26b4e798"
+      "bytes": 1876,
+      "sha256": "ff238a57e84cb6a7a8f192384963c9136251a2661942a2c5ec4b48df3b5f577d"
     },
     "FarmVillage/bushels.py": {
       "bytes": 21338,
@@ -416,8 +416,8 @@
       "sha256": "18402b2da360ea7307612e856c1c526919e620245a01ace545f9f2c1a800c205"
     },
     "FarmVillage/macOS/FarmVillage.xcodeproj/project.pbxproj": {
-      "bytes": 11094,
-      "sha256": "b688c8d203d7ecc4f56f7426129afbd91690f1598992a4e1e8de0687a7b97dbe"
+      "bytes": 11482,
+      "sha256": "4c7d67919f18bed453d64c3c92e86f9939a0c894cb3c988caaae2f4b217f4fd5"
     },
     "FarmVillage/macOS/FarmVillage.xcodeproj/xcshareddata/xcschemes/FarmVillage.xcscheme": {
       "bytes": 1995,
@@ -440,12 +440,12 @@
       "sha256": "3215dbecf2cad91190683d6a0b9d1d088a62033d5f367ba06d48ca561dd8e6d4"
     },
     "FarmVillage/macOS/Runtime/bootstrap.py": {
-      "bytes": 22301,
-      "sha256": "2e016d6c46fb8bbcc4f6ec50ab21bbaa57da9683077f6810cd754949c3ded6d4"
+      "bytes": 23912,
+      "sha256": "1871c73f801b7f4473018f3062b7531c9dc9cf751d7a3627da8f7ee21360b261"
     },
     "FarmVillage/macOS/Runtime/native_assets.py": {
-      "bytes": 10277,
-      "sha256": "3d4eb06a7f5d4e351868a52c9e59fcdb333dd261c4a179d2329a760f8a0fd9a0"
+      "bytes": 11282,
+      "sha256": "13a04d83d643bd174726311709a0b7aa99d74ea022f5e9a0af3647e98b423a7b"
     },
     "FarmVillage/macOS/Runtime/native_launcher.py": {
       "bytes": 7357,
@@ -460,12 +460,12 @@
       "sha256": "0c09a858f60b7a0ef93ed33144f8e3badc889709298d84a570e906fc06a65a65"
     },
     "FarmVillage/macOS/Scripts/build.sh": {
-      "bytes": 5173,
-      "sha256": "ac62b365e5bc6c96f5d9ada062861d71d2313f1fc24e09829eb404abfde4576e"
+      "bytes": 8202,
+      "sha256": "87db889f2f0257ecd160e0d7d6a3de09d2165212c11ab5f752f647e35d6a0324"
     },
     "FarmVillage/macOS/Scripts/bundle-runtime.sh": {
-      "bytes": 4369,
-      "sha256": "177b87e83e715b25190a472b9368be6dba2181949a65ab0538efc130225a01c7"
+      "bytes": 6185,
+      "sha256": "5edaca4e40c6af71372e0d123ef254b7edca25f306811d09c3d13ea47b275a46"
     },
     "FarmVillage/macOS/Scripts/client-inspection/abcdis.py": {
       "bytes": 14391,
@@ -488,8 +488,8 @@
       "sha256": "8e3f9bde47a9d548da52ecd9be75ff8b3b77951068d7b7a9db11501023d3327e"
     },
     "FarmVillage/macOS/Scripts/prepare-heritage-assets.py": {
-      "bytes": 13551,
-      "sha256": "a565acdca50734fd8d411c27402a18e47bbfa08d4018ee7e7da8eec7b7786a8d"
+      "bytes": 15512,
+      "sha256": "da4786ac195eaf83eb70747c0a1eca218a12617c5a381df6e17184d844b38bd9"
     },
     "FarmVillage/macOS/Scripts/prepare-portable-release.py": {
       "bytes": 29038,
@@ -504,8 +504,8 @@
       "sha256": "e3686357ecd9f2fb1bba325650186755ee63bac9aa49be43976939c0bfa38178"
     },
     "FarmVillage/macOS/Scripts/runtime.sh": {
-      "bytes": 2233,
-      "sha256": "6e4308e51d921ad4c0f2c4b7e9c978b2cfdab85d32958a754a1bcd49c63e0aaa"
+      "bytes": 3438,
+      "sha256": "29e70a5909bcd1a4b3beeb9211f3b11771c934db5732da35de1104a3610997bc"
     },
     "FarmVillage/macOS/Scripts/verify-home-music.py": {
       "bytes": 2541,
@@ -1404,8 +1404,8 @@
       "sha256": "705ad1bc776fc4e98a71ff578c1172f7f21b8e9b2edec3441233eeec2a548b8c"
     },
     "FarmVillage/portable/Linux/server_runner.py": {
-      "bytes": 19631,
-      "sha256": "e2d8fa65a03c7a31abe108fafc0c03397badf93b068d62acd0d9fcfa3f52bdd6"
+      "bytes": 20235,
+      "sha256": "05961d706ea19acd3739545bf7533965fca07ca7d1a5b95c6226d51fa074909f"
     },
     "FarmVillage/portable/Linux/start-server.sh": {
       "bytes": 1016,
@@ -1524,36 +1524,44 @@
       "sha256": "c63981977750d740c24a70fdd1582f9f4b40f9bb8bf18fd8ed2790e576628e0d"
     },
     "FarmVillage/ruffle_runtime/0.7.1-farmvillage-gc1/provenance/README.md": {
-      "bytes": 3509,
-      "sha256": "b2e67db750f0f34f1007a6762286e5b66afbb24c8c347f435f3306467ed557df"
+      "bytes": 3285,
+      "sha256": "8fe7ecdfc72e483a616ac7da422dc2c0db34ad8a0adb1f0165ed71eedff3acbe"
     },
     "FarmVillage/ruffle_runtime/0.7.1-farmvillage-gc1/provenance/build-runtime.py": {
-      "bytes": 5733,
-      "sha256": "83e333c908de4035da03cf5798414547a479e98f6e6089967f2f6fdd81100f94"
+      "bytes": 9578,
+      "sha256": "a761b283d051f78fe18c85e9a5cb09733d17dc65b4c2a5cf86b064d453154e04"
     },
     "FarmVillage/ruffle_runtime/0.7.1-farmvillage-gc1/provenance/gc-pacing.patch": {
       "bytes": 1069,
       "sha256": "502ad9492deb3b5904d1b09c535ec521345b86b17b8db16145de862046515d14"
     },
+    "FarmVillage/ruffle_runtime/0.7.1-farmvillage-gc1/provenance/historical-runtime-files.json": {
+      "bytes": 1157,
+      "sha256": "dbf47a0423d55d36e2201099f4922f9a4fe03417fc39c75809d14099f25f2e4c"
+    },
     "FarmVillage/ruffle_runtime/0.7.1-farmvillage-gc1/provenance/package-lock.json": {
       "bytes": 721670,
       "sha256": "fff432c1cd6a43c1b907dca1ebe438d38f28748368060cd1769bb9cb5bf05147"
     },
+    "FarmVillage/ruffle_runtime/0.7.1-farmvillage-gc1/provenance/public-build.json": {
+      "bytes": 1054,
+      "sha256": "2ea937ff40770f4654c273d3219144e67b5a69cf47b2a1c773de377d9cf0afd4"
+    },
     "FarmVillage/ruffle_runtime/0.7.1-farmvillage-gc1/provenance/runtime-files.json": {
       "bytes": 1157,
-      "sha256": "dbf47a0423d55d36e2201099f4922f9a4fe03417fc39c75809d14099f25f2e4c"
+      "sha256": "45ae72215a43427082a8a15b8f55d350d752143910f1430d8cf95e0def466836"
     },
     "FarmVillage/ruffle_runtime/0.7.1-farmvillage-gc1/provenance/version-seal.json": {
       "bytes": 295,
       "sha256": "e31f5d3d95f93dc508f2921263917950907ca616a16f63ba7fbb0a6656f4db5a"
     },
     "FarmVillage/runtime_compatibility.py": {
-      "bytes": 13649,
-      "sha256": "044026464d1e3eef6288997d3d01e40f723a1fc982b4927aa6ff2312eccd83a1"
+      "bytes": 26979,
+      "sha256": "3750a0b94770ba50251868d6be37595cce3d77323dbfd11f59766b9b8286ea1c"
     },
     "FarmVillage/server.py": {
-      "bytes": 55443,
-      "sha256": "1cffcbf3f8eb4d04e342e24623c72f918e07f2e0d19faffeee0f5b04b549415a"
+      "bytes": 55666,
+      "sha256": "ede0beb59c776453bf40941f8f4fe0e69ac9f38d963996a992b7f2cb3f2ddcbe"
     },
     "FarmVillage/storage.py": {
       "bytes": 74723,
@@ -1695,13 +1703,17 @@
       "bytes": 14961,
       "sha256": "eb5967bbc9e91593ea36a8f7080e06ef0dd9daa45d1f07c6c6f12ae7ef759d8f"
     },
+    "GodBarn/scripts/bootstrap_resources.py": {
+      "bytes": 11256,
+      "sha256": "d0805bd763409291a4a7aa9e5bcd3864839ee5c08c687c02da477cbbe24434ac"
+    },
     "GodBarn/scripts/build_native.sh": {
       "bytes": 611,
       "sha256": "9018703afd6f0bc70ab16c12807ebeff15b170773c346971f3f01aef368a9436"
     },
     "GodBarn/scripts/bundle_companion.py": {
-      "bytes": 4413,
-      "sha256": "299faff276570705df91e4d49fc67cdbd295d200ae3ace0c850bc748b31cbf2f"
+      "bytes": 6742,
+      "sha256": "c50cb0ed7f9bf55578fc79515fa761e5e3e41521a469d5fd794ab69cfe91ec8c"
     },
     "GodBarn/scripts/deploy_bifrost_barn.sh": {
       "bytes": 3617,
@@ -1720,40 +1732,44 @@
       "sha256": "68474a7d8e1875935cb82b1882b53773d8bbf696e2bacd87fefa60d2b711130b"
     },
     "GodBarn/scripts/prepare_assets.py": {
-      "bytes": 14107,
-      "sha256": "c05a266a6483aca970249f31c7ee6cbe6952134cb3190d15ae33d4788ca1031e"
+      "bytes": 14523,
+      "sha256": "ae4b4033c6e2e106b2c6ff7900f559c51bbb4d1b66a98bab2e8bd44116c10e17"
     },
     "GodBarn/scripts/prepare_encyclopedia.py": {
       "bytes": 10470,
       "sha256": "9d2c123b6a498d4e87259cd88c98f6146c24a9c1edbfb2ca402741a50983985d"
     },
     "GodBarn/scripts/prepare_helpers.py": {
-      "bytes": 10290,
-      "sha256": "0b22e61daab97fa0ea904ac1fa279731d1d1163de1c1636f2b75be1868d06911"
+      "bytes": 10465,
+      "sha256": "9c51ea501f3cb72ba695c155e3cfb4e0ed5a9eb53a09e411707cbef2f15201e1"
     },
     "GodBarn/scripts/prepare_progression.py": {
-      "bytes": 6725,
-      "sha256": "0768de4d315d8a86507b42e5f8e669917020c54418fa53a6823decf172af452e"
+      "bytes": 6904,
+      "sha256": "275b2ebe225185112e53dc98803de18f0019623c657df3d15cdd12e959863a34"
     },
     "GodBarn/scripts/prepare_skin.py": {
-      "bytes": 8183,
-      "sha256": "55567f7974aec9cfd4729bcbf3c8b6e6191378e25d32ab5f30059c079da838c9"
+      "bytes": 10271,
+      "sha256": "5e940e450b1d9c3cbddaa559381895f0e1b1fc11852233f9256a8ce6e84c4324"
     },
     "GodBarn/scripts/prepare_untabbed.py": {
-      "bytes": 6386,
-      "sha256": "81d3f736a8df62b1020371896f3d3d7e64b4749e5a1aeb930b2daa0e1a82a0c4"
+      "bytes": 7713,
+      "sha256": "b53cda14f70af7a1eae5a9f5ee3f2a4cf13611058061747f72de1183f3e3dc42"
     },
     "GodBarn/scripts/preview_integration.py": {
       "bytes": 9881,
       "sha256": "248ee60379e35c2dfd97f95ced9776d55d7d6c2d0be6afbbd70a790c28e8055e"
     },
     "GodBarn/scripts/recover_catalog.py": {
-      "bytes": 23845,
-      "sha256": "daf3391e1b2371d9379daeb406946935b5f5a48bfc2719d23bffd35ebb4a446a"
+      "bytes": 24445,
+      "sha256": "9fb267d41ed53676d696489446c764f49623c8ad7e369f10ffd04ccd5269bf0e"
     },
     "GodBarn/scripts/recover_labels.py": {
       "bytes": 11799,
       "sha256": "0b16467a8de07a81b904349f74b7f70f908d6f5b1f656bd842d352c1435d2b27"
+    },
+    "GodBarn/scripts/verify_resources.py": {
+      "bytes": 10630,
+      "sha256": "f32df621b2aa2d3d7bdb20f176473bcc1ac0e430fd990f8f1dcfef9f564bf9be"
     },
     "GodBarn/seasonal.py": {
       "bytes": 4326,
@@ -1816,8 +1832,8 @@
       "sha256": "1b5718215ca996281ce95024822181e34f6256f2aba67b09db9e3254d6917bf4"
     },
     "GodBarn/tests/test_bundle_companion.py": {
-      "bytes": 7577,
-      "sha256": "ef5a0e4428987c8e115ce63c6f38435ec175ded468006e4af9f642f1f82bf07d"
+      "bytes": 11311,
+      "sha256": "17ef3eef1c63386bac619b8d3d10661c36bbf7e979bb482e74d3b34b1aac018d"
     },
     "GodBarn/tests/test_catalog_recovery.py": {
       "bytes": 11938,
@@ -1876,12 +1892,16 @@
       "sha256": "4b68c4997493ddd74a6340b3566c54f541a930cc345a2d37deab65f733acafe3"
     },
     "GodBarn/tests/test_prepare_untabbed.py": {
-      "bytes": 5734,
-      "sha256": "b1a5f56862825dbbcc9fba4085ee1337ca05a49ade5461b8463ad4087e7cdb28"
+      "bytes": 6180,
+      "sha256": "9d930ff10420578c8ac6ab58b7da0ae566f0df2ed7300b8ce84307b30a1a119c"
     },
     "GodBarn/tests/test_progression_tools.py": {
       "bytes": 7375,
       "sha256": "f5b8b05a24e3dc194f3da08efe11fd24d2b33079d2bd452b57d4122a663d8b98"
+    },
+    "GodBarn/tests/test_resource_bootstrap.py": {
+      "bytes": 19392,
+      "sha256": "06421e72b05f8eed17b70ca873fc479fc11120c266a4b10572bd3a999e34bbb5"
     },
     "GodBarn/tests/test_seasonal.py": {
       "bytes": 5671,
@@ -1908,8 +1928,8 @@
       "sha256": "3e81b797931fb151de07ec298f93f3d7143b506117f7e151d1ddafbbe5370107"
     },
     "HANDOVER_STATUS.md": {
-      "bytes": 4689,
-      "sha256": "1a84f2daf6dd4c06826a8bc62d6608b8a91dd1957064fb70ed392152c16a3f38"
+      "bytes": 5313,
+      "sha256": "a64c25807c382ebf86380a9ca24524ec3404153561e0d57031d157210bf2d9a7"
     },
     "LICENSE": {
       "bytes": 35149,
@@ -1920,8 +1940,8 @@
       "sha256": "39987da1e007eb22b3fcf2efc2ef08bd180a0ad1aaf6101eca8f6815ef58e167"
     },
     "README.md": {
-      "bytes": 6784,
-      "sha256": "558ceabfd18a131af267bb0b94a929e2409d4f3e5717f4c14a0d8279fa2504ef"
+      "bytes": 6817,
+      "sha256": "11afaaa083497fcebed088c6a2def2679e63a37ba64b785a82806f7d5e3757ab"
     },
     "RESOURCE_SETUP_RECOVERY.patch": {
       "bytes": 225183,
@@ -1932,16 +1952,16 @@
       "sha256": "06f27b4d050b02515e21fdd33ca2a0768d05212e2dd6fb7f728e81b450c17586"
     },
     "START_HERE.sh": {
-      "bytes": 2179,
-      "sha256": "18cf2a82267a7790f8676969a6823f393d409b0132888b50a4f9757df156c080"
+      "bytes": 2169,
+      "sha256": "4c3a8e711f43e568bb3e19522de4c94efdf407d7139f73d1e0323f1415606d71"
     },
     "START_MAC.command": {
-      "bytes": 2109,
-      "sha256": "ef8fec0da5dd65aacc930b43d2399c0f1f805259f17fd5a47039d86954e9eb27"
+      "bytes": 2116,
+      "sha256": "75e9c0e2a304052510466df5f29a7412b7a02ea7a3b4836b76dd7a4d7dfb58b6"
     },
     "TAKEOVER.md": {
-      "bytes": 5873,
-      "sha256": "a747bc6f356820530e5185520e4f54593f2e9be09de0e92ef6e7c328c04ccb3e"
+      "bytes": 5919,
+      "sha256": "80dc5e3fd222b0dda4cb0b32473b1c8805a1232f90bb6c87419251f85f27fafd"
     },
     "UPLOAD_TO_GITHUB.md": {
       "bytes": 2506,
@@ -1956,64 +1976,128 @@
       "sha256": "cda9445bb2c077d021c1ace68a4607419d3831b8518e577ae54075617665f42c"
     },
     "docs/DEVELOPMENT.md": {
-      "bytes": 5952,
-      "sha256": "a990e839d56620a3db5b038579dad48ae4b5dda593c1c12758c3b5176caefb22"
+      "bytes": 6544,
+      "sha256": "13fbf970841640486570712e3dc9b2b266b1d90956deae2c8f04fd7e18b75e74"
     },
     "docs/PLAY_ON_MAC.md": {
-      "bytes": 5507,
-      "sha256": "a9fc8ce110579ead769c59bc6a9624185ed40f6f89c3a5d5813cea5f3c107ba7"
+      "bytes": 8350,
+      "sha256": "31b4cfecf38676192f16588bd95f2bcb4a0b5b3dfa1e23b93c76274e58a825d4"
     },
     "docs/PLAY_ON_SERVER.md": {
-      "bytes": 5588,
-      "sha256": "c699ffb7b94ba21c2500318f6e4caaccf618bdb9cd3727dd6b7c63ada618bae7"
+      "bytes": 4919,
+      "sha256": "5ea0035961be78c0b817302a523d1ba5d461a2c5e50ff118d1ff467f65810018"
     },
     "docs/RESOURCE_SETUP.md": {
-      "bytes": 7474,
-      "sha256": "09115950395d148b9cd407f9f66236ae8d0ada8bc2b68401adbfd4c3423e601f"
+      "bytes": 5694,
+      "sha256": "bf4645fc82151d6f03b9b2a59f0a0a2d7ab92e6666e4aa8ef921b38eb3f4e096"
+    },
+    "tools/build-public-ruffle.py": {
+      "bytes": 19593,
+      "sha256": "01046855ffcafa2c276f4ba18810f3bd7c1b7088d17f0a8242fc655143346a0f"
     },
     "tools/check-doc-links.py": {
       "bytes": 2039,
       "sha256": "de0c683160fe7a4efeaa779a3e3b3994c7ed22c74246e4a2ee6700601f47c2a6"
     },
     "tools/check-source.py": {
-      "bytes": 4731,
-      "sha256": "cc0d385fcf91031185d381f55547a3c9cb5994fb7290ae52495f9b9a0e6eba0b"
+      "bytes": 4907,
+      "sha256": "b90f02de901caea713769f1ea438c97fc4c3255e20d77bdfefea7699fe6e424d"
+    },
+    "tools/native_resources.py": {
+      "bytes": 15814,
+      "sha256": "eabe4b7f1f071d19035dbc762e43890a6064fd88a30b905ec04ca88b4c85ff92"
     },
     "tools/player-setup.py": {
-      "bytes": 16783,
-      "sha256": "91cd7b319663f382861207044545fb8d439a63c3eec744fd1fe5528dffbfc35f"
+      "bytes": 9540,
+      "sha256": "799ad63156c73e3476048564ee5e38f5f504858e5f90b0dce26f6d28111fa46e"
+    },
+    "tools/player_install.py": {
+      "bytes": 7422,
+      "sha256": "d332f54270f459c6646985853938b3e86baac438891dea590b391e1404867659"
+    },
+    "tools/preparation-requirements.txt": {
+      "bytes": 50,
+      "sha256": "cee652c1a41c049c91e0929e11f3b1347722f86405c38cf034bdb333bacef707"
     },
     "tools/prepare-browser-runtime.py": {
-      "bytes": 3900,
-      "sha256": "27fd3c74bc623d03667bb14c2142b574e7e96ab519e33f9c268503eefb2ab357"
+      "bytes": 5415,
+      "sha256": "8c579f8a036d804f51f4b282b56a45ac77c883f334f176b449748a282abfa94f"
     },
     "tools/private-inputs.py": {
       "bytes": 4480,
       "sha256": "a9b9ff2a88349c7fce58306c243c9ec78f709a8b16da9b634532a7078e45d7e3"
     },
+    "tools/public-resources.json": {
+      "bytes": 8468,
+      "sha256": "fead81f47373f9eba61f5ad79016f4a660e05af764a18b85c8301f8ffd47ee0d"
+    },
+    "tools/public-ruffle-toolchains.json": {
+      "bytes": 3110,
+      "sha256": "80730d80f097224c84ac0bdb7c24115656f325be770eff8c9a56b55521411622"
+    },
+    "tools/public_downloads.py": {
+      "bytes": 5904,
+      "sha256": "6cf1bd583cb20a19a090c283c0d9d385691052e2db06884d0e2dd768f575f5ba"
+    },
     "tools/refresh-source-manifest.py": {
       "bytes": 2496,
       "sha256": "a5591fb6e0dac30d789561833681136a8e707c892430ae402beedd15a06da081"
     },
+    "tools/resource_pipeline.py": {
+      "bytes": 19484,
+      "sha256": "7ec31b5d5ed94217208a20a86c160bd912e1ebce392a96ab115738933aec949b"
+    },
+    "tools/setup-resources.py": {
+      "bytes": 1557,
+      "sha256": "a974f98b80c4e5ee111ec3b42489c37409974f6ce9435562a19e9d58fede7bf5"
+    },
     "tools/setup-wizard.py": {
-      "bytes": 25500,
-      "sha256": "af450d2b292025c22a7d7f2fe2862dd824a6c928803028cdac1c6e50aa72ebbe"
+      "bytes": 26630,
+      "sha256": "3a60924d07bc3e1e99b9f9b1ee57ad394e37d912685fed652ed8f3a368319a15"
     },
     "tools/test_handoff_tools.py": {
       "bytes": 7404,
       "sha256": "d145933d879d174e642f6a85844f651ff51717babd5dacd0d661464b9928511f"
     },
     "tools/test_mac_build_preflight.py": {
-      "bytes": 6172,
-      "sha256": "4faae9e3a61738fb5910e52d8a83032ab6e026048f0623d95241531dd21f12fa"
+      "bytes": 6175,
+      "sha256": "0225af48b1aa00a4245fd0416f705399d81d56fc3e3324b8bd1eb621c8ae045a"
+    },
+    "tools/test_native_resources.py": {
+      "bytes": 8760,
+      "sha256": "279527d59e6dd8564eaac0a27ade992a1681ce0b2e7f8a1d2d912cecd6e4d1a7"
+    },
+    "tools/test_native_staging.py": {
+      "bytes": 12539,
+      "sha256": "018b408917783f66232d53d895839284beedf9271113160928f06c9d920b8027"
+    },
+    "tools/test_player_install.py": {
+      "bytes": 4340,
+      "sha256": "4857047a0357538f401143677a964e67dc675f75ff9de3d9971e0cadb42487cd"
     },
     "tools/test_player_setup.py": {
-      "bytes": 9601,
-      "sha256": "4cf9b681898a70fe119e3174b0b3ae11075bb9bb598c0d00eecf691a2fa6dd52"
+      "bytes": 9600,
+      "sha256": "5d0fd4063581d094c01e22dd676bde030246e1f1ad22c00ad25044c975f2e4d2"
+    },
+    "tools/test_public_browser_stage.py": {
+      "bytes": 10640,
+      "sha256": "2f6fb2d0f21f18c16c7ea249e7c6eca42a8c188b17d6f0bc1c0bd3432512ef44"
+    },
+    "tools/test_public_install_flow.py": {
+      "bytes": 11055,
+      "sha256": "ea92d50d7a1dc0cc29ef2b4f5045b471c88ff9b8006ad7b410e227d1542827af"
+    },
+    "tools/test_public_ruffle.py": {
+      "bytes": 19067,
+      "sha256": "ac8dceede1a027ad0afa88ddcd882fb04c845f9c9f7db21597d80911b6f23865"
+    },
+    "tools/test_resource_pipeline.py": {
+      "bytes": 14102,
+      "sha256": "4d784f81f49557eed0c046bb1ea6e831dbdaa2681a6d9aa5262f8a74445d06e8"
     },
     "tools/test_setup_wizard.py": {
       "bytes": 14994,
-      "sha256": "b06057ecca674906a9960a67a225c3a3e4292d331b2e8a8a95a329b5649e9903"
+      "sha256": "d169b4730ceb09bb23009a4dd79404b6a69487642c32783aa56ffe970032b335"
     }
   },
   "githubDesktopHandoff": {
@@ -2025,7 +2109,7 @@
     "previousCheckoutGitHistoryCopied": false,
     "repository": "https://github.com/jannsenburke/FarmVillage-GodBarn",
     "repositoryAtDesktopCreation": "https://github.com/jannsenburke/FarmVillage-The-GodBarn-Edition",
-    "resourceBootstrap": "unfinished",
+    "resourceBootstrap": "implemented; real clean-clone platform/gameplay qualification remains open",
     "reviewedSourceCommit": "f1f8eeccfffabbd0793588877099eb535583fb32",
     "sourceOnlyCopy": true
   },
@@ -2087,6 +2171,26 @@
     "uploadStrategy": "Reviewed source copied into the existing owner-created GitHub Desktop repository; Desktop initial commit and text attributes preserved; previous checkout Git history not copied; owner publishes through browser-authenticated Desktop"
   },
   "playerSetupRevision": {
+    "accountOrCredentialAccess": false,
+    "actualNativeBuildOrUbuntuInstallationRun": false,
+    "archiveBytes": 19126111395,
+    "audiences": [
+      "native Mac players",
+      "Ubuntu/Linux server owners with browser players"
+    ],
+    "automaticPublicResourceBootstrapImplemented": true,
+    "date": "2026-10-26",
+    "entryPoints": {
+      "mac": "START_MAC.command",
+      "serverSource": "START_HERE.sh"
+    },
+    "gameplayRulesChanged": false,
+    "largeDownloadsPerformedForThisUpdate": false,
+    "ownerPerformsUpload": true,
+    "previousSourceCommit": "e413303645e7b792e264a2e6961de06a61eb60a4",
+    "qualification": "Synthetic/mocked installer coverage only; complete public install and gameplay unrun"
+  },
+  "priorPlayerSetupRevision": {
     "actualNativeBuildOrUbuntuInstallationRun": false,
     "archiveBytes": 19126111395,
     "audiences": [
@@ -2123,6 +2227,29 @@
     "upstreamCommit": "2dc25ca24032041a8b68d299b861eb2d4d449653",
     "upstreamHistory": "original public commits retained",
     "upstreamRepository": "https://github.com/AcidCaos/farmvillage"
+  },
+  "publicResourceInstaller": {
+    "date": "2026-10-26",
+    "exactFreshInstallPeakQualified": false,
+    "freeSpaceReserveGiB": 5,
+    "localPublicPlayerRequiresSourceVerifiedExplicitPin": true,
+    "minimumFreeGiB": {
+      "mac": 110,
+      "serverResources": 80
+    },
+    "nativeData": "chosen resource root/player-data; PLAY_MAC.command shortcut",
+    "newGameplayAcceptance": false,
+    "noPrivateInputsRequired": true,
+    "packBudgetGiB": {
+      "mac": 100,
+      "serverResources": 70
+    },
+    "preparedOutputOutsideSource": true,
+    "resourcePreparation": "tools/setup-resources.py; tools/resource_pipeline.py",
+    "serverData": "separate explicitly chosen managed target",
+    "sources": "tools/public-resources.json; tools/public-ruffle-toolchains.json",
+    "strictDefaultRuntimePinPreserved": true,
+    "supersedes": "Earlier readiness-only setup and unapplied recovery status"
   },
   "resealScope": "Reviewed source changes only; gameplay/platform acceptance requires a separate new record",
   "reviewedFromCommit": "adc1230029f2e9dadd8390a12d7474e7011977b1",

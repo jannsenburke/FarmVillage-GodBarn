@@ -83,6 +83,40 @@ class NativeArchiveBundleTests(unittest.TestCase):
         self.assertFalse((self.destination / "static/assets/items").exists())
         self.assertFalse((self.destination / "workspace").exists())
 
+    def test_portable_resource_mapping_needs_no_original_workstation_path(self):
+        self.write("data/provenance.json", {"schema": 2, "containsPlayerState": False, "assets": [
+            {"path": "static/assets/items/cow.png", "assetRelativePath": "animals/season/cow-hash.png"}]})
+        bundler.bundle_companion(self.source, self.destination)
+        self.assertEqual(json.loads((self.destination / "data/asset-map.json").read_text()),
+                         {"static/assets/items/cow.png": "animals/season/cow-hash.png"})
+
+    def test_portable_mapping_cannot_escape_asset_root(self):
+        for relative in ("../secret.png", "/secret.png"):
+            with self.subTest(relative=relative):
+                self.write("data/provenance.json", {"schema": 2, "assets": [
+                    {"path": "static/assets/items/cow.png", "assetRelativePath": relative}]})
+                destination = self.base / ("portable-stage-" + str(len(list(self.base.glob("portable-stage-*")))))
+                with self.assertRaises(ValueError):
+                    bundler.bundle_companion(self.source, destination)
+
+    def test_external_resources_are_combined_with_authored_source_without_owner_inputs(self):
+        resources = self.base / "generated-resources"
+        resources.mkdir()
+        (self.source / "data").rename(resources / "data")
+        image = resources / "static/assets/ui/gift.png"
+        image.parent.mkdir(parents=True)
+        image.write_bytes(b"fresh public resource")
+        stale = self.source / "static/assets/ui/stale.png"
+        stale.parent.mkdir(parents=True)
+        stale.write_bytes(b"unrelated old source media")
+        (self.source / "static/index.html").write_text("authored UI source")
+        bundler.bundle_companion(self.source, self.destination, resources=resources)
+        self.assertEqual((self.destination / "static/index.html").read_text(), "authored UI source")
+        self.assertEqual((self.destination / "static/assets/ui/gift.png").read_bytes(), b"fresh public resource")
+        self.assertFalse((self.destination / "static/assets/ui/stale.png").exists())
+        self.assertEqual(json.loads(gzip.decompress((self.destination / "data/catalog.json.gz").read_bytes())), self.catalog)
+        self.assertFalse((self.source / "data").exists())
+
     def test_missing_shared_discovery_helper_fails_before_building_a_broken_runtime(self):
         (self.source / "catalog_tools.py").unlink()
         with self.assertRaisesRegex(ValueError, "catalog_tools.py"):
@@ -123,6 +157,30 @@ class NativeArchiveBundleTests(unittest.TestCase):
                 destination = self.base / ("stage-" + str(len(list(self.base.glob("stage-*")))))
                 with self.assertRaises(ValueError):
                     bundler.bundle_companion(self.source, destination)
+
+    def test_output_cannot_be_source_descendant_or_linked(self):
+        for destination in (self.source / "staged", self.base / "linked"):
+            if destination.name == "linked":
+                destination.symlink_to(self.source, target_is_directory=True)
+            with self.subTest(destination=destination), self.assertRaises(ValueError):
+                bundler.bundle_companion(self.source, destination)
+        self.assertFalse((self.source / "staged").exists())
+
+    def test_parent_directory_symlink_cannot_redirect_metadata_reads(self):
+        (self.source / "data").rename(self.base / "original-data")
+        (self.source / "data").symlink_to(self.base / "original-data", target_is_directory=True)
+        with self.assertRaisesRegex(ValueError, "symbolic links"):
+            bundler.bundle_companion(self.source, self.destination)
+        self.assertFalse(self.destination.exists())
+        self.assertEqual(list(self.base.glob(".god-barn-bundle-*")), [])
+
+    def test_late_mapping_failure_rolls_back_new_owned_stage(self):
+        self.write("data/provenance.json", {"assets": [
+            {"path": "static/assets/items/cow.png", "assetRelativePath": "../private.png"}]})
+        with self.assertRaises(ValueError):
+            bundler.bundle_companion(self.source, self.destination)
+        self.assertFalse(self.destination.exists())
+        self.assertEqual(list(self.base.glob(".god-barn-bundle-*")), [])
 
 
 if __name__ == "__main__":

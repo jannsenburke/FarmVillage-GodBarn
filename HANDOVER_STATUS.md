@@ -1,6 +1,6 @@
 # Development status and maintainer priorities
 
-**Updated 26 October 2026.** The application source and engineering documentation are available for community development. A complete public-resource installation is still unfinished: a fresh clone cannot yet acquire, prepare and run the whole game automatically.
+**Updated 26 October 2026.** The public resource installer is implemented for native Mac and Ubuntu/Linux server paths. It downloads verified originals, generates God Barn, builds pinned Ruffle, and connects generated resources to installation. No large downloads or real builds were run on the owner’s Mac for this update. Full clean-clone/native/Ubuntu gameplay qualification remains open.
 
 The continuing targets are the native macOS desktop app and browser hosting on Ubuntu/Linux. The active alpha has sixteen worlds with different feature limits. iPad/iOS development is discontinued; Enchanted Glen and Holiday Lights are excluded. See [world readiness](WORLD_READINESS.md).
 
@@ -15,27 +15,28 @@ The application source baseline is FarmVillage `62809de497404588f133e38740242864
 
 ## Two player paths
 
-- [Mac players](docs/PLAY_ON_MAC.md) keep a large local native installation. A complete app downloads the original artwork on first Create/Open Farm, but the fresh-source app/resource bootstrap is still incomplete.
-- [Server owners](docs/PLAY_ON_SERVER.md) prepare the full game on Ubuntu/Linux. Players use browsers; the existing installer requires pre-extracted artwork and a prepared release.
+- [Mac players](docs/PLAY_ON_MAC.md): `START_MAC.command` opens the plan and guided resource preparation, builds the native app externally, and launches it with dedicated player data. Extracted artwork is shared without a second archive download.
+- [Server owners](docs/PLAY_ON_SERVER.md): `bash START_HERE.sh` prepares public resources, then opens the guarded clean Ubuntu installer. Browser players use the resulting server URL.
 
-`START_MAC.command` and the public-source `START_HERE.sh` open a read-only readiness guide. This is not a complete game installer or a new clean-clone gameplay pass. The prepared-bundle server installer remains a separate, explicitly scoped flow.
+Both require an explicit target and download/build confirmation. No owner’s Mac files, account, token, historical farm or private server is an input. See [all sources, storage and retry behavior](docs/RESOURCE_SETUP.md).
 
-## First priority: independent resource setup
+## First priority: qualify real installations
 
-1. Retrieve the original files from the documented public preservation sources, with resumable downloads and verified identities.
-2. Extract and select the required resource versions into an external game-resource directory.
-3. Generate God Barn metadata and interface resources without using a previous player farm or private cache as a seed.
-4. Build and verify the pinned Ruffle player. The recovered public build work reproduced outputs on two macOS paths; Linux output identity remains unresolved because the compiled output includes Apple Clang-produced code.
-5. Connect the resulting resource directory to browser staging, native builds and Ubuntu installation.
-6. Validate the complete path from a clean clone with a new synthetic farm, a real farming cycle and normal save/restart persistence. Test native macOS and actual Ubuntu separately.
+1. Run the public source flow on a clean Mac and an actual Ubuntu host separately, with adequate user-approved disk/network budgets.
+2. Record exact source revision, generated pack seals, runtime build receipt and native/compiler identities. Cross-host Ruffle output differences use explicit source-verified local manifests rather than the old Mac output pin.
+3. Create fresh synthetic profiles; test a real farming cycle, save/reload and process restart. Confirm prices/timers/rewards remain original.
+4. Record native UI acceptance, browser gameplay and Ubuntu service/network results separately. A mocked compiler or Mac adapter test does not establish Ubuntu execution.
+5. Measure peak download/build/final-install storage and verify interruption/retry with actual sources.
 
-See [resource setup](docs/RESOURCE_SETUP.md) for the original sources and existing interfaces.
+The recovery patch remains a historical record. Relevant generator/native/player work was selectively integrated and missing orchestration implemented. Do not apply [the old patch](RESOURCE_SETUP_RECOVERY.patch) wholesale to this active tree.
 
-## Draft resource work
+## Installer checks recorded for this update
 
-[RESOURCE_SETUP_RECOVERY.patch](RESOURCE_SETUP_RECOVERY.patch) preserves **unapplied, incomplete resource automation work**. It includes resource manifests, generator changes, native resource handling and build-provenance changes. Its documentation references central helpers that are not implemented in the active source. It is not an installation script or a release-ready patch.
+The final targeted run includes 142 installer/handoff fixture tests, 66 God Barn reconstruction/bundling/parser tests, and 22 existing runtime compatibility/upgrade tests: **230 tests, 229 passed and one skipped because loopback binding is restricted**. Source integrity, Python/shell syntax and 308 repository-local documentation links also passed. The two player entry plans and resource-only dry run created no installation folder.
 
-Review and integrate it in a separate development branch. Match it to the source baseline recorded in its provenance, implement the missing downloader/orchestrator and browser launcher, and update resource identities through review rather than accepting arbitrary files. Do not apply the draft wholesale and treat its commands as working setup instructions.
+The orchestration tests use tiny synthetic originals/WARCs and mocked package/compiler/native-tool commands. They exercise Mac and server resource seals, resume/failure behavior, runtime-pin propagation, native staging, the generated Mac launch shortcut, browser staging and server-wizard handoff. They download no originals or toolchains and start no real game/service.
+
+A broader existing native runtime suite was also attempted; it hit 17 environment errors from denied localhost binding and unavailable `requests` in the system interpreter. This update does not claim that broader suite or a full game regression passed. No dependencies or permissions were added to bypass those limits.
 
 ## Other open work
 

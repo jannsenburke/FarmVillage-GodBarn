@@ -64,4 +64,15 @@ fi
 
 export PYTHONUNBUFFERED=1
 export PYTHONDONTWRITEBYTECODE=1
+# A public install reuses its already verified archive. This small path-only
+# receipt is bundled by the installer; the game archive is never copied into
+# the app or downloaded a second time by Start.
+PUBLIC_INSTALL="$SCRIPT_DIR/../Runtime/PUBLIC_INSTALL.json"
+if [ -e "$PUBLIC_INSTALL" ] || [ -L "$PUBLIC_INSTALL" ]; then
+    FARMVILLAGE_ASSETS_DIR="$("$PYTHON" -I -S -B -c 'import json,pathlib,sys; p=pathlib.Path(sys.argv[1]).absolute(); assert not p.is_symlink(), "Linked public install receipt refused"; m=json.loads(p.read_text()); assert m.get("schema")==1, "Invalid public install receipt"; a=pathlib.Path(m["assets_root"]); assert a.is_absolute() and ".." not in a.parts and not any(q.is_symlink() for q in (a,*a.parents)), "Public assets must be an ordinary absolute folder"; assert (a/"Environment").is_dir() and (a/"xpromoSupport").is_dir(), "Public assets are missing; rerun START_MAC.command"; print(a)' "$PUBLIC_INSTALL")" || exit 2
+    export FARMVILLAGE_ASSETS_DIR
+elif [ -f "$SCRIPT_DIR/../Runtime/PREPARED_RUNTIME.json" ]; then
+    echo '[FarmVillage] The public-install asset receipt is missing. Run START_MAC.command again; no archive will be downloaded by Start.' >&2
+    exit 2
+fi
 exec "$PYTHON" -I -B -u "$ADAPTER_DIR/bootstrap.py" "${ARGS[@]}"

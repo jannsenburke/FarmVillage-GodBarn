@@ -59,7 +59,9 @@ def run_tests(root):
         (root / "FarmVillage/macOS/Tests", ["-m", "unittest", "-v", "test_persistence.AtomicStorageTests", "test_persistence.CacheIdentityTests", "test_persistence.MultiFarmJournalTests"]),
         (root / "GodBarn", ["-m", "unittest", "discover", "-s", "tests", "-p", "test_engine.py", "-v"]),
         (root / "GodBarn", ["-m", "unittest", "discover", "-s", "tests", "-p", "test_seasonal.py", "-v"]),
-        (root / "tools", ["-m", "unittest", "-v", "test_handoff_tools", "test_setup_wizard", "test_player_setup", "test_mac_build_preflight"]),
+        (root / "GodBarn", ["-m", "unittest", "discover", "-s", "tests", "-p", "test_resource_bootstrap.py", "-v"]),
+        (root / "GodBarn", ["-m", "unittest", "discover", "-s", "tests", "-p", "test_bundle_companion.py", "-v"]),
+        (root / "tools", ["-m", "unittest", "discover", "-s", ".", "-p", "test_*.py"]),
     ]
     for directory, args in suites:
         subprocess.run([sys.executable, "-B", *args], cwd=directory, env=env, check=True)

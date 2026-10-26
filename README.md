@@ -4,7 +4,7 @@ A community preservation fork of [AcidCaos/FarmVillage](https://github.com/AcidC
 
 The aim is to make the original farming experience playable locally while preserving its prices, timers and game rules. Restoration is incomplete, and contributions are welcome.
 
-**Development status:** this is a source release. A fresh clone can run source checks and selected tests, but the automatic setup needed to download and prepare all game resources is **not finished**. There is no verified clone-and-play installation yet.
+**Development status:** a sixteen-world alpha. The public installer now downloads original resources, generates God Barn and builds the reviewed local player. Full fresh-install/native/Ubuntu gameplay qualification remains open; this update was checked with small synthetic files and mocked build tools.
 
 ## Choose how you want to play
 
@@ -13,9 +13,9 @@ The aim is to make the original farming experience playable locally while preser
 | **Mac players willing to install 20+ GB locally** | On your Mac, using the native app; a separate server is not required | [Mac player guide](docs/PLAY_ON_MAC.md) · `START_MAC.command` |
 | **People with an Ubuntu/Linux server** | On the host; players connect through their browsers without installing the full archives on each computer | [Server owner guide](docs/PLAY_ON_SERVER.md) · `bash START_HERE.sh` on the host |
 
-**Automatic downloads today:** a complete Mac app can fetch the four original artwork archives on first Create/Open Farm. The compressed archives alone are 19.13 GB, with extracted files and temporary space additional. Today’s source clone cannot yet build that complete app automatically. The server installer instead expects a prepared release and already-extracted artwork; it does not acquire that game-resource set automatically.
+The source launchers show the complete download plan, ask for a dedicated folder and require exact confirmation before downloads/builds. They fetch the original client and four artwork WARCs from public sources, generate metadata and build Ruffle. No owner’s Mac files, private server or GitHub account is required.
 
-The new source setup wizard is a **readiness guide**. It explains the appropriate path, checks missing resources and stops honestly when the complete installation is not available. It does not start large downloads, install packages or erase anything.
+**Storage:** original compressed artwork is 19.13 GB. Source compilation and extracted artwork require more: the installer conservatively asks for 110 GiB free for Mac or 80 GiB for server resource preparation. The server’s final installation needs additional staging space. Exact fresh-install peak is not yet qualified. Read the appropriate player guide before starting.
 
 ## What’s included
 
@@ -59,9 +59,9 @@ The original preservation sources include:
 - [AcidCaos/FarmVillage’s pinned upstream files](https://github.com/AcidCaos/farmvillage/tree/2dc25ca24032041a8b68d299b861eb2d4d449653).
 - [Internet Archive’s original-farmville collection](https://archive.org/details/original-farmville).
 
-Those downloads alone do not produce the complete resource layout this fork currently expects. The highest-priority setup work is to connect the original files, extraction, catalogue generation and player build into a reproducible installation.
+The installer connects these originals to extraction, catalogue generation, player compilation and installation. It keeps generated resources outside the source checkout and records their identities.
 
-Read [game resource setup](docs/RESOURCE_SETUP.md) for the public sources, existing tools and missing steps. Contributors who already have compatible prepared resources can use the [development and build guide](docs/DEVELOPMENT.md). Historical gameplay results are recorded in [validation scope](ACCEPTANCE.md); they do not establish clean-clone playability.
+Read [game resource setup](docs/RESOURCE_SETUP.md) for all download sources, storage, generated files and retry behavior. Contributors who already have compatible prepared resources can use the [development and build guide](docs/DEVELOPMENT.md). Historical gameplay results are recorded in [validation scope](ACCEPTANCE.md); they do not establish clean-clone playability.
 
 ## Find your way around
 
@@ -77,7 +77,7 @@ Keep `FarmVillage/` and `GodBarn/` as sibling directories.
 
 ## Help continue the project
 
-Useful starting points include completing public resource setup, testing the native app and actual Ubuntu hosting, improving documentation, and restoring one well-defined game feature at a time.
+Useful starting points include qualifying complete clean-clone installation, testing the native app and actual Ubuntu hosting, improving documentation, and restoring one well-defined game feature at a time.
 
 Start with [contributing](CONTRIBUTING.md), the [maintainer guide](TAKEOVER.md) and [current development priorities](HANDOVER_STATUS.md). The [restoration backlog](<Wave 3.md>) and [engineering index](FarmVillage/macOS/Documentation/ENGINEERING_INDEX.md) provide more detail. Please preserve original costs and timers, document unsupported behavior, and distinguish tests from actual gameplay checks.
 

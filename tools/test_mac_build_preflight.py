@@ -99,7 +99,7 @@ class MacBuildPreflightTests(unittest.TestCase):
         result = self.run_build()
         self.assertEqual(result.returncode, 2, result.stderr)
         self.assertIn("PLAY_ON_MAC.md", result.stderr)
-        self.assertIn("readiness guide", result.stderr)
+        self.assertIn("installation guide", result.stderr)
         self.assertIn("No Python setup, compilation or game-resource download", result.stderr)
         self.assertFalse(self.python_log.exists())
         self.assertFalse(self.compiler_log.exists())

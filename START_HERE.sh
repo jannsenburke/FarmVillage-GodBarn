@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 FV_SETUP_DIR="$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-# Public source copies open the read-only player/server readiness guide.
+# Public source copies open the guided resource and player installer.
 # Complete prepared bundles keep the separately documented eight-step installer.
 if [[ -f "$FV_SETUP_DIR/PrivateInputs.expected.json" && -f "$FV_SETUP_DIR/tools/player-setup.py" ]]; then
   if [[ "$(uname -s)" == Darwin ]]; then
     exec /bin/bash "$FV_SETUP_DIR/START_MAC.command" "$@"
   fi
   if ! command -v python3 >/dev/null || ! python3 -I -B -c 'import sys; assert sys.version_info >= (3, 10)' >/dev/null 2>&1; then
-    printf 'The server readiness guide needs an existing Python 3.10+. Nothing was installed or downloaded. Read docs/PLAY_ON_SERVER.md for the current setup limits.\n' >&2
+    printf 'The server installer needs an existing Python 3.10+. Nothing was installed or downloaded. Read docs/PLAY_ON_SERVER.md for the setup prerequisites.\n' >&2
     exit 2
   fi
   exec python3 -I -B "$FV_SETUP_DIR/tools/player-setup.py" --audience server "$@"

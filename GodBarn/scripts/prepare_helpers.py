@@ -125,7 +125,7 @@ def recover(source):
     return {"schemaVersion": 1, "source": provenance, "collections": collections, "quests": quests}
 
 
-def copy_artwork(source, metadata, root=ROOT, *, manifests=None):
+def copy_artwork(source, metadata, root=ROOT, *, manifests=None, assets_root=None):
     """Copy only exact raster URLs declared by each collection/quest frontend."""
     source, root = source.resolve(), root.resolve()
     if manifests is None:
@@ -151,7 +151,7 @@ def copy_artwork(source, metadata, root=ROOT, *, manifests=None):
             if Path(logical).suffix.lower() not in (".png", ".jpg", ".jpeg", ".gif", ".webp"):
                 continue
             if logical not in cache:
-                original, reason, manifest, _ = resolve_from_manifests(source, manifests, logical)
+                original, reason, manifest, _ = resolve_from_manifests(source, manifests, logical, assets_root=assets_root)
                 record = None
                 if original:
                     payload = original.read_bytes()
@@ -168,7 +168,8 @@ def copy_artwork(source, metadata, root=ROOT, *, manifests=None):
                         destination.parent.mkdir(parents=True, exist_ok=True)
                         destination.write_bytes(payload)
                         record = {"path": "/" + relative, "logical": logical,
-                                  "sourcePath": original.relative_to(source).as_posix(),
+                                  "sourcePath": (original.relative_to(Path(assets_root).resolve()).as_posix()
+                                                 if assets_root else original.relative_to(source).as_posix()),
                                   "sha256": digest, "sourceSha256": digest, "bytes": len(payload),
                                   "manifest": manifest, "width": info["width"], "height": info["height"],
                                   "method": "Exact original declared raster"}

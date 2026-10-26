@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 """Reproduce the small native launcher pack from explicitly selected local assets.
 
-Requires Pillow and FFDec 26.4.0 with a Java 17 runtime. This script never scans
-the game cache, downloads files, starts the server, or modifies source artwork.
-The committed pack is used by normal builds; this is an authoring utility only.
+Requires Pillow and FFDec 26.4.0 with Java 17. Explicit original/asset roots replace the old private LocalData dependency. The exporter downloads nothing and reads no player data.
 """
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -18,6 +17,7 @@ import tempfile
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
+SOURCE_ROOT = Path(__file__).resolve().parents[3]
 OUTPUT = ROOT / "macOS/Resources/Heritage"
 ART_NOTICE = "Original FarmVille artwork/audio, Zynga and its respective creators. Archive presence does not establish redistribution rights."
 ERA = "Classic home-farm subject; exact first-use date has not been independently established."
@@ -29,16 +29,37 @@ def digest(path: Path) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--game-root", type=Path, required=True)
+    parser.add_argument("--assets-root", type=Path, required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--tool-home", type=Path, required=True)
     parser.add_argument("--java", type=Path, required=True)
     parser.add_argument("--ffdec", type=Path, required=True)
     args = parser.parse_args()
+    global ROOT, OUTPUT
+    ROOT, OUTPUT = args.game_root.absolute(), args.output.absolute()
+    asset_root = args.assets_root.absolute()
+    if any(path == SOURCE_ROOT or SOURCE_ROOT in path.parents for path in (OUTPUT, args.tool_home.absolute())):
+        raise ValueError("Generated native artwork and tool state must stay outside the source checkout")
+    for path in (ROOT, OUTPUT, asset_root, args.java.absolute(), args.ffdec.absolute(), args.tool_home.absolute()):
+        if '..' in path.parts or any(p.is_symlink() for p in (path, *path.parents)):
+            raise ValueError("Linked input/output paths refused")
+    if OUTPUT.exists() or ROOT in OUTPUT.parents or asset_root in OUTPUT.parents:
+        raise ValueError("Choose new Heritage output separate from original inputs")
+    def source_path(relative):
+        if isinstance(relative, Path): return relative
+        prefix = "LocalData/assets/"
+        return asset_root / relative[len(prefix):] if relative.startswith(prefix) else ROOT / relative
     if OUTPUT.is_symlink():
         raise SystemExit("Heritage output must not be a symlink")
     OUTPUT.mkdir(parents=True, exist_ok=True)
+    args.tool_home.mkdir(parents=True, exist_ok=True)
+    tool_tmp = args.tool_home / "tmp"
+    tool_tmp.mkdir(exist_ok=True)
     records = []
 
     def publish(name, source, logical, *, image=None, operation="Unmodified file copy", era=ERA, notice=ART_NOTICE, **extra):
-        source = ROOT / source
+        source = source_path(source)
         target = OUTPUT / name
         if target.is_symlink():
             raise ValueError(f"Output must not be a symlink: {name}")
@@ -46,7 +67,7 @@ def main() -> None:
             shutil.copyfile(source, target)
         else:
             image.save(target, format="PNG", optimize=True)
-        item = dict(file=name, logical_name=logical, source=str(source.relative_to(ROOT)),
+        item = dict(file=name, logical_name=logical, source=("assets/" + str(source.relative_to(asset_root))) if source.is_relative_to(asset_root) else ("original/" + str(source.relative_to(ROOT))) if source.is_relative_to(ROOT) else "public-archive-display-font",
                     source_sha256=digest(source), sha256=digest(target), bytes=target.stat().st_size,
                     operation=operation, era_confidence=era, notice=notice, **extra)
         if name.endswith(".png"):
@@ -76,7 +97,7 @@ def main() -> None:
         publish("farmville-logo.png", "templates/img/logo.jpg", "Original HTML FarmVille wordmark",
                 image=logo.convert("RGBA"), operation="Lossless PNG encoding of decoded JPEG; original opaque white background retained")
     parchment_source = "LocalData/assets/dialogs/4d_elements/England/20bbf13feca9152136e18ba9a9f686b1.jpg"
-    with Image.open(ROOT / parchment_source) as parchment:
+    with Image.open(source_path(parchment_source)) as parchment:
         publish("parchment.png", parchment_source, "dialogs/4d_elements/England/parchmentTexture.jpg",
                 image=parchment.convert("RGBA"), operation="Lossless PNG encoding of decoded original JPEG; no retouching",
                 era="Original England dialog texture; exact first-use date unverified. Optional material, not proof of a 2009 UI.")
@@ -85,23 +106,25 @@ def main() -> None:
         for name, y in [("play-normal.png", 0), ("play-hover.png", 54), ("play-pressed.png", 27)]:
             publish(name, button_source, "Original HTML game-bar Play tab", image=strip.crop((0, y, 36, y + 27)),
                     operation=f"Exact source-pixel crop [0,{y},36,{y + 27}]; semantic row names inferred; brown row is the selected Play state")
-    publish("display.ttf", "BADABB__.TTF", "BADABB__.TTF / BadaBoom BB",
-            notice="(c) 2003 Nate Piekos. www.blambot.com. Font rights remain with its creator; no new redistribution license is asserted.",
-            postscript_name="BadaBoomBB", private_registration_only=True)
     publish("heading.ttf", "LocalData/assets/fonts/0eb3ba3e8af999051771bccbbe4d4a6b.ttf", "fonts/MERKIN__.ttf / Merkin",
             notice="© Apostrophic Labs. All rights reserved. apostrophe@home.com. No additional redistribution license is asserted.",
             postscript_name="Merkin", private_registration_only=True,
             companion_verification="SHA-256 matches GodBarn/static/assets/skin/merkin.ttf exactly: dfcf08440bbdb6631618c576fea5cff3e3d21fe3fff5e51b7c3edffa6eaf93d8")
 
     def export(directory: Path, source: str, options: list[str], kinds: str) -> None:
-        command = [str(args.java), "-Djava.awt.headless=true", "-jar", str(args.ffdec),
-                   *options, "-export", kinds, str(directory), str(ROOT / source)]
-        completed = subprocess.run(command, check=True, stdout=subprocess.PIPE,
-                                   stderr=subprocess.STDOUT, text=True, timeout=120)
-        if "FAIL:" in completed.stdout:
-            raise RuntimeError(completed.stdout)
+        command = [str(args.java), "-Djava.awt.headless=true", "-Duser.home=" + str(args.tool_home),
+                   "-Djava.io.tmpdir=" + str(tool_tmp), "-jar", str(args.ffdec),
+                   *options, "-export", kinds, str(directory), str(source_path(source))]
+        environment = {k: v for k, v in os.environ.items() if k not in {"JAVA_TOOL_OPTIONS", "JDK_JAVA_OPTIONS", "_JAVA_OPTIONS"}}
+        environment.update(HOME=str(args.tool_home), TMPDIR=str(tool_tmp))
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, env=environment)
+        print(f"Native artwork export Java PID: {process.pid}", flush=True)
+        try: output, _ = process.communicate(timeout=120)
+        except BaseException:
+            process.kill(); process.communicate(); raise
+        if process.returncode or "FAIL:" in output: raise RuntimeError(output)
 
-    with tempfile.TemporaryDirectory(prefix="farmvillage-heritage-export-") as scratch:
+    with tempfile.TemporaryDirectory(prefix=".heritage-export-", dir=OUTPUT.parent) as scratch:
         scratch = Path(scratch)
         barn_source = "LocalData/assets/buildings/7a33d16789ef24303034271d87c81620.swf"
         export(scratch / "barn", barn_source, ["-format", "image:png", "-selectid", "1"], "image")
@@ -177,10 +200,11 @@ def main() -> None:
         "export_tool": "JPEXS FFDec 26.4.0, Java 17; Pillow PNG encoding and exact rectangular sprite cropping",
         "source_preservation": "All original source files remain unchanged. No AI redraws or invented scene objects.",
         "audio_policy": "Disabled by default; user-controlled launcher-only playback, stopped before game handoff.",
-        "font_policy": "Register heading.ttf (Merkin, matching God Barn) and optional display.ttf (BadaBoom BB) privately for this process. Book Antiqua excluded because embedded license restricts copying/distribution; use a system sans-serif body font.",
+        "font_policy": "Register original Merkin for this process. The display font uses the existing native system-rounded fallback. No private font is read. Book Antiqua is excluded; body text uses a system font.",
         "distribution_notice": "This local preservation pack does not grant rights to relicense or publicly redistribute Zynga artwork, audio, marks, or third-party fonts. Review source-specific terms before distribution.",
         "assets": records,
     }
+    (OUTPUT / "NOTICES.md").write_text("# Native resource notices\n\n" + ART_NOTICE + "\n\nMerkin: © Apostrophic Labs. The display font uses a system fallback. No private font/player data is read.\n", encoding="utf-8")
     (OUTPUT / "manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"Prepared {len(records)} assets, {sum(r['bytes'] for r in records):,} bytes, in {OUTPUT}")
 

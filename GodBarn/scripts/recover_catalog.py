@@ -66,7 +66,7 @@ def raster_candidates(record):
     return sorted(candidates, key=lambda image: _ROLE_ORDER.get(image["role"], 4))
 
 
-def resolve_asset(source, manifest, logical):
+def resolve_asset(source, manifest, logical, *, assets_root=None):
     """Resolve only the exact declared URL through the original asset manifest."""
     if not isinstance(logical, str):
         return None, "invalid-logical-path"
@@ -79,7 +79,7 @@ def resolve_asset(source, manifest, logical):
     archive_hash = group_map.get(relative.as_posix()) if isinstance(group_map, dict) else None
     if not isinstance(archive_hash, str) or not _HASH.fullmatch(archive_hash):
         return None, "not-in-manifest"
-    asset_root = (source / "LocalData/assets").resolve()
+    asset_root = Path(assets_root).resolve() if assets_root else (source / "LocalData/assets").resolve()
     original = asset_root / group / relative.parent / (archive_hash + relative.suffix)
     if original.is_symlink() or not original.resolve().is_relative_to(asset_root):
         return None, "unsafe-asset-path"
@@ -88,12 +88,12 @@ def resolve_asset(source, manifest, logical):
     return original, None
 
 
-def resolve_from_manifests(source, manifests, logical):
+def resolve_from_manifests(source, manifests, logical, *, assets_root=None):
     if isinstance(manifests, dict):
         manifests = [("assethash/v9/assethash.master.amf.gz", manifests)]
     attempts = []
     for name, manifest in manifests:
-        path, reason = resolve_asset(source, manifest, logical)
+        path, reason = resolve_asset(source, manifest, logical, assets_root=assets_root)
         attempts.append({"file": name, "status": "missing" if reason else "exact",
                          **({"reason": reason} if reason else {})})
         if path:
@@ -243,7 +243,7 @@ def apply_label(row, labels):
     return 0
 
 
-def recover(catalog, records, manifest, source, root, *, names=None, write_assets=False, progress=None):
+def recover(catalog, records, manifest, source, root, *, names=None, write_assets=False, progress=None, assets_root=None, portable_provenance=False):
     """Return repaired rows, exhaustive audit and asset provenance.
 
     Existing rows, including duplicate source records, survive in their original
@@ -265,7 +265,7 @@ def recover(catalog, records, manifest, source, root, *, names=None, write_asset
         for candidate in candidates:
             logical = candidate["logical"]
             if logical not in cache:
-                original, failure, manifest_name, manifest_attempts = resolve_from_manifests(source, manifest, logical)
+                original, failure, manifest_name, manifest_attempts = resolve_from_manifests(source, manifest, logical, assets_root=assets_root)
                 if failure:
                     cache[logical] = (None, failure, manifest_attempts)
                 else:
@@ -287,6 +287,9 @@ def recover(catalog, records, manifest, source, root, *, names=None, write_asset
                         entry = {"logical": logical, "originalPath": str(original), "path": relative,
                                  "bytes": len(payload), "sha256": digest,
                                  "width": info["width"], "height": info["height"], "manifest": manifest_name}
+                        if portable_provenance:
+                            archive = Path(assets_root).resolve() if assets_root else source / "LocalData/assets"
+                            entry["assetRelativePath"] = original.relative_to(archive).as_posix()
                         cache[logical] = (entry, None, manifest_attempts)
                         if relative not in output_assets:
                             output_assets[relative] = entry
@@ -365,6 +368,10 @@ def recover(catalog, records, manifest, source, root, *, names=None, write_asset
         audit["localizationSource"] = dict(names["source"])
         audit["labelRecoveryVersion"] = names.get("recoveryVersion")
         audit["unresolvedLabels"] = names.get("unresolvedLabels", [])
+    if portable_provenance:
+        audit.pop("preparedAt", None)
+        for asset in output_assets.values():
+            asset.pop("originalPath", None)
     return rows, audit, list(output_assets.values())
 
 

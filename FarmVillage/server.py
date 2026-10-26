@@ -97,9 +97,11 @@ PUBLIC_URL = (_args.public_url or f"http://{BIND_HOST}:{BIND_PORT}").rstrip("/")
 NATIVE_WRAPPER = os.environ.get("FARMVILLAGE_NATIVE") == "1"
 RUFFLE_DIR = os.environ.get("FARMVILLAGE_RUFFLE_DIR")
 # Source and bundled launches use the same hard-pinned self-hosted package.
-_runtime_directory = Path(RUFFLE_DIR) if RUFFLE_DIR else runtime_compatibility.bundled_runtime(Path(TMP_BUNDLED_DIR))
-VERIFIED_RUFFLE = runtime_compatibility.verify_runtime(_runtime_directory)
-RUFFLE_PUBLIC_PATH = runtime_compatibility.public_path()
+_runtime_release = runtime_compatibility.select_runtime_release(
+    Path(TMP_BUNDLED_DIR), prepared_pin_sha256=os.environ.get("FARMVILLAGE_PREPARED_RUNTIME_PIN_SHA256"))
+_runtime_directory = Path(RUFFLE_DIR) if RUFFLE_DIR else runtime_compatibility.bundled_runtime(Path(TMP_BUNDLED_DIR), _runtime_release)
+VERIFIED_RUFFLE = runtime_compatibility.verify_runtime(_runtime_directory, _runtime_release)
+RUFFLE_PUBLIC_PATH = runtime_compatibility.public_path(_runtime_release)
 
 app: Flask = Flask(__name__)
 
