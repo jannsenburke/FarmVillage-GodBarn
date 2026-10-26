@@ -198,12 +198,16 @@ process.stdout.write(JSON.stringify(results));
         with self.client.session_transaction() as session:
             self.assertEqual(session["UID"], uids[0])
 
-    def test_post_new_village_keeps_the_legacy_flash_redirect_outside_the_wrapper(self):
-        with mock.patch.object(self.server, "NATIVE_WRAPPER", False), redirect_stdout(io.StringIO()):
-            response = self.client.post("/new.html", data={"name": "Pat"})
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.location, "/play.html")
-        self.assertEqual(len(self.player.all_saves_uids()), 1)
+    def test_post_new_village_opens_ruffle_in_the_wrapper_and_in_a_plain_browser(self):
+        # The form has no Ruffle choice and /play.html is a Flash page browsers cannot run, so a new farm
+        # always goes to /ruffle.html. Only the optional login route still reaches /play.html.
+        for created, (wrapper, name) in enumerate(((True, "Pat"), (False, "Sam")), start=1):
+            with self.subTest(native_wrapper=wrapper):
+                with mock.patch.object(self.server, "NATIVE_WRAPPER", wrapper), redirect_stdout(io.StringIO()):
+                    response = self.client.post("/new.html", data={"name": name})
+                self.assertEqual(response.status_code, 302)
+                self.assertEqual(response.location, "/ruffle.html")
+                self.assertEqual(len(self.player.all_saves_uids()), created)
 
     def test_post_new_village_rejects_empty_and_overlong_names_on_the_form(self):
         for label, name in (("empty", ""), ("blank", "   "), ("too long", "x" * 81)):
