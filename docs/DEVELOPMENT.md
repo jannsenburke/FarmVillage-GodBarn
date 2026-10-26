@@ -8,6 +8,49 @@ This guide is for contributors working beyond the source-only checks. Start with
 
 The selected synthetic tests need Python 3.10+, Bash and the packages in `FarmVillage/requirements.txt`. One staging test also runs the macOS script `FarmVillage/macOS/Scripts/bundle-runtime.sh`, which calls `/usr/bin/rsync`. macOS includes it; on Ubuntu install it with `sudo apt install rsync`. Without it, that single test is reported as skipped with an `UNRUN` reason, so the run finishes with `OK (skipped=1)`. A skipped test is not a pass: install `rsync` and rerun to include it.
 
+## Running the broad suite on a public clone
+
+The README check runs a curated set of source-only suites. The wider test folders also run on a public clone, but many of their tests need the original game files, or files built from them, which a public clone deliberately lacks. `conftest.py` reports those tests as **UNRUN** so that a missing input is not mistaken for a defect. pytest is not in `FarmVillage/requirements.txt`, so install it into the same external environment first:
+
+```sh
+"$FV_CHECK_ENV/bin/python" -m pip install pytest
+export PYTHONDONTWRITEBYTECODE=1
+"$FV_CHECK_ENV/bin/python" -m pytest FarmVillage/macOS/Tests
+"$FV_CHECK_ENV/bin/python" -m pytest FarmVillage/portable
+"$FV_CHECK_ENV/bin/python" -m pytest tools
+(cd GodBarn && "$FV_CHECK_ENV/bin/python" -m pytest tests)
+```
+
+- **God Barn tests must run from inside `GodBarn/`.** They import its modules by bare name, so `pytest GodBarn/tests` from the repository root stops with a collection error. That is a wrong working directory, not a defect.
+- **Use `python -m pytest`**, so the current folder is on the import path. `pytest.ini` turns off pytest's `.pytest_cache` folder, which the publication check refuses as an unexpected file. Compiled-bytecode folders pass that check; `PYTHONDONTWRITEBYTECODE=1` just keeps the checkout tidy.
+- **Run as your normal user, not root.** The update activation script refuses to run as root, so two `test_bifrost_update` tests fail under sudo.
+
+| Outcome | What it means |
+| --- | --- |
+| passed | The test ran and its checks held. |
+| skipped: `UNRUN: needs private input <path>` | An original file listed in `PrivateInputs.expected.json` is absent. This is neither a pass nor a defect. |
+| skipped: `UNRUN: needs built artifact <path>` | A file a build would create under `FarmVillage/macOS/.build` is absent. |
+| skipped: `UNRUN: needs an accepted Runtime` | The neighborhood host tests need `FARMVILLAGE_TEST_RUNTIME`, or exactly one built tarball. |
+| skipped: any other reason | The test chose to skip. Read its reason. |
+| failed or error | Treat as real until shown otherwise. |
+
+The UNRUN conversion is narrow on purpose. It applies only to the exact failure signatures listed at the top of `conftest.py`, and only when the input they name is really absent when the result is reported. Everything else still fails: an assertion error, a different message, the same message raised somewhere else, and any of these when the input is present. One consequence is that a test which fails an assertion because absent data made a result empty still shows as failed. Failures that happen while collecting tests are recognised only for a missing listed private path.
+
+Counts belong to their own run; do not add them together. One dated measurement for orientation, not a standing promise: on 26 October 2026, a public clone at `46ee71f` plus the UNRUN extension, Ubuntu 24.04, Python 3.13, run as root:
+
+| Folder | Passed | Failed | UNRUN |
+| --- | --- | --- | --- |
+| `FarmVillage/macOS/Tests` | 284 | 0 | 1878 |
+| `FarmVillage/portable` | 82 | 3 | 20 |
+| `GodBarn/tests` | 296 | 1 | 9 |
+| `tools` | 168 | 0 | 0 |
+
+The four failures then were these. Re-check before relying on this list.
+
+- Two `test_bifrost_update` tests failed only because the run was root. Run as an unprivileged user they passed.
+- `test_current_client_pin_matches_preparation_and_keeps_a4_review_historical` reads `FarmVillage/macOS/Documentation/ClientPatches/provenance.json`, which is not tracked, not in the manifest and not listed as a private input. That is an undeclared dependency to resolve.
+- `test_shipped_shelves_have_exact_archived_identities_and_honest_unmatched_reward` asserts on God Barn data that a public clone does not contain.
+
 ## Public-resource build path
 
 Use the [resource installer](RESOURCE_SETUP.md) to prepare a new external pack. It downloads and verifies originals, generates metadata and records a source-built Ruffle identity. The source launcher then builds/installs the selected product. To build/stage separately after preparation:
