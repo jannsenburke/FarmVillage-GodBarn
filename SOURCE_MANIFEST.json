@@ -944,8 +944,8 @@
       "sha256": "ac078ee164107f3e4684893eef4287b1a5daa409d2d112c9a6a70f61f66e1111"
     },
     "FarmVillage/macOS/Tests/test_minion_browser_qol.py": {
-      "bytes": 13097,
-      "sha256": "a355049f4c0bf62de6b7a1eaec21ffb1dbbfcfbbfd4444cb67b83004f0d22027"
+      "bytes": 13494,
+      "sha256": "7849aff1a749c3fd56d3efe91cd2e0f09648dd57b48e5e4e7b184942f28b43c7"
     },
     "FarmVillage/macOS/Tests/test_minion_commands_equipment.py": {
       "bytes": 4821,
@@ -1556,8 +1556,8 @@
       "sha256": "37195f670c6e5c10d024bb7c55cb686987ab8a5895e87b25012ca1aaaf709cde"
     },
     "FarmVillage/server.py": {
-      "bytes": 55666,
-      "sha256": "ede0beb59c776453bf40941f8f4fe0e69ac9f38d963996a992b7f2cb3f2ddcbe"
+      "bytes": 55901,
+      "sha256": "54be2ab06128e2f2aa7101728391b3e70fe6078362f67855c56c311c761bedb5"
     },
     "FarmVillage/storage.py": {
       "bytes": 74723,

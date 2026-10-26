@@ -297,7 +297,10 @@ def new():
         except ValueError as exception:
             error = str(exception)
         else:
-            return redirect("/ruffle.html" if NATIVE_WRAPPER else "/play.html")
+            # /play.html is a Flash <object>/<embed> page that current browsers cannot run, and this form
+            # has no Ruffle choice, so a new farm always opens in the self-hosted Ruffle player. The login
+            # page keeps its optional legacy Flash route.
+            return redirect("/ruffle.html")
     return render_template("new.html",
         version=version_name,
         name=name,
