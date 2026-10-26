@@ -1679,6 +1679,10 @@
       "bytes": 73,
       "sha256": "1b969df0d0ca6372aec884da79c9c172c1bbccca4ad907fa4a22d093017bbd11"
     },
+    "GodBarn/branding/README.md": {
+      "bytes": 1611,
+      "sha256": "3e7418547c049e1186ca09e7e880de3745cc8df0a214d69d51e5f4087179c558"
+    },
     "GodBarn/catalog_tools.py": {
       "bytes": 13818,
       "sha256": "8662ac27b4aede78c793c93ebb80ff4ef2bb9bdce323972dd0149a037a75610a"
