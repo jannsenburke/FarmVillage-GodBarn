@@ -36,8 +36,8 @@
       "sha256": "5a12b7bbc177eaadbcd0d4590a5085670fb7915b1d45e49729a90a0b625013da"
     },
     "ACCEPTANCE.md": {
-      "bytes": 6730,
-      "sha256": "6336f8b6b7bd20700fe5aaf9a0bd3fe812e31158b7a6b94ff54e8511dbb25f1c"
+      "bytes": 10898,
+      "sha256": "061e6c3c77bde9d601c62dd6a4597d6e3509dd263346de994024e8c462b353ea"
     },
     "AGENTS.md": {
       "bytes": 2376,
@@ -1928,8 +1928,8 @@
       "sha256": "3e81b797931fb151de07ec298f93f3d7143b506117f7e151d1ddafbbe5370107"
     },
     "HANDOVER_STATUS.md": {
-      "bytes": 5313,
-      "sha256": "a64c25807c382ebf86380a9ca24524ec3404153561e0d57031d157210bf2d9a7"
+      "bytes": 6440,
+      "sha256": "2e2268008167cd4503c344542c823c04a81b683165c65865e10f44436f6254fe"
     },
     "LICENSE": {
       "bytes": 35149,
@@ -2002,6 +2002,22 @@
     "docs/UBUNTU_ACCEPTANCE.md": {
       "bytes": 13025,
       "sha256": "b634d135c1cf620a77025a0f7bf508173d84b50f3b7b6d5ecb4b90d488fdf95d"
+    },
+    "docs/briefs/ASSET_REVIEW_NO_MAC.md": {
+      "bytes": 6551,
+      "sha256": "e6f198bdfce6005c09047728ad3393631fb25a68c2e9fa2bef4d01becb696915"
+    },
+    "docs/briefs/M02_PREREQUISITE_WIRING_SCOPE.md": {
+      "bytes": 5559,
+      "sha256": "5a60f633f36e24b8b343eba477de5adbd16b9ed35c67c680ce859cbcff335181"
+    },
+    "docs/briefs/W15_MISTLETOE_HOLIDAY_SEASON.md": {
+      "bytes": 6425,
+      "sha256": "e1be2b95d697f2a8e9ff73e8690ff7584e980e46941427ddc1d1fd0feb149362"
+    },
+    "docs/briefs/WORLD_ROSTER_AND_REPURPOSING.md": {
+      "bytes": 11029,
+      "sha256": "3b4b13b362629dd57c75b669b164ad6f2a79f1e01ce68e51c09b2bd4b717918f"
     },
     "pytest.ini": {
       "bytes": 108,
@@ -2103,6 +2119,10 @@
       "bytes": 19484,
       "sha256": "7ec31b5d5ed94217208a20a86c160bd912e1ebce392a96ab115738933aec949b"
     },
+    "tools/review-originals.py": {
+      "bytes": 14334,
+      "sha256": "d00dd3e39322b6b9b5bdf02bef0e0327cc77d12525b3e4c994a7c8f6e906b840"
+    },
     "tools/setup-resources.py": {
       "bytes": 1557,
       "sha256": "a974f98b80c4e5ee111ec3b42489c37409974f6ce9435562a19e9d58fede7bf5"
@@ -2174,6 +2194,10 @@
     "tools/test_resource_pipeline.py": {
       "bytes": 14102,
       "sha256": "4d784f81f49557eed0c046bb1ea6e831dbdaa2681a6d9aa5262f8a74445d06e8"
+    },
+    "tools/test_review_originals.py": {
+      "bytes": 10763,
+      "sha256": "d3972b67401bf08e0586cfab52d615c29688277ce5144786ea90e7b21060ba40"
     },
     "tools/test_setup_wizard.py": {
       "bytes": 15253,
@@ -2332,7 +2356,7 @@
     "supersedes": "Earlier readiness-only setup and unapplied recovery status"
   },
   "resealScope": "Reviewed source changes only; gameplay/platform acceptance requires a separate new record",
-  "reviewedFromCommit": "5d1b71d4aa57f9d7659feca06700d5ba0044954c",
+  "reviewedFromCommit": "237024b345bc8ead9a56c5d992aa09e37c969d12",
   "schema": 1,
   "source": {
     "FarmVillage": "62809de497404588f133e38740242864717af0c0",

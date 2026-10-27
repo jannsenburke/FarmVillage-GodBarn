@@ -28,6 +28,15 @@ Both require an explicit target and download/build confirmation. No owner’s Ma
 4. Record native UI acceptance, browser gameplay and Ubuntu service/network results separately. A mocked compiler or Mac adapter test does not establish Ubuntu execution.
 5. Measure peak download/build/final-install storage and verify interruption/retry with actual sources.
 
+## Briefs ready to pick up
+
+Each brief is one bounded assignment written to be started cold. They follow the rules in [Wave 3](<Wave 3.md>) and [AGENTS.md](AGENTS.md).
+
+- [M02 / F03: wiring the prerequisite evaluator](docs/briefs/M02_PREREQUISITE_WIRING_SCOPE.md): phased plan that changes no behavior until the owner settles the unknown and `end_time` policies. Starts with confirming one guessed attribute name.
+- [Asset review without a Mac](docs/briefs/ASSET_REVIEW_NO_MAC.md): one command fetches the 44 pinned public originals, verifies them, and writes the retired-world decor candidates and the Mistletoe recipe table. No Mac, no private inputs, no 19 GB download.
+- [W15: Mistletoe Lane for the holiday season](docs/briefs/W15_MISTLETOE_HOLIDAY_SEASON.md): finish the active Christmas world honestly. Accept the other 16 Patisserie recipes one at a time, classify the open catalogue records, run the native loop.
+- [World roster and repurposing](docs/briefs/WORLD_ROSTER_AND_REPURPOSING.md): which worlds are playing, which could return, which stay closed, and careful ideas for the closed ones. Reactivates nothing.
+
 The recovery patch remains a historical record. Relevant generator/native/player work was selectively integrated and missing orchestration implemented. Do not apply [the old patch](RESOURCE_SETUP_RECOVERY.patch) wholesale to this active tree.
 
 ## Installer checks recorded for this update
