@@ -1180,8 +1180,8 @@
       "sha256": "23f537129b098f40c62a8c3c600635510528aceb09ce8e6a068cb2bc7a965adb"
     },
     "FarmVillage/macOS/Tests/test_themed_worlds.py": {
-      "bytes": 24904,
-      "sha256": "732fa1c4800b4cd0dfeff70595db0b6596e298b7d0ab1c2991ab939e9a63fa82"
+      "bytes": 26021,
+      "sha256": "8fe8effd1496b51a46b6dffa75378da799ac0c2641a7568a4bfd37d2b6fa879f"
     },
     "FarmVillage/macOS/Tests/test_turbo_client_refusal.py": {
       "bytes": 7266,
@@ -2368,7 +2368,7 @@
     "supersedes": "Earlier readiness-only setup and unapplied recovery status"
   },
   "resealScope": "Reviewed source changes only; gameplay/platform acceptance requires a separate new record",
-  "reviewedFromCommit": "eb7cb10ff4aabb4da1485c8a2aa7ff908090e5e2",
+  "reviewedFromCommit": "e84ebffcd4e392770f2ff77976974f28dde6c517",
   "schema": 1,
   "source": {
     "FarmVillage": "62809de497404588f133e38740242864717af0c0",
