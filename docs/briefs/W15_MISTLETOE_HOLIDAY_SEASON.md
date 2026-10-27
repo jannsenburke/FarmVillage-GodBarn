@@ -29,13 +29,13 @@ Facts from the source at the time of writing; re-audit against your baseline.
 - The catalogue audit counts 193 associated records for Mistletoe: 61 inside the current themed admission contract and 132 outside it. The 132 are **not** a broken-item count.
 - Relevant tests: `FarmVillage/macOS/Tests/test_htown_crafting_admission.py`, `test_crafting_expansion.py`, `test_themed_worlds.py`.
 
-**Unknown from public source:** which recipe is the one with browser acceptance, the recipe names and ingredients, and which recipes or items carry holiday date windows. These live in the private catalogue and evidence. Finding them is step 0.
+**Answered from public originals (27 October 2026)** by `tools/review-originals.py`; see the [no-Mac review guide](ASSET_REVIEW_NO_MAC.md). The 17 recipes in the original data are exactly the 17 the repo admits. **None of the 17 recipes, and none of the 47 finished goods and ingredient bushels they use, carries a date window, and none is deprecated.** So the recipes are not a calendar problem; the work is acceptance testing. **Still unknown from public source:** which recipe is the one with browser acceptance.
 
 ## Steps
 
 Each step is a separate small change with its own evidence. Return a shared-engine patch separately from any Mistletoe admission.
 
-0. **Research table.** With the private inputs imported, list the 17 recipes: name, code, skill and recipe level, ingredients, original build time, rush or instant cost and currency, yield, availability dates and whether it is date-windowed now. Keep the table in private evidence. Report only counts and gaps publicly. This decides how much of the season is realistic.
+0. **Research table. Done.** Run `tools/review-originals.py` and read `mistletoe_patisserie.csv`: name, code, skill and recipe level, ingredients, cook minutes, rush cost, yield and dates for all 17. It needs no private inputs. Result: no date windows, so the season is realistic for the recipes. Keep the CSV out of the repository.
 1. **Accept the other 16 recipes one at a time.** On a newly created synthetic farm: fund the cottage as setup only, craft one recipe, check the ingredients consumed, the original timer, the yield, the claim, then reload and restart. Setup funding is not earned progress. Record PASS, FAIL or UNRUN per recipe. Do not promote one recipe to all.
 2. **Skill tiers above 3.** Only where the original data supplies the cost and effect. If it does not, record the missing artifact by name as `RECOVERY_BLOCKED`.
 3. **Classify the 132 outside records.** Give each one primary disposition from the table in Wave 3 section 5. Changing admission only to shrink the number is not a valid goal.
