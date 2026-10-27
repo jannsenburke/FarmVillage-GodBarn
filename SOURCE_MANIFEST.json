@@ -1948,8 +1948,8 @@
       "sha256": "39987da1e007eb22b3fcf2efc2ef08bd180a0ad1aaf6101eca8f6815ef58e167"
     },
     "README.md": {
-      "bytes": 11613,
-      "sha256": "c94a24479f6636835ac331eeafc8786d907a75e40b6d221eabeadeb18312c4f6"
+      "bytes": 12476,
+      "sha256": "bf952f5945404e9d825c4109203eff8f21ff9812928df27c91cb18142dd36372"
     },
     "RESOURCE_SETUP_RECOVERY.patch": {
       "bytes": 225183,
@@ -2368,7 +2368,7 @@
     "supersedes": "Earlier readiness-only setup and unapplied recovery status"
   },
   "resealScope": "Reviewed source changes only; gameplay/platform acceptance requires a separate new record",
-  "reviewedFromCommit": "dd745748850c7f303bdfaf9320a2392392b61d97",
+  "reviewedFromCommit": "aadd76abe0093836aa2dd9bf48b78afdaaaf6233",
   "schema": 1,
   "source": {
     "FarmVillage": "62809de497404588f133e38740242864717af0c0",
