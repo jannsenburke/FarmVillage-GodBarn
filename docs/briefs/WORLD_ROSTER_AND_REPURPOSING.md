@@ -69,7 +69,7 @@ Recorded on 27 October 2026 from the maintainer directing this work. Change them
 
 1. **Candidate exploration: yes.** Contributors may explore ordinary retired-world decor for Mistletoe Lane, Fairytale Fields and Mystical Groves, as **candidates only**. Nothing is admitted, sold or placed until the world owner and the integration reviewer approve it item by item (see the approval route above).
 2. **Museum of Lost Worlds: no.** Do not build it.
-3. **Prices: an item's own recovered price first.** Where an item has no recovered price, derive one by the deterministic heritage-style policy, never by hand. This follows what `heritage_pricing.py` already does, and was recorded from a short "sure" answer, so confirm it before the first item is priced.
+3. **Prices: an item's own recovered price first.** Where an item has no recovered price, derive one by the deterministic heritage-style policy, never by hand. This follows what `heritage_pricing.py` already does. Confirmed by the maintainer on 27 October 2026.
 4. **Christmas world for the coming season: Mistletoe Lane.** It is the only active holiday world with accepted play, so it is the best and most stable choice. This is not a reactivation of anything.
-5. **Seasonal window: deferred.** See idea 4. Build an always-available shelf first.
+5. **Seasonal window: deferred.** See idea 4. Build an always-available shelf first. Agreed by the maintainer on 27 October 2026.
 6. **Holiday Lights and Glen: still retired.** No answer above reactivates either. That needs its own explicit instruction and acceptance.

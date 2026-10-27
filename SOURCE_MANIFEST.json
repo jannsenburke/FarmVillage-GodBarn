@@ -2012,8 +2012,8 @@
       "sha256": "6ba72a6e89a9781f4af61f61308ca4ea581e9b9670d1a26d3604111c66dcc47a"
     },
     "docs/briefs/WORLD_ROSTER_AND_REPURPOSING.md": {
-      "bytes": 9178,
-      "sha256": "85095aabb1275f28af0b232a0aa8c57e0093be2cabcfa2e7be790adeb3779ad7"
+      "bytes": 9179,
+      "sha256": "18208e1ecf4669bc3b05434a9a3ffb12713049f2d423b825c544a02a2258d675"
     },
     "pytest.ini": {
       "bytes": 108,
@@ -2344,7 +2344,7 @@
     "supersedes": "Earlier readiness-only setup and unapplied recovery status"
   },
   "resealScope": "Reviewed source changes only; gameplay/platform acceptance requires a separate new record",
-  "reviewedFromCommit": "5777ff1a923fe5d6e1d7f9e9e945a60cf69127eb",
+  "reviewedFromCommit": "fb645a4dd53bc43365626434a6a5a899171b840c",
   "schema": 1,
   "source": {
     "FarmVillage": "62809de497404588f133e38740242864717af0c0",
