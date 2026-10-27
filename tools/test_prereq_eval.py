@@ -306,6 +306,16 @@ class FormsAndPurityTests(unittest.TestCase):
             with self.subTest(label):
                 result = PE.evaluate(node, FACTS, nodes={"n": known(YES)})
                 self.assertEqual((result.verdict, result.reasons), (UNKNOWN, (reason,)))
+        for falsy in (0, False, "", {}, None, 0.0, set()):
+            for kind, extra in (("level_min", {"value": "1"}), ("location", {"value": "farm"}),
+                                ("AND", {}), ("OR", {}), ("prereq_check", {"value": "n"})):
+                with self.subTest(children=repr(falsy), kind=kind):
+                    result = PE.evaluate({"type": kind, **extra, "children": falsy}, FACTS, nodes={"n": known(YES)})
+                    self.assertEqual((result.verdict, result.reasons), (UNKNOWN, ("malformed-children:" + kind,)),
+                                     "a present but malformed children value must never read as no children")
+        self.assertEqual(verdict({"type": "level_min", "value": "1", "children": 0}), UNKNOWN, "the reported grant-by-malformed-input case")
+        for absent_or_empty in ({}, {"children": []}, {"children": ()}):
+            self.assertEqual(verdict({"type": "level_min", "value": "1", **absent_or_empty}), YES, "no children, or an empty list, is still a leaf")
         mixed = {"type": "AND", "z": 1, 2: 2, "children": [known(YES)]}
         self.assertEqual(PE.evaluate(mixed, FACTS).reasons, ("unknown-attribute:2,z",), "mixed key types are named in a stable order")
         self.assertEqual(verdict({"type": "AND", "children": []}), UNKNOWN)

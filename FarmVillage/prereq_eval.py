@@ -96,9 +96,15 @@ def _attributes(node):
 
 
 def _children(node):
-    """The authored children, or None when a mapping's "children" is not a list or tuple."""
+    """The authored children, or None when a mapping's "children" is present but not a list or tuple.
+
+    Only an absent key means "no children". A present value of any other type, including a falsy one
+    such as 0, False, "", {} or None, is malformed content and must not read as an empty list.
+    """
     if isinstance(node, Mapping):
-        children = node.get("children") or ()
+        if "children" not in node:
+            return []
+        children = node["children"]
         return list(children) if isinstance(children, (list, tuple)) else None
     return list(node)
 
