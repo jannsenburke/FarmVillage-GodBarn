@@ -62,7 +62,7 @@ If something is missing, the installer says so and stops before downloading anyt
 
 You cannot break anything by stopping and trying again. Fix whatever the message names (a missing Python or Xcode is the usual one), run `bash START_MAC.command` again, and choose the **same** folder. Downloads that already passed their checks are reused. Do not run two installers on the same folder, and do not delete the game folder afterwards: it holds the artwork the app needs and your farms.
 
-For every detail, including what is downloaded from where, read the full [Mac player guide](docs/PLAY_ON_MAC.md). To tell us how it went, see [contributing](CONTRIBUTING.md).
+For every detail, including what is downloaded from where, read the full [Mac player guide](docs/PLAY_ON_MAC.md). To tell us how it went, [open an install report](https://github.com/jannsenburke/FarmVillage-GodBarn/issues/new?template=install-report.md): a short form where a failure is as useful as a success. See [contributing](CONTRIBUTING.md) for the rest.
 
 ## What’s included
 

@@ -27,6 +27,14 @@
       "bytes": 209,
       "sha256": "519a0ae4cca2474c04c5ce2f5b1583b2e8c9d363410552edad5c4a3fac971047"
     },
+    ".github/ISSUE_TEMPLATE/game-problem.md": {
+      "bytes": 928,
+      "sha256": "2b4be46056460d2e39723873660134bd7036c152a1124207a442ccf50be8b80b"
+    },
+    ".github/ISSUE_TEMPLATE/install-report.md": {
+      "bytes": 1481,
+      "sha256": "528643eafeeaf26c43e291bdb253afcf69fe2e9303c8d635415dd86beecc77c0"
+    },
     ".github/source-checks.yml.example": {
       "bytes": 1561,
       "sha256": "0b2f0bafcf97c0a3e93510c48099d70afcadca7697a88ab0e3d9a81f6766876e"
@@ -1948,8 +1956,8 @@
       "sha256": "39987da1e007eb22b3fcf2efc2ef08bd180a0ad1aaf6101eca8f6815ef58e167"
     },
     "README.md": {
-      "bytes": 12476,
-      "sha256": "bf952f5945404e9d825c4109203eff8f21ff9812928df27c91cb18142dd36372"
+      "bytes": 12662,
+      "sha256": "07a89bb8fa95a4b8249c5f45ef68b90dcc2ec73aafe3a1aa4fd5e29d90e0d990"
     },
     "RESOURCE_SETUP_RECOVERY.patch": {
       "bytes": 225183,
@@ -2368,7 +2376,7 @@
     "supersedes": "Earlier readiness-only setup and unapplied recovery status"
   },
   "resealScope": "Reviewed source changes only; gameplay/platform acceptance requires a separate new record",
-  "reviewedFromCommit": "aadd76abe0093836aa2dd9bf48b78afdaaaf6233",
+  "reviewedFromCommit": "6083cf7008f933466c9e68f6939c1f76d4b15357",
   "schema": 1,
   "source": {
     "FarmVillage": "62809de497404588f133e38740242864717af0c0",
