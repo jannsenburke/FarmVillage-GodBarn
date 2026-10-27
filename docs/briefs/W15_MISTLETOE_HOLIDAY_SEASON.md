@@ -40,7 +40,7 @@ Each step is a separate small change with its own evidence. Return a shared-engi
 2. **Skill tiers above 3.** Only where the original data supplies the cost and effect. If it does not, record the missing artifact by name as `RECOVERY_BLOCKED`.
 3. **Classify the 132 outside records.** Give each one primary disposition from the table in Wave 3 section 5. Changing admission only to shrink the number is not a valid goal.
 4. **Native and browser loop for Mistletoe.** The native Mistletoe crop loop is one of the four listed UNRUN. Run it, with the settled scene judged separately from an early loading frame.
-5. **Optional, needs owner approval: seasonal decor.** Ordinary decorations from retired worlds are a documented *candidate* for Mistletoe. See [the roster and repurposing brief](WORLD_ROSTER_AND_REPURPOSING.md). Do not start this without a yes.
+5. **Seasonal decor, candidates only.** On 27 October 2026 the maintainer approved *exploring* ordinary decorations from retired worlds for Mistletoe. Nothing is admitted without per-item approval from the world owner and the integration reviewer. Prices follow the item's own recovered price, and a deterministic derived price only where none exists. A date-window shelf is deferred. See [the roster and repurposing brief](WORLD_ROSTER_AND_REPURPOSING.md) for the decisions and the things never to do.
 
 ## Out of scope and why
 

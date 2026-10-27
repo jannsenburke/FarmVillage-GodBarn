@@ -43,10 +43,10 @@ Both retired worlds are in `RESERVED_WORLDS`, so their items are **not** rehomed
 
 None of these exist. Each needs the approval route at the end.
 
-1. **A Museum of Lost Worlds in God Barn.** A read-only exhibit for each closed world: its name, its original art, notable items, original prices, and why it is closed. Nothing to buy, place or travel to. It carries no gameplay risk. God Barn already builds item history and acquisition data in `GodBarn/encyclopedia.py`; whether a world chapter fits that pipeline is not verified here.
+1. **A Museum of Lost Worlds in God Barn. Declined on 27 October 2026; do not build.** It was a read-only exhibit for each closed world: its name, its original art, notable items, original prices, and why it is closed. Nothing to buy, place or travel to. It carries no gameplay risk. God Barn already builds item history and acquisition data in `GodBarn/encyclopedia.py`; whether a world chapter fits that pipeline is not verified here.
 2. **A winter shelf in Mistletoe Lane.** Ordinary decorations from Holiday Lights, offered in the active Christmas world. Wave 3 records **591 Holiday-associated raw records, of which 379 pass only an ordinary-class screen**. Those are candidates before any gate, not approved items. A reward-gated piece such as `beatholidaylightsstatue` stays reward-gated.
 3. **Fairy-tale decor from Glen.** Ordinary Glen-themed decorations for Fairytale Fields or Mystical Groves. Wave 3 records **172 Glen-associated raw records, of which 91 pass only the ordinary screen**, and names `cobblestonebridge` and `fairybed` as items to investigate.
-4. **A seasonal window as disclosed local policy.** Show the winter shelf only in a chosen holiday window. The project already discloses local policy for the Mistletoe starter and theme, so this has a precedent. It is a new mechanic and needs approval of the dates and the wording.
+4. **A seasonal window as disclosed local policy.** Show the winter shelf only in a chosen holiday window. The project already discloses local policy for the Mistletoe starter and theme, so this has a precedent. **Deferred on 27 October 2026.** It was approved only if it proved the best and most stable option, and it is not: it adds calendar logic with a known wall-clock offset subtlety, it is hard to test across dates, and a mistake would hide content from players. Build an always-available shelf first, and revisit a window only after that shelf is accepted.
 
 ## Never, whichever idea you pick
 
@@ -63,10 +63,13 @@ Wave 3 section 5 sets the bar. A proposal delivers a machine-readable dispositio
 
 A sensible first slice: pick one destination (for example Mistletoe Lane), list its ordinary candidates with every original gate, run five of them through the destination's real purchase, placement, storage and reload path on a new synthetic farm, and report PASS, FAIL or UNRUN for each.
 
-## Decisions for the owner
+## Decisions recorded
 
-1. May contributors explore ordinary retired-world decor for Mistletoe Lane, Fairytale Fields and Mystical Groves, as candidates only?
-2. Is the Museum of Lost Worlds worth building, given it adds no gameplay?
-3. If a shelf is built, should prices follow the heritage-style deterministic policy or each item's own recovered price?
-4. Is a seasonal window acceptable as disclosed local policy?
-5. Reactivating Holiday Lights or Glen is a separate decision and is not implied by any answer above.
+Recorded on 27 October 2026 from the maintainer directing this work. Change them only on a new explicit instruction.
+
+1. **Candidate exploration: yes.** Contributors may explore ordinary retired-world decor for Mistletoe Lane, Fairytale Fields and Mystical Groves, as **candidates only**. Nothing is admitted, sold or placed until the world owner and the integration reviewer approve it item by item (see the approval route above).
+2. **Museum of Lost Worlds: no.** Do not build it.
+3. **Prices: an item's own recovered price first.** Where an item has no recovered price, derive one by the deterministic heritage-style policy, never by hand. This follows what `heritage_pricing.py` already does, and was recorded from a short "sure" answer, so confirm it before the first item is priced.
+4. **Christmas world for the coming season: Mistletoe Lane.** It is the only active holiday world with accepted play, so it is the best and most stable choice. This is not a reactivation of anything.
+5. **Seasonal window: deferred.** See idea 4. Build an always-available shelf first.
+6. **Holiday Lights and Glen: still retired.** No answer above reactivates either. That needs its own explicit instruction and acceptance.
