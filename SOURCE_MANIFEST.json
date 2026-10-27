@@ -1928,8 +1928,8 @@
       "sha256": "3e81b797931fb151de07ec298f93f3d7143b506117f7e151d1ddafbbe5370107"
     },
     "HANDOVER_STATUS.md": {
-      "bytes": 5313,
-      "sha256": "a64c25807c382ebf86380a9ca24524ec3404153561e0d57031d157210bf2d9a7"
+      "bytes": 5687,
+      "sha256": "53356b914160de28534b83a5a1553d3c11e05177e2d0ab154eb1f7618f0590d6"
     },
     "LICENSE": {
       "bytes": 35149,
@@ -2002,6 +2002,10 @@
     "docs/UBUNTU_ACCEPTANCE.md": {
       "bytes": 13025,
       "sha256": "b634d135c1cf620a77025a0f7bf508173d84b50f3b7b6d5ecb4b90d488fdf95d"
+    },
+    "docs/briefs/WORLD_ROSTER_AND_REPURPOSING.md": {
+      "bytes": 8131,
+      "sha256": "2820f99982c43b7ce11dbc70e48afdf3319191b45866ef19d4a5e8942272f1b2"
     },
     "pytest.ini": {
       "bytes": 108,
@@ -2332,7 +2336,7 @@
     "supersedes": "Earlier readiness-only setup and unapplied recovery status"
   },
   "resealScope": "Reviewed source changes only; gameplay/platform acceptance requires a separate new record",
-  "reviewedFromCommit": "af87024685dd741d7abc2f40849470aa15cc8036",
+  "reviewedFromCommit": "24680dd5f8b6c53b8da0ef0719a0b44445ec108f",
   "schema": 1,
   "source": {
     "FarmVillage": "62809de497404588f133e38740242864717af0c0",

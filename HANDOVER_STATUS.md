@@ -28,6 +28,12 @@ Both require an explicit target and download/build confirmation. No owner’s Ma
 4. Record native UI acceptance, browser gameplay and Ubuntu service/network results separately. A mocked compiler or Mac adapter test does not establish Ubuntu execution.
 5. Measure peak download/build/final-install storage and verify interruption/retry with actual sources.
 
+## Briefs ready to pick up
+
+Each brief is one bounded assignment written to be started cold. They follow the rules in [Wave 3](<Wave 3.md>) and [AGENTS.md](AGENTS.md).
+
+- [World roster and repurposing](docs/briefs/WORLD_ROSTER_AND_REPURPOSING.md): which worlds are playing, which could return, which stay closed, and careful ideas for the closed ones. Reactivates nothing.
+
 The recovery patch remains a historical record. Relevant generator/native/player work was selectively integrated and missing orchestration implemented. Do not apply [the old patch](RESOURCE_SETUP_RECOVERY.patch) wholesale to this active tree.
 
 ## Installer checks recorded for this update
