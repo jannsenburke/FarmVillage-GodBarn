@@ -4,7 +4,7 @@ A community preservation fork of [AcidCaos/FarmVillage](https://github.com/AcidC
 
 The aim is to make the original farming experience playable locally while preserving its prices, timers and game rules. Restoration is incomplete, and contributions are welcome.
 
-**Development status:** a sixteen-world alpha. The public installer now downloads original resources, generates God Barn and builds the reviewed local player. Full fresh-install/native/Ubuntu gameplay qualification remains open; this update was checked with small synthetic files and mocked build tools.
+**Development status:** a sixteen-world alpha. The public installer downloads original resources, generates God Barn and builds the reviewed local player, but a complete install from a clean computer has not yet been run end to end. On 26 October 2026 an owner-run QA of the published code on an Apple Silicon Mac passed the source checks, the full active-game test suite, the native app build, and bounded Home farming checks in both the native app and a browser, using resources that were already on hand. Actual Ubuntu hosting, all sixteen worlds graphically on the current revision, and long play sessions remain untested. See [validation scope](ACCEPTANCE.md) for exactly what ran.
 
 ## Choose how you want to play
 
@@ -62,7 +62,7 @@ If something is missing, the installer says so and stops before downloading anyt
 
 You cannot break anything by stopping and trying again. Fix whatever the message names (a missing Python or Xcode is the usual one), run `bash START_MAC.command` again, and choose the **same** folder. Downloads that already passed their checks are reused. Do not run two installers on the same folder, and do not delete the game folder afterwards: it holds the artwork the app needs and your farms.
 
-For every detail, including what is downloaded from where, read the full [Mac player guide](docs/PLAY_ON_MAC.md). To tell us how it went, see [contributing](CONTRIBUTING.md).
+For every detail, including what is downloaded from where, read the full [Mac player guide](docs/PLAY_ON_MAC.md). To tell us how it went, [open an install report](https://github.com/jannsenburke/FarmVillage-GodBarn/issues/new?template=install-report.md): a short form where a failure is as useful as a success. See [contributing](CONTRIBUTING.md) for the rest.
 
 ## What’s included
 
@@ -126,7 +126,9 @@ Keep `FarmVillage/` and `GodBarn/` as sibling directories.
 
 ## Help continue the project
 
-Useful starting points include qualifying complete clean-clone installation, testing the native app and actual Ubuntu hosting, improving documentation, and restoring one well-defined game feature at a time.
+Useful starting points include qualifying complete clean-clone installation, testing the native app and actual Ubuntu hosting, improving documentation, and restoring one well-defined game feature at a time. Mistletoe Lane is the active Christmas-themed world, and a brief covers getting it ready for the holidays.
+
+**No Mac? You can still help.** A read-only review of the retired-world decorations and the Mistletoe Lane recipes needs only Python and about 100 MB of disk: see [asset review without a Mac](docs/briefs/ASSET_REVIEW_NO_MAC.md). More bounded tasks, each written to be picked up cold, are listed under [briefs ready to pick up](HANDOVER_STATUS.md#briefs-ready-to-pick-up).
 
 Start with [contributing](CONTRIBUTING.md), the [maintainer guide](TAKEOVER.md) and [current development priorities](HANDOVER_STATUS.md). The [restoration backlog](<Wave 3.md>) and [engineering index](FarmVillage/macOS/Documentation/ENGINEERING_INDEX.md) provide more detail. Please preserve original costs and timers, document unsupported behavior, and distinguish tests from actual gameplay checks.
 
