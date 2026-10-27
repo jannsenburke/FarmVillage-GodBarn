@@ -36,8 +36,8 @@
       "sha256": "5a12b7bbc177eaadbcd0d4590a5085670fb7915b1d45e49729a90a0b625013da"
     },
     "ACCEPTANCE.md": {
-      "bytes": 6730,
-      "sha256": "6336f8b6b7bd20700fe5aaf9a0bd3fe812e31158b7a6b94ff54e8511dbb25f1c"
+      "bytes": 10898,
+      "sha256": "061e6c3c77bde9d601c62dd6a4597d6e3509dd263346de994024e8c462b353ea"
     },
     "AGENTS.md": {
       "bytes": 2376,
@@ -2332,7 +2332,7 @@
     "supersedes": "Earlier readiness-only setup and unapplied recovery status"
   },
   "resealScope": "Reviewed source changes only; gameplay/platform acceptance requires a separate new record",
-  "reviewedFromCommit": "5d1b71d4aa57f9d7659feca06700d5ba0044954c",
+  "reviewedFromCommit": "af87024685dd741d7abc2f40849470aa15cc8036",
   "schema": 1,
   "source": {
     "FarmVillage": "62809de497404588f133e38740242864717af0c0",
