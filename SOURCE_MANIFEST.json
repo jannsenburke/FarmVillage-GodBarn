@@ -1928,8 +1928,8 @@
       "sha256": "3e81b797931fb151de07ec298f93f3d7143b506117f7e151d1ddafbbe5370107"
     },
     "HANDOVER_STATUS.md": {
-      "bytes": 5936,
-      "sha256": "e30521946237e7048c287707177666d1a68a15072ec93d1e998f0fcba35bf555"
+      "bytes": 6181,
+      "sha256": "701b14f8f8e2b165d5cf8ae5fd8ccb72e43a0626494c7f4b282d68ff1f9ee05f"
     },
     "LICENSE": {
       "bytes": 35149,
@@ -2002,6 +2002,10 @@
     "docs/UBUNTU_ACCEPTANCE.md": {
       "bytes": 13025,
       "sha256": "b634d135c1cf620a77025a0f7bf508173d84b50f3b7b6d5ecb4b90d488fdf95d"
+    },
+    "docs/briefs/M02_PREREQUISITE_WIRING_SCOPE.md": {
+      "bytes": 5559,
+      "sha256": "5a60f633f36e24b8b343eba477de5adbd16b9ed35c67c680ce859cbcff335181"
     },
     "docs/briefs/W15_MISTLETOE_HOLIDAY_SEASON.md": {
       "bytes": 5819,
@@ -2340,7 +2344,7 @@
     "supersedes": "Earlier readiness-only setup and unapplied recovery status"
   },
   "resealScope": "Reviewed source changes only; gameplay/platform acceptance requires a separate new record",
-  "reviewedFromCommit": "7d3220564bb972cf1d05847b32c4828ddb45c6d6",
+  "reviewedFromCommit": "b3def92f28fde8fa1c6a12587376d6c712e2d445",
   "schema": 1,
   "source": {
     "FarmVillage": "62809de497404588f133e38740242864717af0c0",
