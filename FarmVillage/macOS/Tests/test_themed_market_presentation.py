@@ -12,6 +12,7 @@ import zlib
 ROOT=Path(__file__).resolve().parents[2]
 sys.path[:0]=[str(ROOT),str(Path(__file__).resolve().parent)]
 import test_persistence as fixtures  # Synthetic data paths before product imports.
+import retired_decor
 import themed_market_presentation as policy
 import themed_worlds
 try:
@@ -117,11 +118,21 @@ class ThemedMarketPresentationTests(unittest.TestCase):
                     self.assertEqual(before['harvestYield'], {'className':'QuestRewardHarvestYield',
                         'type':'world_score','unit':'pixie','value':'2','class':item['name'],'phylum':'harvest'})
                     self.assertNotIn('harvestYield',after)
+                elif any(retired_decor.allows(item,world) for world in retired_decor.destinations()):
+                    # An individually approved retired-world decoration is offered as a destination-world item.
+                    kind='transplant'
+                    destination=next(w for w in sorted(retired_decor.destinations()) if retired_decor.allows(item,w))
+                    self.assertEqual(after['requirements'],{'compare':'any','requirement':[
+                        {'className':'World','name':destination,'strict':'true'}]})
+                    self.assertNotIn('experimentGate',after)
+                    self.assertEqual(after['buyable'],before['buyable'])
                 else:
                     kind=('feature' if item['name']=='xrforchard_finished' else
                           'storage' if not owners else 'mixed' if owners-set(themed_worlds.SPECS) else 'closed')
                 counts[kind]+=1
-                allowed={'harvestYield'} if kind=='harvest_score' else {'requirements'} if kind in ('storage','mixed','feature') else {'buyable'}
+                allowed=({'harvestYield'} if kind=='harvest_score' else
+                         {'requirements','experimentGate'} if kind=='transplant' else
+                         {'requirements'} if kind in ('storage','mixed','feature') else {'buyable'})
                 if kind=='harvest_score' and 'glen' not in themed_worlds.active_worlds():
                     # The retired crop remains readable, with its old score
                     # removed, and is now explicitly unavailable to purchase.
@@ -137,7 +148,8 @@ class ThemedMarketPresentationTests(unittest.TestCase):
         self.assertIs(policy.item_projection(cottage),cottage)
         # Retirement closes129 Holiday and2 Glen offers in addition to the
         # prior1153. The12 score-bearing Glen crops keep their separate check.
-        self.assertEqual(counts,{'closed':1284,'mixed':32,'storage':32,'feature':1,'harvest_score':12})
+        # The eight approved Holiday Lights decorations (retired_decor.APPROVED) moved from closed to transplant.
+        self.assertEqual(counts,{'closed':1276,'mixed':32,'storage':32,'feature':1,'harvest_score':12,'transplant':8})
         self.assertEqual(set(policy.class_locks()),classes)
         self.assertEqual(len(classes),292);self.assertIn('',classes)
         self.assertEqual(len(policy.supported_worlds()),20)
