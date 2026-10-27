@@ -46,7 +46,15 @@ None of these exist. Each needs the approval route at the end.
 1. **A Museum of Lost Worlds in God Barn. Declined on 27 October 2026; do not build.** It was a read-only exhibit for each closed world: its name, its original art, notable items, original prices, and why it is closed. Nothing to buy, place or travel to. It carries no gameplay risk. God Barn already builds item history and acquisition data in `GodBarn/encyclopedia.py`; whether a world chapter fits that pipeline is not verified here.
 2. **A winter shelf in Mistletoe Lane.** Ordinary decorations from Holiday Lights, offered in the active Christmas world. Wave 3 records **591 Holiday-associated raw records, of which 379 pass only an ordinary-class screen**. Those are candidates before any gate, not approved items. A reward-gated piece such as `beatholidaylightsstatue` stays reward-gated.
 3. **Fairy-tale decor from Glen.** Ordinary Glen-themed decorations for Fairytale Fields or Mystical Groves. Wave 3 records **172 Glen-associated raw records, of which 91 pass only the ordinary screen**, and names `cobblestonebridge` and `fairybed` as items to investigate.
-4. **A seasonal window as disclosed local policy.** Show the winter shelf only in a chosen holiday window. The project already discloses local policy for the Mistletoe starter and theme, so this has a precedent. **Deferred on 27 October 2026.** It was approved only if it proved the best and most stable option, and it is not: it adds calendar logic with a known wall-clock offset subtlety, it is hard to test across dates, and a mistake would hide content from players. Build an always-available shelf first, and revisit a window only after that shelf is accepted.
+4. **A seasonal window as disclosed local policy.** Show the winter shelf only in a holiday window, using the **server's clock** and never the player's device. The project already discloses local policy for the Mistletoe starter and theme, so this has a precedent. **Window approved on 27 October 2026:** it opens on Thanksgiving, 26 November 2026, and closes on 6 January 2027. Build the always-available shelf first, then add the window on top of it. The rules in "The window's safeguards" below apply.
+
+## The window's safeguards
+
+- **Server clock only.** Use the project's existing server-time convention for date windows (see `_guard_purchase_dates` in `FarmVillage/creative_worlds.py` and the offset handling in `quests._quest_time_to_timestamp`). A player's device clock must never open or close the shelf.
+- **Closing hides new purchases only.** It must never remove, lock or alter anything a player already owns or has placed. A closed shelf is invisible, not destructive.
+- **Boundaries are pinned by tests.** Follow the existing date-window boundary convention, and test the moment before opening, the opening, the last moment and the moment after closing.
+- **No item is rushed to meet a date.** If the always-available shelf is not accepted by the opening date, the window simply does not open that year. An unaccepted item is never added to make the calendar.
+- **Original gates still apply.** The window is in addition to each item's own date, level, prerequisite and terrain gates, never instead of them.
 
 ## Never, whichever idea you pick
 
@@ -71,5 +79,5 @@ Recorded on 27 October 2026 from the maintainer directing this work. Change them
 2. **Museum of Lost Worlds: no.** Do not build it.
 3. **Prices: an item's own recovered price first.** Where an item has no recovered price, derive one by the deterministic heritage-style policy, never by hand. This follows what `heritage_pricing.py` already does. Confirmed by the maintainer on 27 October 2026.
 4. **Christmas world for the coming season: Mistletoe Lane.** It is the only active holiday world with accepted play, so it is the best and most stable choice. This is not a reactivation of anything.
-5. **Seasonal window: deferred.** See idea 4. Build an always-available shelf first. Agreed by the maintainer on 27 October 2026.
+5. **Seasonal window: approved, built second.** It opens Thanksgiving, 26 November 2026, and closes 6 January 2027, on the server's clock. The always-available shelf is built and accepted first. Agreed by the maintainer on 27 October 2026. Whether the window repeats each year, and on which rule (the fourth Thursday of November or a fixed date), is not decided.
 6. **Holiday Lights and Glen: still retired.** No answer above reactivates either. That needs its own explicit instruction and acceptance.

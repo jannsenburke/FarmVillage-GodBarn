@@ -2008,12 +2008,12 @@
       "sha256": "5a60f633f36e24b8b343eba477de5adbd16b9ed35c67c680ce859cbcff335181"
     },
     "docs/briefs/W15_MISTLETOE_HOLIDAY_SEASON.md": {
-      "bytes": 6076,
-      "sha256": "6ba72a6e89a9781f4af61f61308ca4ea581e9b9670d1a26d3604111c66dcc47a"
+      "bytes": 6190,
+      "sha256": "89fa571a1cfc216e682ff05a0fb0392e944504e7d3da307735298de2da208e91"
     },
     "docs/briefs/WORLD_ROSTER_AND_REPURPOSING.md": {
-      "bytes": 9179,
-      "sha256": "18208e1ecf4669bc3b05434a9a3ffb12713049f2d423b825c544a02a2258d675"
+      "bytes": 10367,
+      "sha256": "8227040d1b444f39bfea56e694a0ee28a33b05de8d074cc31e1f783104769ef0"
     },
     "pytest.ini": {
       "bytes": 108,
@@ -2344,7 +2344,7 @@
     "supersedes": "Earlier readiness-only setup and unapplied recovery status"
   },
   "resealScope": "Reviewed source changes only; gameplay/platform acceptance requires a separate new record",
-  "reviewedFromCommit": "fb645a4dd53bc43365626434a6a5a899171b840c",
+  "reviewedFromCommit": "e6e51079905913076a54b242567e1a67f627b9e2",
   "schema": 1,
   "source": {
     "FarmVillage": "62809de497404588f133e38740242864717af0c0",
