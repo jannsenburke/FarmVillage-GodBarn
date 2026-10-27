@@ -32,6 +32,7 @@ Both require an explicit target and download/build confirmation. No owner’s Ma
 
 Each brief is one bounded assignment written to be started cold. They follow the rules in [Wave 3](<Wave 3.md>) and [AGENTS.md](AGENTS.md).
 
+- [W15: Mistletoe Lane for the holiday season](docs/briefs/W15_MISTLETOE_HOLIDAY_SEASON.md): finish the active Christmas world honestly. Accept the other 16 Patisserie recipes one at a time, classify the open catalogue records, run the native loop.
 - [World roster and repurposing](docs/briefs/WORLD_ROSTER_AND_REPURPOSING.md): which worlds are playing, which could return, which stay closed, and careful ideas for the closed ones. Reactivates nothing.
 
 The recovery patch remains a historical record. Relevant generator/native/player work was selectively integrated and missing orchestration implemented. Do not apply [the old patch](RESOURCE_SETUP_RECOVERY.patch) wholesale to this active tree.
