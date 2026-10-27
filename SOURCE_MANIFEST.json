@@ -1488,8 +1488,8 @@
       "sha256": "6e3efbe2f035e32757c84d3dfd46bd3cd2731731fcb9d73bbda57d17b541d2ff"
     },
     "FarmVillage/prereq_eval.py": {
-      "bytes": 12907,
-      "sha256": "4f69a675c9812849f83dc39c9b224e1c4e6132934807872e4a460e3eea1fd93e"
+      "bytes": 13168,
+      "sha256": "9715d35a8ee34ad9e293def900784642009be7bd2b75221db06c5a45a7fb77f6"
     },
     "FarmVillage/progression.py": {
       "bytes": 8826,
@@ -2148,8 +2148,8 @@
       "sha256": "5d0fd4063581d094c01e22dd676bde030246e1f1ad22c00ad25044c975f2e4d2"
     },
     "tools/test_prereq_eval.py": {
-      "bytes": 32636,
-      "sha256": "0c3c164f41c06ad5fe52840911255ef7093ba6986ff17b01ab6f855b22a70281"
+      "bytes": 33656,
+      "sha256": "ea75e84801f6b557c97a895c6f7fd633fa4f5d25ad712bbe4c4c5eed7487069e"
     },
     "tools/test_prerequisite_dispositions.py": {
       "bytes": 18229,
