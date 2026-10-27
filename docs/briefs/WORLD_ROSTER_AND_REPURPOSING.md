@@ -60,7 +60,7 @@ None of these exist. Each needs the approval route at the end.
 
 - Do not move a retired world's special systems: buildings, gifts, community or reward mechanics.
 - Do not turn a reward-gated item into a sale or a free grant.
-- Do not use a new shelf to get around an item's original date, level, prerequisite, terrain or experiment gate.
+- Do not use a new shelf to get around an item's original date, level, prerequisite, terrain or experiment gate. The one recorded exception is decision 7: the retired world's own master gate, waived for exactly the eight approved items.
 - Do not merge or remap original item codes. Keep names and codes; reference art by its original identity.
 - Do not reactivate travel to either retired world.
 - Do not claim an item works because its name or picture suggests it does.
@@ -81,3 +81,4 @@ Recorded on 27 October 2026 from the maintainer directing this work. Change them
 4. **Christmas world for the coming season: Mistletoe Lane.** It is the only active holiday world with accepted play, so it is the best and most stable choice. This is not a reactivation of anything.
 5. **Seasonal window: approved, built second.** It opens Thanksgiving, 26 November 2026, and closes 6 January 2027, on the server's clock. The always-available shelf is built and accepted first. Agreed by the maintainer on 27 October 2026. Whether the window repeats each year, and on which rule (the fourth Thursday of November or a fixed date), is not decided.
 6. **Holiday Lights and Glen: still retired.** No answer above reactivates either. That needs its own explicit instruction and acceptance.
+7. **Gate waiver for the eight approved items: yes.** All eight carry `experimentGate = fv_hlights`, the retired world's master switch, which the game serves as off, so they cannot be admitted under the ordinary rule. On 27 October 2026 the maintainer approved waiving that one gate, for exactly those eight codes and only in Mistletoe Lane. This follows how `heritage_pricing.py` already rehomes ordinary decorations from inactive worlds (it drops their experiment gate). Every other gate, level, date window, price and class rule still applies. The waiver lives in `FarmVillage/retired_decor.py` and is not a general precedent: any further item needs its own approval.

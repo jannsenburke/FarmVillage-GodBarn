@@ -25,6 +25,20 @@ NOW = 1800000000
 RICH = {"gold": 10_000_000, "cash": 100_000}
 
 
+def clear_theme_caches():
+    """Drop the process-wide admission caches.
+
+    themed_worlds.catalog_rules is cached for the life of the process, and the Market admissions built
+    from it are cached too. Both depend on the served experiments, which several tests here patch. Clear
+    them whenever a test changes that input, and again afterwards, so a result computed under a patch is
+    neither read stale by this test nor kept for the tests that run after it.
+    """
+    tw.catalog_rules.cache_clear()
+    presentation = sys.modules.get("themed_market_presentation")
+    if presentation is not None:
+        presentation._admissions.cache_clear()
+
+
 def ensure_levels():
     if game_settings._level_xp_map is None:
         game_settings.load_game_settings()
@@ -222,6 +236,9 @@ class ActivatedFarmHelpers:
     world = None
 
     def setUp(self):
+        # Registered first, so it runs last: after the patches below are undone, drop whatever was
+        # computed under them. Otherwise the retired worlds' "switched on" admissions leak into later tests.
+        self.addCleanup(clear_theme_caches)
         if self.world in {"glen", "hlights"}:
             patcher = mock.patch.object(tw, "served_experiments", return_value=dormant_experiments())
             patcher.start()
@@ -229,6 +246,7 @@ class ActivatedFarmHelpers:
         patcher = mock.patch.object(tw, "ACTIVE_WORLDS", frozenset({self.world}))
         patcher.start()
         self.addCleanup(patcher.stop)
+        clear_theme_caches()  # never reuse a result computed before the patches took effect
 
     def unlocked(self, **kwargs):
         save = base_save(**{**RICH, **kwargs})
@@ -286,8 +304,10 @@ class ActivatedFarmCases(ActivatedFarmHelpers):
             with self.assertRaisesRegex(ValueError, "all-access option"):
                 creative_worlds.create(save, self.world, "generalAccess", now=NOW)
             self.assertEqual(save, before)
+        self.addCleanup(clear_theme_caches)  # runs after the patch below is undone
         with self.subTest("experiment not served"), \
                 mock.patch.object(tw, "served_experiments", return_value={}):
+            clear_theme_caches()
             save = base_save()
             before = copy.deepcopy(save)
             with self.assertRaisesRegex(ValueError, "not served"):

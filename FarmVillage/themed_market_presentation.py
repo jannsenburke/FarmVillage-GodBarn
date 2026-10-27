@@ -31,6 +31,11 @@ def _themed():
     return themed_worlds
 
 
+def _retired():
+    import retired_decor
+    return retired_decor
+
+
 def _worlds(item):
     return {node.get('name') for node in _themed().creative_worlds._nodes(item.get('requirements'))
             if node.get('className') == 'World'}
@@ -46,6 +51,7 @@ def policy_digest():
     for data in (Path(__file__).read_bytes(), Path(themed.__file__).read_bytes(),
                  json.dumps(themed.SPECS, sort_keys=True).encode(),
                  json.dumps(sorted(supported_worlds())).encode(),
+                 Path(_retired().__file__).read_bytes(),
                  CATALOG_SOURCE.read_bytes(), WORLD_SETTINGS_SOURCE.read_bytes(),
                  Path(TEMPLATES_DIR, 'play.html').read_bytes()):
         digest.update(len(data).to_bytes(8,'big')); digest.update(data)
@@ -123,6 +129,15 @@ def item_projection(item):
     item=_without_glen_harvest_score(item)
     themed = _themed()
     owners = _worlds(item)
+    for destination in sorted(_retired().destinations()):
+        if _retired().allows(item, destination) and item.get('name') in _admissions().get(destination, ()):
+            # An approved retired-world decoration is offered as a destination-world item. The client
+            # would otherwise hide it behind the retired world's switched-off gate and World lock.
+            result = copy.deepcopy(item)
+            result['requirements'] = {'compare': 'any', 'requirement': [
+                {'className': 'World', 'name': destination, 'strict': 'true'}]}
+            result.pop('experimentGate', None)
+            return result
     worldless_features = {world for world in themed.SPECS
         if (themed._world_feature(item, world) or {}).get('worldless')}
     if not owners and worldless_features:

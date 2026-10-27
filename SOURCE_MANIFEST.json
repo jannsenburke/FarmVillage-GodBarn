@@ -148,8 +148,8 @@
       "sha256": "b97f8d716904dca50f98a113325b1ddc3594da897eda315f2f9dd24a5bf1443c"
     },
     "FarmVillage/creative_worlds.py": {
-      "bytes": 41504,
-      "sha256": "b02d05916f660c8d52d8bc63364e443e49d7feddbf071804d6d4f2e6b3d02dad"
+      "bytes": 41674,
+      "sha256": "d8c8ea01d6b8eb3cacb50e7c2e24bf4ab9980d21d9c973410ee79d8fe0dc9568"
     },
     "FarmVillage/engine.py": {
       "bytes": 12571,
@@ -1111,6 +1111,10 @@
       "bytes": 12142,
       "sha256": "4ef6793715c1e4974472f9d6333302ff5f9b5991a974b5249d9802835ba5d8aa"
     },
+    "FarmVillage/macOS/Tests/test_retired_decor.py": {
+      "bytes": 13611,
+      "sha256": "050157429c08bf767196eedde5087824b00c7a8a686284593cdcbf5dc2b02b02"
+    },
     "FarmVillage/macOS/Tests/test_retired_worlds.py": {
       "bytes": 6155,
       "sha256": "9abde30e303003c3f2e2e518778b3164d981b554ea3a0f02af4eafac49577097"
@@ -1172,12 +1176,12 @@
       "sha256": "e8bea5878e9dbcb260fa896d8352fdd6b0549d46ff37409029484a37e1aa0d98"
     },
     "FarmVillage/macOS/Tests/test_themed_market_presentation.py": {
-      "bytes": 14145,
-      "sha256": "23f537129b098f40c62a8c3c600635510528aceb09ce8e6a068cb2bc7a965adb"
+      "bytes": 15088,
+      "sha256": "936a54da1575940fd4cb1a9ba1a3ea1e163d537cacc6b05c4f331f6d82dc989c"
     },
     "FarmVillage/macOS/Tests/test_themed_worlds.py": {
-      "bytes": 24904,
-      "sha256": "732fa1c4800b4cd0dfeff70595db0b6596e298b7d0ab1c2991ab939e9a63fa82"
+      "bytes": 26021,
+      "sha256": "8fe8effd1496b51a46b6dffa75378da799ac0c2641a7568a4bfd37d2b6fa879f"
     },
     "FarmVillage/macOS/Tests/test_turbo_client_refusal.py": {
       "bytes": 7266,
@@ -1511,6 +1515,10 @@
       "bytes": 73,
       "sha256": "0b6bc7c03eec22083323bcf9b5c84fca9a7c47f5373dfd41b96a4b132b22cc92"
     },
+    "FarmVillage/retired_decor.py": {
+      "bytes": 2975,
+      "sha256": "fa1cde4dd2d59f9e4e2bd06134ea252ab1e61eab59292a18a9de794cb72df8f9"
+    },
     "FarmVillage/ruffle_runtime/0.7.1-farmvillage-gc1/.farmvillage-ruffle.json": {
       "bytes": 3113,
       "sha256": "a841dc7fc1729eab67afe67cf3418a4633a2de5e03ebd878e1cf6749387ddf03"
@@ -1608,12 +1616,12 @@
       "sha256": "1f9edb0ec8524ede91e1b173db28c0a6e0ebe62bfeb3d8764e6fb7a8bedddc92"
     },
     "FarmVillage/themed_market_presentation.py": {
-      "bytes": 9964,
-      "sha256": "2196759fe33154ecee0dd410478d5788ab4e40b3b1a2b3c304e38b898ac7b835"
+      "bytes": 10723,
+      "sha256": "85e748c1d3936f90659e61c88d41308d487fa3250e8e832ee56248ddf5d48863"
     },
     "FarmVillage/themed_worlds.py": {
-      "bytes": 43652,
-      "sha256": "537e2aad0437eef5fa56a7b2037ce2f5613c6e3534640678d484c31a01a16f5e"
+      "bytes": 43821,
+      "sha256": "65220017b6227da22262a0bd07ff103190273530c46da909a7033203c2aea9d3"
     },
     "FarmVillage/ugc.py": {
       "bytes": 13639,
@@ -1928,8 +1936,8 @@
       "sha256": "3e81b797931fb151de07ec298f93f3d7143b506117f7e151d1ddafbbe5370107"
     },
     "HANDOVER_STATUS.md": {
-      "bytes": 6440,
-      "sha256": "2e2268008167cd4503c344542c823c04a81b683165c65865e10f44436f6254fe"
+      "bytes": 6658,
+      "sha256": "ffe52f2c27ccaed059b3e61db00f2bdfda034d601a86bae4c4fa63e51590b00f"
     },
     "LICENSE": {
       "bytes": 35149,
@@ -2011,13 +2019,17 @@
       "bytes": 5559,
       "sha256": "5a60f633f36e24b8b343eba477de5adbd16b9ed35c67c680ce859cbcff335181"
     },
+    "docs/briefs/SHELF_FIRST_BATCH.md": {
+      "bytes": 7061,
+      "sha256": "69d25ce6e874f43e74765a44c237dd5bb3c7cd0321173a97f5afef1ae50f5173"
+    },
     "docs/briefs/W15_MISTLETOE_HOLIDAY_SEASON.md": {
       "bytes": 6425,
       "sha256": "e1be2b95d697f2a8e9ff73e8690ff7584e980e46941427ddc1d1fd0feb149362"
     },
     "docs/briefs/WORLD_ROSTER_AND_REPURPOSING.md": {
-      "bytes": 11029,
-      "sha256": "3b4b13b362629dd57c75b669b164ad6f2a79f1e01ce68e51c09b2bd4b717918f"
+      "bytes": 11824,
+      "sha256": "bcb216dec4f55ff9dadd82c76ad78668d042e12c1bac6642f63a5d9d45466ceb"
     },
     "pytest.ini": {
       "bytes": 108,
@@ -2356,7 +2368,7 @@
     "supersedes": "Earlier readiness-only setup and unapplied recovery status"
   },
   "resealScope": "Reviewed source changes only; gameplay/platform acceptance requires a separate new record",
-  "reviewedFromCommit": "237024b345bc8ead9a56c5d992aa09e37c969d12",
+  "reviewedFromCommit": "dd745748850c7f303bdfaf9320a2392392b61d97",
   "schema": 1,
   "source": {
     "FarmVillage": "62809de497404588f133e38740242864717af0c0",

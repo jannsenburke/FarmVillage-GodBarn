@@ -24,6 +24,7 @@ from bundle import XML_DIR
 from game_settings import CONFIG_CMS_XML, CONFIG_XML, get_farming_int, xp_to_level
 import world_travel
 import cove_rules
+import retired_decor
 
 WORLD = "meadows"
 ACCESS_OPTION = "cash60"
@@ -245,6 +246,8 @@ def _nodes(value):
 
 def world_requirement_matches(item, world_type):
     """Original WorldRequirement.check honors Meadows' non-strict Home alias."""
+    if retired_decor.allows(item, world_type):
+        return True  # An individually approved retired-world decoration, only in its approved world.
     raw = item.get("requirements")
     requirements = [e for e in _nodes(raw) if e.get("className") == "World"]
     if not requirements:

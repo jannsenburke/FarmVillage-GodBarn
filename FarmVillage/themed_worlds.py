@@ -31,6 +31,7 @@ from game_settings import get_farming_int, xp_to_level
 import cove_rules
 import creative_worlds
 import items
+import retired_decor
 import world_currency_conversion as wcc
 import world_travel
 
@@ -334,7 +335,8 @@ def _reasons(item, world_type):
             or item.get("placeable") in (False, "false")):
         reasons.append("unavailable")
     served = served_experiments()
-    if any(not _own_gate(g, world_type) or served.get(g) != 1 for g in _gates(item)):
+    waived = retired_decor.waived_gates(item, world_type)
+    if any(not _own_gate(g, world_type) or served.get(g) != 1 for g in _gates(item) if g not in waived):
         reasons.append("gate")
     return reasons
 
@@ -373,8 +375,9 @@ def catalog_rules(world_type):
             and item.get("className") == "StorageBuilding"
             and (item.get("storageType") or {}).get("itemClass") == "Inventory"
             and item.get("requirements") in NONE_VALUES)
-        own_world_item = any(node.get("className") == "World" and node.get("name") == world_type
-                             for node in creative_worlds._nodes(item.get("requirements")))
+        own_world_item = (any(node.get("className") == "World" and node.get("name") == world_type
+                              for node in creative_worlds._nodes(item.get("requirements")))
+                          or retired_decor.allows(item, world_type))
         feature = _world_feature(item, world_type)
         if not own_world_item and not global_inventory_building and not (feature or {}).get("worldless"):
             continue

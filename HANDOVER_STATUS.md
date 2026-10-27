@@ -33,6 +33,7 @@ Both require an explicit target and download/build confirmation. No owner’s Ma
 Each brief is one bounded assignment written to be started cold. They follow the rules in [Wave 3](<Wave 3.md>) and [AGENTS.md](AGENTS.md).
 
 - [M02 / F03: wiring the prerequisite evaluator](docs/briefs/M02_PREREQUISITE_WIRING_SCOPE.md): phased plan that changes no behavior until the owner settles the unknown and `end_time` policies. Starts with confirming one guessed attribute name.
+- [Shelf first batch (proposal)](docs/briefs/SHELF_FIRST_BATCH.md): eight plain decorations proposed for Mistletoe Lane, what to hold back and why, and the questions only an integrator can answer. Nothing is admitted.
 - [Asset review without a Mac](docs/briefs/ASSET_REVIEW_NO_MAC.md): one command fetches the 44 pinned public originals, verifies them, and writes the retired-world decor candidates and the Mistletoe recipe table. No Mac, no private inputs, no 19 GB download.
 - [W15: Mistletoe Lane for the holiday season](docs/briefs/W15_MISTLETOE_HOLIDAY_SEASON.md): finish the active Christmas world honestly. Accept the other 16 Patisserie recipes one at a time, classify the open catalogue records, run the native loop.
 - [World roster and repurposing](docs/briefs/WORLD_ROSTER_AND_REPURPOSING.md): which worlds are playing, which could return, which stay closed, and careful ideas for the closed ones. Reactivates nothing.
