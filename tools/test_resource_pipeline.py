@@ -113,6 +113,18 @@ class ResourcePipelineTests(unittest.TestCase):
         for index,payload in enumerate(cases):
             with self.subTest(index=index),self.assertRaises(ValueError):pipeline.extract_archive(self.archive(payload),self.pack,reserve=0)
         self.assertFalse((self.pack/'assets/crops/test.bin').exists())
+    def test_oversized_non_artwork_is_skipped_and_logged_but_oversized_artwork_stops(self):
+        with mock.patch.object(pipeline,'RECORD_LIMIT',200):
+            archive=self.archive(record('big.bin',b'x'*500,host='example.invalid')+record('Environment/ok.bin',b'ok'))
+            with contextlib.redirect_stdout(io.StringIO()) as shown:
+                self.assertEqual(pipeline.extract_archive(archive,self.pack,reserve=0),1)
+            self.assertIn('example.invalid',shown.getvalue())
+            self.assertEqual((self.pack/'assets/Environment/ok.bin').read_bytes(),b'ok')
+            logged=[json.loads(line) for line in (self.pack/'skipped-oversized.jsonl').read_text().splitlines()]
+            self.assertEqual(len(logged),1);self.assertIn('example.invalid',logged[0]['uri'])
+            with self.assertRaisesRegex(ValueError,'Environment/huge.bin'):
+                pipeline.extract_archive(self.archive(record('Environment/huge.bin',b'x'*500)),self.pack,reserve=0)
+        self.assertFalse((self.pack/'assets/Environment/huge.bin').exists())
     def test_target_ownership_rejects_source_system_unrelated_and_moved_markers(self):
         unrelated=self.base/'unrelated';unrelated.mkdir();(unrelated/'keep').write_bytes(b'preserved')
         for target in (self.source,self.source/'generated',Path('/usr/fv-fixture'),unrelated):

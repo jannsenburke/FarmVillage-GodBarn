@@ -2136,8 +2136,8 @@
       "sha256": "0c845e198c80fdf3bff1893cac0348c616e04dad40661587b5cbff1f28c6b55f"
     },
     "tools/resource_pipeline.py": {
-      "bytes": 19940,
-      "sha256": "913df25efcc87647bc20bf4fb8a6657227718a9a13761081069ac0d12848d77c"
+      "bytes": 20137,
+      "sha256": "a9942ca1e13a1abaa123d61db5b9e054855394b1d01ab33ab242ba8ab7af75b0"
     },
     "tools/review-originals.py": {
       "bytes": 14334,
@@ -2212,8 +2212,8 @@
       "sha256": "6f99ce82a4f6c9822ad24839fd25e513d8c305a70814e9bf9e04d40e24b2d2a1"
     },
     "tools/test_resource_pipeline.py": {
-      "bytes": 14102,
-      "sha256": "4d784f81f49557eed0c046bb1ea6e831dbdaa2681a6d9aa5262f8a74445d06e8"
+      "bytes": 15160,
+      "sha256": "d534fe91f991caf68a7f6971e0494eb05d284f55468ba4de9e30bb168e30fd4b"
     },
     "tools/test_review_originals.py": {
       "bytes": 10763,

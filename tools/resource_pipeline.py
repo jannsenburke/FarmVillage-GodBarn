@@ -9,6 +9,7 @@ from public_downloads import child, download, identity, ordinary
 ROOT = Path(__file__).resolve().parents[1]
 MARKER = '.farmvillage-public-resources.json'
 GIB = 1024 ** 3
+RECORD_LIMIT = 128 * 1024 ** 2
 
 def digest(path):
     h = hashlib.sha256()
@@ -147,16 +148,10 @@ def extract_archive(archive, pack, *, reserve=5 * GIB):
             length = int(meta.get('content-length', '-1'))
             if length < 0:
                 raise ValueError('WARC record has invalid content-length')
-            if length > 128 * 1024**2:
-                remaining = length
-                while remaining:
-                    block = stream.read(min(1 << 20, remaining))
-                    if not block:
-                        raise ValueError('Truncated WARC (oversized record)')
-                    remaining -= len(block)
-                print('Artwork: skipped oversized WARC record (%d MiB) in %s' % (length // (1024 ** 2), archive.name), flush=True)
-                continue
-            name = art_name(meta.get('warc-target-uri', '')) if meta.get('warc-type') == 'response' else None
+            uri = meta.get('warc-target-uri', '')
+            name = art_name(uri) if meta.get('warc-type') == 'response' else None
+            if length > RECORD_LIMIT and name is not None:
+                raise ValueError('Artwork record exceeds the 128 MiB safety bound: %s (%d MiB)' % (uri, length // 1024**2))
             if name is None:
                 remaining = length
                 while remaining:
@@ -164,6 +159,11 @@ def extract_archive(archive, pack, *, reserve=5 * GIB):
                     if not block:
                         raise ValueError('Truncated WARC')
                     remaining -= len(block)
+                if length > RECORD_LIMIT:
+                    note = {'archive': archive.name, 'type': meta.get('warc-type', ''), 'uri': uri, 'bytes': length}
+                    with child(pack, 'skipped-oversized.jsonl').open('a') as log:
+                        log.write(json.dumps(note, sort_keys=True) + '\n')
+                    print('Skipped oversized non-artwork WARC record (%d MiB): %s' % (length // 1024**2, uri[:200]), flush=True)
                 continue
             raw = stream.read(length)
             if len(raw) != length:
