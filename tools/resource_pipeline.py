@@ -145,8 +145,17 @@ def extract_archive(archive, pack, *, reserve=5 * GIB):
                 raise ValueError('Malformed WARC version')
             meta = headers(stream)
             length = int(meta.get('content-length', '-1'))
-            if not 0 <= length <= 128 * 1024**2:
-                raise ValueError('WARC record exceeds the 128 MiB safety bound')
+            if length < 0:
+                raise ValueError('WARC record has invalid content-length')
+            if length > 128 * 1024**2:
+                remaining = length
+                while remaining:
+                    block = stream.read(min(1 << 20, remaining))
+                    if not block:
+                        raise ValueError('Truncated WARC (oversized record)')
+                    remaining -= len(block)
+                print('Artwork: skipped oversized WARC record (%d MiB) in %s' % (length // (1024 ** 2), archive.name), flush=True)
+                continue
             name = art_name(meta.get('warc-target-uri', '')) if meta.get('warc-type') == 'response' else None
             if name is None:
                 remaining = length

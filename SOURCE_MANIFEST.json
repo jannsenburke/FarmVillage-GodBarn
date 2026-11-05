@@ -2136,8 +2136,8 @@
       "sha256": "0c845e198c80fdf3bff1893cac0348c616e04dad40661587b5cbff1f28c6b55f"
     },
     "tools/resource_pipeline.py": {
-      "bytes": 19484,
-      "sha256": "7ec31b5d5ed94217208a20a86c160bd912e1ebce392a96ab115738933aec949b"
+      "bytes": 19940,
+      "sha256": "913df25efcc87647bc20bf4fb8a6657227718a9a13761081069ac0d12848d77c"
     },
     "tools/review-originals.py": {
       "bytes": 14334,
